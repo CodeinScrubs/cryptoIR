@@ -239,14 +239,16 @@ class SpotRiskGuard:
         return self.ledger.submit(order_id, self.venue, self.pair, side, quantity, price, self.rules,
                                   now_ns=now_ns, latency_ns=latency_ns, ttl_ns=ttl_ns, preflight=preflight)
 
-    def on_book(self, book: Book):
-        state = self.observe(book, now_ns=book.received_ns)
+    def on_book(self, book: Book, *, now_ns: int | None = None):
+        now_ns = book.received_ns if now_ns is None else timestamp(now_ns)
+        state = self.observe(book, now_ns=now_ns)
         if not state["data_ok"]:
             return []
         # Fill and post-fill mark use separate ledger transactions; the runner
         # is single-threaded and must not mutate this ledger from another owner.
-        results = self.ledger.on_book(book, max_age_ns=self.limits.max_feed_age_ns, participation=self.limits.depth_participation)
-        self.observe(book, now_ns=book.received_ns)
+        results = self.ledger.on_book(book, max_age_ns=self.limits.max_feed_age_ns,
+                                      participation=self.limits.depth_participation, now_ns=now_ns)
+        self.observe(book, now_ns=now_ns)
         return results
 
 

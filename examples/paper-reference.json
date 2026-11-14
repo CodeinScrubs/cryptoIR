@@ -1,0 +1,32 @@
+{
+  "mode": "paper",
+  "capital_basis": "synthetic_reference_usdt",
+  "venue": "nobitex",
+  "pair": "BTC/USDT",
+  "strategy": "trend_24_168",
+  "rules": {
+    "quantity_step": "0.000001",
+    "price_tick": "0.01",
+    "minimum_notional": "5",
+    "maximum_notional": "25",
+    "fee_rate": "0.0013",
+    "buy_fee_mode": "received_base"
+  },
+  "risk": {
+    "initial_quote": "100",
+    "max_exposure_fraction": "0.25",
+    "daily_loss_fraction": "0.01",
+    "drawdown_fraction": "0.05",
+    "maximum_order_notional": "25",
+    "maximum_open_orders": 1,
+    "max_feed_age_ns": 5000000000,
+    "depth_participation": "0.1"
+  },
+  "decision_delay_seconds": 3600,
+  "decision_expiry_seconds": 300,
+  "order_latency_ms": 500,
+  "order_ttl_seconds": 10,
+  "max_candle_lag_seconds": 3900,
+  "limit_offset_bps": "15",
+  "prior_volume_fraction": "0.01"
+}

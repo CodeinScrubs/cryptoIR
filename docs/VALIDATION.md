@@ -1,6 +1,6 @@
 # Initial validation record
 
-Versions: 0.1.0 through 0.6.0. Date: 2026-11-14.
+Versions: 0.1.0 through 0.7.0. Date: 2026-11-14.
 
 ## Evidence
 
@@ -111,3 +111,26 @@ historical fees.
 - Version 0.5.0 and its research-results commit passed CI on Windows/Linux and
   Python 3.11/3.13 (`277998a` and `12c055a`).
 - No continuous paper strategy, authenticated request or real trade was run.
+
+## Version 0.7.0 additions (2026-11-14)
+
+- All 152 local tests passed. Forward tests exercise future/partial/revised
+  candles, warmup without past trades, decision delay and later-snapshot latency,
+  missing hours, processing delay, sealed source/configuration, duplicate-intent
+  crash recovery, OS lock recovery after abrupt process exit, STOP behavior,
+  localhost transport/REST integration and same-account resume.
+- A 120-second public Nobitex forward session received 167 source-timed books
+  and two candle responses. The latest 168 completed hours warmed the trend
+  signal. Its observed target was flat. No simulated order was generated.
+- An unchanged 15-second resume received 20 books and another candle response.
+  Both logs replayed cleanly; the account still had exactly its synthetic
+  reference 100 USDT, no base holding and no order. Session count increased to
+  two. This establishes short public-data orchestration and persistence, not
+  filled-order performance or calibrated execution.
+- Initial log SHA-256:
+  `2a92fb72c0f3c4263db1ae4476bcad1f4fbc3a5f7224f825eae07a3852c22053`.
+  Resume log SHA-256:
+  `00a40b6ecca714bab756342e7f186c40b71d5074831f86ffbc6a719c567e729a`.
+- The user's IRT capital has not been converted or allocated by this runner.
+  It is an explicitly synthetic reference experiment, not the accepted owner
+  paper account. No authenticated request or real trade was made.

@@ -57,11 +57,11 @@ unrealized loss and data uncertainty must still be reported and managed.
 - Drive `guard.advance` from a timer even when the feed stops. It expires orders
   and cancels pending buys when the freshness budget elapses.
 - Use a single owner for a ledger. Observation, fill and post-fill mark are
-  separate transactions. A future runner must enforce process ownership and
-  avoid bypassing the guard through direct ledger mutations.
+  separate transactions. The [forward runner](FORWARD.md) enforces OS-level
+  single-writer ownership and routes session mutations through the guard.
 
 No portfolio conversion across IRT/USDT or venues, automatic hedge, exchange
 native protection, cancellation-race model, authenticated reconciliation,
-continuous scheduler, notification delivery or live order transport is included.
+always-running service, notification delivery or live order transport is included.
 Those remain required before unattended trading. A laptop shutdown cannot
 provide exchange-side protection.

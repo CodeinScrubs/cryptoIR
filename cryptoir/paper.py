@@ -235,7 +235,7 @@ class PaperLedger:
             self.db.execute("BEGIN IMMEDIATE")
             self._advance(now_ns)
 
-    def on_book(self, book: Book, *, max_age_ns: int, participation: Decimal) -> list[dict]:
+    def on_book(self, book: Book, *, max_age_ns: int, participation: Decimal, now_ns: int | None = None) -> list[dict]:
         """Fill eligible IOC intents on a later source-timed snapshot only.
 
         Each snapshot's available depth is shared across all orders and can be
@@ -244,7 +244,8 @@ class PaperLedger:
         participation = number(participation)
         if not 0 < participation <= 1:
             raise DataError("participation must be in (0,1]")
-        book.validate_age(book.received_ns, max_age_ns)
+        now_ns = book.received_ns if now_ns is None else timestamp(now_ns)
+        book.validate_age(now_ns, max_age_ns)
         if book.exchange_ns is None:
             raise DataError("paper fill requires known source time")
         content = (book.venue, book.pair, book.exchange_ns,
@@ -254,7 +255,7 @@ class PaperLedger:
         changed = []
         with self.db:
             self.db.execute("BEGIN IMMEDIATE")
-            self._advance(book.received_ns)
+            self._advance(now_ns)
             if self.db.execute("SELECT 1 FROM snapshots WHERE id=?", (snapshot_id,)).fetchone():
                 return []
             self.db.execute("INSERT INTO snapshots VALUES (?, ?)", (snapshot_id, book.received_ns))
@@ -292,7 +293,7 @@ class PaperLedger:
                 self._event("ioc_result", order_id=order["id"], status=status, filled=filled,
                             notional=notional, fee=fee, fee_asset=order["fee_asset"],
                             fee_quote_equivalent=quote_equivalent, quote=quote, snapshot=snapshot_id,
-                            participation=participation, received_ns=book.received_ns)
+                            participation=participation, received_ns=book.received_ns, processed_ns=now_ns)
                 changed.append(self.order(order["id"]))
         return changed
 

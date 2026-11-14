@@ -165,6 +165,11 @@ class RecordingIOError(Exception):
     pass
 
 
+class ConsumerFailure(Exception):
+    """A downstream paper/accounting failure must stop, never reconnect/retry it."""
+    pass
+
+
 class EventWriter:
     def __init__(self, path: Path, max_bytes: int):
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -253,7 +258,7 @@ async def capture_venue(venue: str, pair: str, writer: EventWriter):
                             writer.write(venue, {"kind": "subscription_ack", "id": message.get("id")})
         except asyncio.CancelledError:
             raise
-        except RecordingIOError:
+        except (RecordingIOError, ConsumerFailure):
             raise
         except (RecordingLimit, OSError) as exc:
             # Disk errors must terminate recording. Network OSError gets bounded reconnects.

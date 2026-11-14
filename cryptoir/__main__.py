@@ -119,6 +119,15 @@ def main() -> int:
     paper.add_argument("--output", required=True, type=Path)
     risk_demo = commands.add_parser("risk-demo", help="synthetic loss, risk latch and restart exercise")
     risk_demo.add_argument("--output", required=True, type=Path)
+    forward = commands.add_parser("paper-run", help="bounded experimental forward paper session; public data only")
+    forward.add_argument("--config", required=True, type=Path)
+    forward.add_argument("--directory", required=True, type=Path)
+    forward.add_argument("--seconds", type=int, default=60)
+    forward.add_argument("--max-mb", type=int, default=64)
+    paper_status = commands.add_parser("paper-status", help="read local paper status and inspect its OS owner lock")
+    paper_status.add_argument("directory", type=Path)
+    paper_stop = commands.add_parser("paper-stop", help="create a persistent paper STOP marker; holdings remain owned")
+    paper_stop.add_argument("directory", type=Path)
     catalog = commands.add_parser("catalog", help="record current public market metadata; no account requests")
     catalog.add_argument("--output", required=True, type=Path)
     stream = commands.add_parser("stream", help="bounded public WebSocket recording with gap markers")
@@ -142,6 +151,35 @@ def main() -> int:
     research.add_argument("--dataset", type=Path, required=True)
     research.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "paper-run":
+        import asyncio
+        from .forward import ForwardConfig
+        from .runner import run_paper
+        config = ForwardConfig.from_dict(json.loads(args.config.read_text(encoding="utf-8-sig")))
+        report = asyncio.run(run_paper(config,args.directory,args.seconds,max_mb=args.max_mb))
+        print(encode({"kind":"forward_paper_summary","reason":report["reason"],"counts":report.get("counts",{}),
+                      "orders":len(report["orders"]),"warmup_bars":report["warmup_bars"],
+                      "risk_halt":report["risk"]["halt"],"capital_basis":report["capital_basis"],
+                      "live_execution":False,"profitability_established":False}))
+        return int(report["reason"]!="duration_completed" or not report.get("counts",{}).get(config.venue+":book")
+                   or not report.get("counts",{}).get(config.venue+":candle_accepted"))
+    if args.command == "paper-status":
+        from .runtime import OwnerLock
+        report=json.loads((args.directory/"status.json").read_text(encoding="utf-8"))
+        try:
+            with OwnerLock(args.directory/"owner.lock"):
+                owner_active=False
+        except DataError:
+            owner_active=True
+        report.update(owner_lock_held=owner_active,heartbeat_age_seconds=(time.time_ns()-report["updated_ns"])/1_000_000_000)
+        print(encode(report))
+        return 0
+    if args.command == "paper-stop":
+        if not (args.directory/"paper.sqlite").is_file():
+            raise DataError("not an existing paper experiment")
+        (args.directory/"STOP").touch(exist_ok=True)
+        print(encode({"kind":"paper_stop_requested","holdings":"retained_not_liquidated"}))
+        return 0
     if args.command == "risk-demo":
         from .risk import demo
         print(encode(demo(args.output)))

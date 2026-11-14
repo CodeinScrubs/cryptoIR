@@ -2,11 +2,11 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.6.0، داده و پژوهش اولیه، دفتر حساب و کنترل ریسک پایدار paper. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
+**وضعیت فعلی: نسخهٔ 0.7.0، اجرای آزمایشی paper روی دادهٔ عمومی نوبیتکس، همراه با دفتر حساب و کنترل ریسک پایدار. سودآوری و آمادگی معاملهٔ واقعی اثبات نشده است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
-It also includes public market metadata collection, audited hourly history, preregistered strategy cost screens, and a durable spot paper ledger with an explicitly synthetic demonstration. It has **no authenticated API client, live order submission, withdrawal, transfer, continuous paper bot or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
+It also includes public market metadata collection, audited hourly history, preregistered strategy cost screens, and bounded experimental forward paper sessions on Nobitex with a durable spot ledger and risk guard. It has **no authenticated API client, live order submission, withdrawal, transfer, accepted trading strategy or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
 
 ## Run
 
@@ -22,6 +22,8 @@ uv run python -m cryptoir paper-demo --output data/paper-demo.sqlite
 uv run python -m cryptoir risk-demo --output data/risk-demo.sqlite
 uv run python -m cryptoir stream --seconds 600 --output data/stream.jsonl.gz
 uv run python -m cryptoir stream-audit data/stream.jsonl.gz
+uv run python -m cryptoir paper-run --config examples/paper-reference.json --directory data/paper-reference --seconds 120
+uv run python -m cryptoir paper-status data/paper-reference
 ```
 
 The fee and reserve in this example are **illustrative assumptions**, not verified account fees. The estimate assumes quote-currency fees and prepositioned inventory at both venues. It does not check minimum order size, asset identity across exchanges, available balances, rounding rules, transfer costs, queue position, cancellation or actual fills. Every result has `executable: false`.
@@ -41,7 +43,7 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 
