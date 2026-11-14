@@ -117,6 +117,8 @@ def main() -> int:
     estimate.add_argument("--max-age-ms", type=int, default=5000)
     paper = commands.add_parser("paper-demo", help="synthetic durable accounting exercise, not a trading strategy")
     paper.add_argument("--output", required=True, type=Path)
+    risk_demo = commands.add_parser("risk-demo", help="synthetic loss, risk latch and restart exercise")
+    risk_demo.add_argument("--output", required=True, type=Path)
     catalog = commands.add_parser("catalog", help="record current public market metadata; no account requests")
     catalog.add_argument("--output", required=True, type=Path)
     stream = commands.add_parser("stream", help="bounded public WebSocket recording with gap markers")
@@ -140,6 +142,10 @@ def main() -> int:
     research.add_argument("--dataset", type=Path, required=True)
     research.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "risk-demo":
+        from .risk import demo
+        print(encode(demo(args.output)))
+        return 0
     if args.command == "research":
         from .research import run_experiment
         report = run_experiment(args.plan, args.dataset, args.output)

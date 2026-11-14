@@ -151,7 +151,7 @@ class PaperLedger:
 
     def submit(self, order_id: str, venue: str, pair: str, side: str,
                quantity: Decimal, limit_price: Decimal, rules: Rules, *,
-               now_ns: int, latency_ns: int, ttl_ns: int) -> dict:
+               now_ns: int, latency_ns: int, ttl_ns: int, preflight=None) -> dict:
         base, quote = pair_assets(pair)
         timestamp(now_ns)
         if type(latency_ns) is not int or type(ttl_ns) is not int or not 0 < latency_ns < ttl_ns:
@@ -187,15 +187,23 @@ class PaperLedger:
             if latest and now_ns < int(latest[0]):
                 raise DataError("intent predates simulation clock")
             self._advance(now_ns)
-            self._adjust(venue, asset, free=-hold, reserved=hold)
-            self.db.execute("""INSERT INTO orders
-                (id, venue, pair, side, quantity, price, fee_rate, step, minimum,
-                 created_ns, eligible_ns, expires_ns, held_asset, held, status, fingerprint, fee_mode, fee_asset)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (order_id, venue, pair, side, str(quantity), str(price), str(rules.fee_rate),
-                 str(rules.quantity_step), str(rules.minimum_notional), now_ns, now_ns + latency_ns,
-                 now_ns + ttl_ns, asset, str(hold), "PENDING", fingerprint, rules.buy_fee_mode, fee_asset))
-            self._event("submitted", order_id=order_id, now_ns=now_ns, reserved=hold, asset=asset)
+            # Trusted local guard runs under the same write transaction. Its
+            # risk latch must commit even when the intent is rejected.
+            rejection = preflight() if preflight is not None else None
+            if rejection is not None:
+                self._event("risk_rejected", order_id=order_id, reason=str(rejection), now_ns=now_ns)
+            else:
+                self._adjust(venue, asset, free=-hold, reserved=hold)
+                self.db.execute("""INSERT INTO orders
+                    (id, venue, pair, side, quantity, price, fee_rate, step, minimum,
+                     created_ns, eligible_ns, expires_ns, held_asset, held, status, fingerprint, fee_mode, fee_asset)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (order_id, venue, pair, side, str(quantity), str(price), str(rules.fee_rate),
+                     str(rules.quantity_step), str(rules.minimum_notional), now_ns, now_ns + latency_ns,
+                     now_ns + ttl_ns, asset, str(hold), "PENDING", fingerprint, rules.buy_fee_mode, fee_asset))
+                self._event("submitted", order_id=order_id, now_ns=now_ns, reserved=hold, asset=asset)
+        if rejection is not None:
+            raise DataError("paper risk rejected: " + str(rejection))
         return self.order(order_id)
 
     def _release(self, order, status):

@@ -21,7 +21,7 @@ The demonstration uses invented prices and capital, explicitly labeled in the re
 
 ## Remaining limits
 
-The model lacks maker queues, self-trade prevention, fee-asset rounding, all venue filters, verified account fees, funding/liquidation, portfolio drawdown controls, benchmark valuation and forward orchestration. The order bound uses requested limit notional; it is not a complete portfolio exposure limit. Displayed depth may disappear, and later snapshots do not reflect market impact from earlier hypothetical fills. A participation fraction does not validate fill probability.
+The model lacks maker queues, self-trade prevention, fee-asset rounding, all venue filters, verified account fees, funding/liquidation, multi-venue valuation and forward orchestration. The order bound alone is not a portfolio exposure limit; the optional [single-venue risk wrapper](RISK.md) adds persistent entry, loss and drawdown gates. Displayed depth may disappear, and later snapshots do not reflect market impact from earlier hypothetical fills. A participation fraction does not validate fill probability.
 
 Catalogs preserve native symbols and unknown fields. They are not automatically turned into executable rules: currency scales, asset identity, minimum quantity, fee denomination and other filters must be reconciled first. OTC minimums are not spot minimums; fiat suffixes must not be assigned units by guesswork.
 

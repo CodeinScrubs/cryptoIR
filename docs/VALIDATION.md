@@ -1,6 +1,6 @@
 # Initial validation record
 
-Versions: 0.1.0 through 0.5.0. Date: 2026-11-14.
+Versions: 0.1.0 through 0.6.0. Date: 2026-11-14.
 
 ## Evidence
 
@@ -95,3 +95,19 @@ Initial strategy results and data rejections are recorded in the
 [research ledger](../research/RESULTS.md). Code checks, exact daily aggregates
 and present-day public fee documentation do not verify historical execution or
 historical fees.
+
+## Version 0.6.0 additions (2026-11-14)
+
+- All 131 local tests passed. Eighteen new risk scenarios cover immutable
+  limits, capital mismatch, shared pending-order exposure, order/count caps,
+  stale/unknown source data, timer expiry, gap cancellation, persistent loss
+  latches, reductions during a halt, unknown inventory, depth-aware valuation,
+  overnight gaps, atomic rejection and restart.
+- The synthetic risk demo bought one gross unit at an invented price of 100,
+  received 0.999 units after its hypothetical base fee, then observed an invented
+  bid of 70. The daily-loss latch rejected the next entry and survived reopening
+  the database. The remaining 0.999 units were still held and reported. This is
+  a loss-path accounting test, not market performance.
+- Version 0.5.0 and its research-results commit passed CI on Windows/Linux and
+  Python 3.11/3.13 (`277998a` and `12c055a`).
+- No continuous paper strategy, authenticated request or real trade was run.

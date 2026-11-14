@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.5.0، ثبت دادهٔ زنده، کنترل تاریخچه، آزمون اولیهٔ استراتژی و حسابداری کارمزد در دارایی مربوطه. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
+**وضعیت فعلی: نسخهٔ 0.6.0، داده و پژوهش اولیه، دفتر حساب و کنترل ریسک پایدار paper. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -19,6 +19,7 @@ uv run python -m cryptoir audit data/session.jsonl
 uv run python -m cryptoir estimate data/session.jsonl --quantity 0.0001 --fee 0.004 --reserve-bps 10
 uv run python -m cryptoir catalog --output data/catalog.jsonl
 uv run python -m cryptoir paper-demo --output data/paper-demo.sqlite
+uv run python -m cryptoir risk-demo --output data/risk-demo.sqlite
 uv run python -m cryptoir stream --seconds 600 --output data/stream.jsonl.gz
 uv run python -m cryptoir stream-audit data/stream.jsonl.gz
 ```
@@ -40,7 +41,7 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

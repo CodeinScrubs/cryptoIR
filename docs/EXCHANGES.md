@@ -4,14 +4,14 @@ Reviewed 2026-11-14. Documentation is evidence of advertised interfaces, not acc
 
 | Venue | Official sources | Observed documentation | This version |
 | --- | --- | --- | --- |
-| Nobitex | [API](https://apidocs.nobitex.ir/), [getting started](https://apidocs.nobitex.ir/getting-started) | Spot, margin and WebSocket sections | Public BTC/USDT REST book request succeeded |
-| Wallex | [API](https://developers.wallex.ir/docs/), [depth](https://developers.wallex.ir/docs/basic-services-depth) | Spot, margin and WebSocket sections | Public BTC/USDT REST book request succeeded |
-| Tabdeal | [API](https://docs.tabdeal.org/) | Spot, margin, professional leverage API (FAPI) and streams | Public BTC/USDT REST book request succeeded |
+| Nobitex | [API](https://apidocs.nobitex.ir/), [getting started](https://apidocs.nobitex.ir/getting-started) | Spot, margin and WebSocket sections | Public catalog, REST/WS BTC books, and audited BTC/ETH/SOL hourly windows |
+| Wallex | [API](https://developers.wallex.ir/docs/), [depth](https://developers.wallex.ir/docs/basic-services-depth) | Spot, margin and WebSocket sections | Public catalog and REST/WS BTC books; WS sides are asynchronous; one historical daily discrepancy found |
+| Tabdeal | [API](https://docs.tabdeal.org/) | Spot, margin, professional leverage API (FAPI) and streams | Public catalog and REST/WS BTC books; source-age failures observed in the ten-minute sample |
 | Versland | [official website](https://versland.io/) | Website advertises leveraged products | Public documented trading API not established; no adapter |
 
 REST books: Nobitex uses `apiv2.nobitex.ir/v3/orderbook/{symbol}`; Wallex uses `api.wallex.ir/v1/depth`; Tabdeal uses `api1.tabdeal.org/r/api/v1/depth`. Bootstrap uses public GET requests only.
 
-Nobitex supplies an update timestamp in the inspected response. The inspected Wallex and Tabdeal REST book payloads do not establish a source timestamp, so it remains unknown. Venue-specific stream and metadata research is still needed. Wallex documentation discourages repeated REST polling for depth; continuous collection should use its documented streams.
+Nobitex supplies an update timestamp in the inspected response. The inspected Wallex and Tabdeal REST book payloads do not establish a source timestamp, so it remains unknown. Stream semantics and observations are documented in [STREAMS.md](STREAMS.md) and [VALIDATION.md](VALIDATION.md). Wallex documentation discourages repeated REST polling for depth; continuous collection uses its documented streams.
 
 The public names `IRT`, `TMN`, `RLS`, and contract multipliers cannot be assumed interchangeable. The initial network adapters are deliberately restricted to USDT spot pairs until explicit unit and asset identity mappings have been verified. The standalone IRR/IRT arithmetic utility is tested; a fiat network integration is not yet implemented.
 
