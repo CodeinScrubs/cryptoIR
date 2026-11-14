@@ -78,6 +78,7 @@ def replay_books(path: Path):
 
 def audit_stream(path: Path) -> dict:
     counts, venues, last_book, max_intervals = Counter(), set(), {}, {}
+    source_ages = {}
     ended, reason, size = False, None, path.stat().st_size
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -104,6 +105,12 @@ def audit_stream(path: Path) -> dict:
         last_book[venue] = book.received_ns
         if book.exchange_ns is None:
             counts[venue + ":unknown_source_time"] += 1
+        else:
+            age = book.received_ns - book.exchange_ns
+            stats = source_ages.setdefault(venue, {"minimum": age, "maximum": age, "future_count": 0, "over_5s_count": 0})
+            stats["minimum"], stats["maximum"] = min(stats["minimum"], age), max(stats["maximum"], age)
+            stats["future_count"] += age < 0
+            stats["over_5s_count"] += age > 5_000_000_000
         try:
             book.validate_age(book.received_ns, 5_000_000_000)
         except DataError:
@@ -111,5 +118,6 @@ def audit_stream(path: Path) -> dict:
     return {"kind": "stream_audit", "sha256": digest.hexdigest(), "bytes": size,
             "counts": dict(counts), "ended_cleanly": ended and reason == "duration_completed",
             "end_reason": reason, "max_book_interval_ns": max_intervals,
+            "source_age_ns": source_ages,
             "venues_without_books": sorted(venues - set(last_book)),
             "market_history_complete": False, "execution_ready": False}

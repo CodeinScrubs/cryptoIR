@@ -1,6 +1,6 @@
 # Initial validation record
 
-Versions: 0.1.0 through 0.3.0. Date: 2026-11-14.
+Versions: 0.1.0 through 0.4.0. Date: 2026-11-14.
 
 ## Evidence
 
@@ -31,3 +31,42 @@ These checks do not establish market-history completeness, exchange solvency, qu
 - All 318 Wallex composites retain unknown source timestamps and non-atomic-side status. The run establishes reception, not fill feasibility.
 - File SHA-256: `eaff8a9ea35137e704914866355fc1fde8f726a92a8f4989feca2147ccdca8ac`. Uncompressed size: 3,915,945 bytes. Raw market data remains ignored by Git.
 - Compressed logs, record/hash corruption, missing terminal records and disregard of fabricated derived-book fields are covered by offline tests.
+
+## Version 0.4.0 additions (2026-11-14)
+
+- All 105 local tests passed. Added exact daily reconciliation, raw-source replay,
+  artifact-tampering checks, delayed execution, prior-volume-only sizing, future
+  mutation invariance, spot accounting, and sequential research gate checks.
+- A 600-second observation finished with 844 Nobitex, 3,291 Wallex and 170 Tabdeal
+  reconstructed books. Its gzip SHA-256 is
+  `83bf19d4ebacfcc345e554d9c8186ba25a5d327ef9d687df097c1ab6f6af60bf`;
+  compressed size is 4,616,674 bytes. No reconnect was observed. This is short-run
+  reception evidence, not unattended-operation acceptance.
+- Wallex had 27 unusable intermediate side combinations and no source clock.
+  Tabdeal had 109 books whose source time was over five seconds old; source age
+  ranged from 0.144 to 59.015 seconds (median 13.840). No negative ages occurred.
+  A new incoming message is not sufficient evidence of current executable depth.
+- For the October/November BTC sample, Nobitex had 43 complete days with exact
+  hourly/daily OHLCV equality. Wallex had 44 complete days but one discrepancy:
+  2026-11-10 UTC aggregated open differed by +107.58 USDT and high by +107.57;
+  low, close and volume matched. That Wallex dataset is not reconciled.
+- The longer Nobitex request found a June/July 2025 gap and was rejected before
+  performance evaluation. See the [registered amendment](../research/CHANGELOG.md).
+- The replacement Nobitex BTC window has 11,664 hourly bars, 486 complete exchange
+  days and no gaps. Every OHLCV delta was exactly zero. Raw window edges excluded
+  24 hourly bars. The normalized file SHA-256 is
+  `bca91a50f83c03d56d23d8adb38966a4d3016c5223754153b83024b20bb01611`.
+  The command `history-audit` prints all 486 rows; the complete table and source
+  records are preserved locally. Selected execution-table rows follow.
+
+| Day open UTC | Tehran session date | Hours | Open delta | High delta | Low delta | Close delta | Volume delta | Match |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 2025-07-02 20:30 | 2025-07-03 | 24 | 0 | 0 | 0 | 0 | 0 | yes |
+| 2025-07-03 20:30 | 2025-07-04 | 24 | 0 | 0 | 0 | 0 | 0 | yes |
+| 2025-07-04 20:30 | 2025-07-05 | 24 | 0 | 0 | 0 | 0 | 0 | yes |
+| 2026-10-28 20:30 | 2026-10-29 | 24 | 0 | 0 | 0 | 0 | 0 | yes |
+| 2026-10-29 20:30 | 2026-10-30 | 24 | 0 | 0 | 0 | 0 | 0 | yes |
+| 2026-10-30 20:30 | 2026-10-31 | 24 | 0 | 0 | 0 | 0 | 0 | yes |
+
+These are data and software checks. No strategy has been accepted for forward
+paper or live trading by this release's validation record.

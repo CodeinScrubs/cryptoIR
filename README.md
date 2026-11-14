@@ -2,11 +2,11 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.3.0، ثبت دادهٔ زنده، مشخصات بازار و دفتر حساب paper. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
+**وضعیت فعلی: نسخهٔ 0.4.0، ثبت دادهٔ زنده، کنترل تاریخچه، آزمون اولیهٔ استراتژی و دفتر حساب paper. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
-It also includes public market metadata collection and a durable spot paper ledger with an explicitly synthetic demonstration. It has **no authenticated API client, live order submission, withdrawal, transfer, continuous paper bot or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
+It also includes public market metadata collection, audited hourly history, preregistered strategy cost screens, and a durable spot paper ledger with an explicitly synthetic demonstration. It has **no authenticated API client, live order submission, withdrawal, transfer, continuous paper bot or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
 
 ## Run
 
@@ -40,7 +40,7 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md) and [validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

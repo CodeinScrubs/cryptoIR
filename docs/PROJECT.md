@@ -56,9 +56,9 @@ A strategy that finds no qualifying trade must remain idle. Research may conclud
 | Gate | Evidence required | Current state |
 | --- | --- | --- |
 | G0: scope | Capital/risk stored privately; agreed trading permissions and venue scope | Scope agreed; live risk limits intentionally unset |
-| G1: data | Verified metadata/units; live streams; reconnect/gap tests; coverage audit | Partial: REST, catalogs and three public WebSocket adapters; full unit/history reconciliation incomplete |
+| G1: data | Verified metadata/units; live streams; reconnect/gap tests; coverage audit | Partial: REST, catalogs, three public WebSocket adapters and exact hourly/daily reconciliation; known historical gaps and venue discrepancies remain |
 | G2: simulation | Portfolio accounting; venue-specific rules; causal fills; recovery/invariant tests | Partial: durable spot ledger and synthetic next-snapshot IOC model |
-| G3: research | Reproducible held-out results after all costs and stress scenarios | Not started |
+| G3: research | Reproducible held-out results after all costs and stress scenarios | Preliminary hourly screening engine and registered experiments; no accepted strategy |
 | G4: paper | Prospective net performance and operational reliability; calibrated fill assumptions | Not started |
 | G5: limited live | User-approved finite limits; account permissions; reconciliation and shutdown exercises | Disabled / not implemented |
 | G6: autonomous operation | Sustained observed live results and ongoing risk/operational monitoring | Not established |
@@ -69,4 +69,4 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
-Acquire and audit historical candles for baseline research, preserving incomplete-data boundaries. Reconcile market units and integrate the spot ledger with causal replay, strategy interfaces and portfolio risk controls before leveraged products. Extend bounded WebSocket observation to longer forward runs. Time-box Versland API discovery and mark missing capabilities instead of guessing routes or placing browser orders.
+Evaluate the registered baseline screens on audited continuous windows and retain negative results. Complete IRT and full-holding benchmarks and validate actual account costs before interpreting returns. Reconcile market units and integrate the spot ledger with causal replay, strategy interfaces and portfolio risk controls before leveraged products. Extend bounded WebSocket observation to longer forward runs. Time-box Versland API discovery and mark missing capabilities instead of guessing routes or placing browser orders.

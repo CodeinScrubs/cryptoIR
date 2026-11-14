@@ -127,7 +127,45 @@ def main() -> int:
     stream.add_argument("--max-mb", type=int, default=64)
     stream_check = commands.add_parser("stream-audit", help="validate stream log and replay original frames")
     stream_check.add_argument("path", type=Path)
+    history = commands.add_parser("history", help="download hourly data and reconcile against exchange daily bars")
+    history.add_argument("--venue", choices=["nobitex", "wallex"], required=True)
+    history.add_argument("--pair", default="BTC/USDT")
+    history.add_argument("--start", required=True, help="UTC date YYYY-MM-DD inclusive")
+    history.add_argument("--end", required=True, help="UTC date YYYY-MM-DD exclusive")
+    history.add_argument("--output", type=Path, required=True)
+    history_check = commands.add_parser("history-audit", help="rebuild historical reconciliation from original responses")
+    history_check.add_argument("directory", type=Path)
+    research = commands.add_parser("research", help="run preregistered cost screens with sequential holdout gates")
+    research.add_argument("--plan", type=Path, required=True)
+    research.add_argument("--dataset", type=Path, required=True)
+    research.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "research":
+        from .research import run_experiment
+        report = run_experiment(args.plan, args.dataset, args.output)
+        print(encode({key: report[key] for key in ("experiment", "status", "selected", "held_out_inspected", "execution_ready")}))
+        return 0
+    if args.command == "history-audit":
+        from datetime import datetime, timezone, timedelta
+        from .history import audit_history
+        result, _ = audit_history(args.directory)
+        table = result.pop("table")
+        print(encode(result))
+        print("Day_UTC | Day_Tehran | Bars | Open_delta | High_delta | Low_delta | Close_delta | Volume_delta | Match")
+        for row in table:
+            utc = datetime.fromtimestamp(row["day_open_epoch"], timezone.utc)
+            deltas = row["deltas"] or {key: "unknown" for key in ("open", "high", "low", "close", "volume")}
+            print(" | ".join(map(str, (utc.isoformat(), utc.astimezone(timezone(timedelta(hours=3, minutes=30))).isoformat(),
+                                       row["hour_count"], *(deltas[k] for k in ("open", "high", "low", "close", "volume")), row["matched"]))))
+        return int(not result["reconciled"])
+    if args.command == "history":
+        from datetime import datetime, timezone
+        from .history import download_history
+        start = int(datetime.strptime(args.start, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
+        end = int(datetime.strptime(args.end, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
+        result = download_history(args.output, args.venue, args.pair, start, end)
+        print(encode(result))
+        return int(not result["reconciled"])
     if args.command == "stream-audit":
         from .stream_audit import audit_stream
         result = audit_stream(args.path)
