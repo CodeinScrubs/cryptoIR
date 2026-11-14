@@ -1,5 +1,7 @@
 import tempfile
 import unittest
+import hashlib
+import sqlite3
 from dataclasses import replace
 from decimal import Decimal as D
 from pathlib import Path
@@ -180,6 +182,80 @@ class PaperTests(unittest.TestCase):
         self.assertFalse(result["profitability_established"])
         with self.assertRaises(FileExistsError):
             demo(target)
+
+    def submit_received_fee(self):
+        return self.ledger.submit("base-fee", "a", "BTC/USDT", "buy", D(1), D(101),
+                                  replace(RULES, buy_fee_mode="received_base"), now_ns=1_000_000_000,
+                                  latency_ns=100_000_000, ttl_ns=3_000_000_000)
+
+    def test_received_asset_fee_reserves_only_quote_notional(self):
+        self.submit_received_fee()
+        self.assertEqual(self.ledger.balance("a", "USDT"), (D(899), D(101)))
+        self.fill()
+        self.assertEqual(self.ledger.balance("a", "USDT"), (D(900), D(0)))
+        self.assertEqual(self.ledger.balance("a", "BTC"), (D("2.99"), D(0)))
+        order = self.ledger.order("base-fee")
+        self.assertEqual(order["fee_asset"], "BTC")
+        self.assertEqual(D(order["fee"]), D("0.01"))
+        self.assertEqual(D(order["fee_quote_equivalent"]), D(1))
+
+    def test_received_asset_partial_fill_survives_restart(self):
+        self.submit_received_fee()
+        self.ledger.close()
+        self.ledger = PaperLedger(self.path)
+        self.fill(participation=D("0.25"))
+        self.assertEqual(self.ledger.balance("a", "USDT"), (D(975), D(0)))
+        self.assertEqual(self.ledger.balance("a", "BTC"), (D("2.2475"), D(0)))
+        self.assertEqual(self.ledger.order("base-fee")["status"], "PARTIAL_CANCELED")
+
+    def test_fee_mode_changes_cannot_reuse_order_id(self):
+        self.submit_received_fee()
+        with self.assertRaises(DataError):
+            self.submit(order_id="base-fee")
+
+    def make_legacy_schema(self):
+        self.submit()
+        legacy_rules = "Rules(quantity_step=Decimal('0.01'), price_tick=Decimal('0.01'), minimum_notional=Decimal('1'), maximum_notional=Decimal('500'), quote_fee_rate=Decimal('0.01'))"
+        intent = ("a", "BTC/USDT", "buy", "1", "101", legacy_rules, 1_000_000_000, 100_000_000, 3_000_000_000)
+        with self.ledger.db:
+            for column in ("fee_mode", "fee_asset", "fee_quote_equivalent"):
+                self.ledger.db.execute("ALTER TABLE orders DROP COLUMN "+column)
+            self.ledger.db.execute("UPDATE orders SET fingerprint=?", (hashlib.sha256(repr(intent).encode()).hexdigest(),))
+            self.ledger.db.execute("UPDATE metadata SET value='1' WHERE key='schema'")
+        self.ledger.close()
+
+    def test_legacy_requires_explicit_upgrade_and_preserves_idempotency(self):
+        self.make_legacy_schema()
+        with self.assertRaises(DataError):
+            PaperLedger(self.path)
+        self.ledger = PaperLedger(self.path, upgrade=True)
+        backup = self.path.with_name(self.path.name+".schema1-backup.sqlite")
+        self.assertTrue(backup.exists())
+        connection = sqlite3.connect(backup)
+        try:
+            self.assertEqual(connection.execute("SELECT value FROM metadata WHERE key='schema'").fetchone()[0], "1")
+            self.assertEqual(connection.execute("SELECT status FROM orders").fetchone()[0], "PENDING")
+        finally:
+            connection.close()
+        before = self.ledger.report()
+        self.submit()
+        self.assertEqual(self.ledger.report(), before)
+        self.fill()
+        self.assertEqual(self.ledger.balance("a", "USDT"), (D(899), D(0)))
+        self.assertEqual(self.ledger.order("one")["fee_asset"], "USDT")
+
+    def test_migration_does_not_overwrite_prior_backup(self):
+        self.make_legacy_schema()
+        backup = self.path.with_name(self.path.name+".schema1-backup.sqlite")
+        backup.write_bytes(b"keep")
+        with self.assertRaises(FileExistsError):
+            PaperLedger(self.path, upgrade=True)
+        self.assertEqual(backup.read_bytes(), b"keep")
+        connection = sqlite3.connect(self.path)
+        try:
+            self.assertEqual(connection.execute("SELECT value FROM metadata WHERE key='schema'").fetchone()[0], "1")
+        finally:
+            connection.close()
 
 
 if __name__ == "__main__":

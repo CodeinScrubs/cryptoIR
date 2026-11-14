@@ -1,6 +1,6 @@
 # Initial validation record
 
-Versions: 0.1.0 through 0.4.0. Date: 2026-11-14.
+Versions: 0.1.0 through 0.5.0. Date: 2026-11-14.
 
 ## Evidence
 
@@ -70,3 +70,28 @@ These checks do not establish market-history completeness, exchange solvency, qu
 
 These are data and software checks. No strategy has been accepted for forward
 paper or live trading by this release's validation record.
+
+## Version 0.5.0 additions (2026-11-14)
+
+- All 113 local tests passed, including received-asset fees, dust valuation,
+  subsequent entries after dust-only exits, restart with partial base-fee fills,
+  fee-mode idempotency conflicts, explicit schema migration, consistent backups,
+  refusal to overwrite backups and preserved legacy order identities.
+- Version 0.4.0 CI passed all four Windows/Linux and Python 3.11/3.13 jobs on
+  commit `8aa9c8557974a65b83af35d0c01159c0e544404a`.
+- The revised July 6, 2025 through November 1, 2026 request window produced
+  11,568 hourly candles and 482 exactly reconciled complete sessions **for each**
+  of BTC, ETH and SOL on Nobitex. No missing sessions or interior hourly gaps
+  remained. Raw partial request-edge hours were excluded; no missing values
+  were synthesized. Each local `audit-table.txt` contains all daily deltas.
+
+| Pair | Normalized SHA-256 |
+| --- | --- |
+| BTC/USDT | `cafdb285307878a12193e8135be7f1fa3620edcab019cf0d351bedbad98f3c0a` |
+| ETH/USDT | `0271ab4809c3a30214991f146acbcf579889dc47da8fe19ae564911dd03d8c82` |
+| SOL/USDT | `735fa75b85abf03c5dfc6ef3bc20ee753af0c09b7c71ce7e5deaaf90c90a5080` |
+
+Initial strategy results and data rejections are recorded in the
+[research ledger](../research/RESULTS.md). Code checks, exact daily aggregates
+and present-day public fee documentation do not verify historical execution or
+historical fees.

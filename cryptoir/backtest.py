@@ -25,10 +25,11 @@ class Assumptions:
     quantity_step: Decimal
     minimum_notional: Decimal
     delay_hours: int = 1
+    buy_fee_mode: str = "quote"
 
     def __post_init__(self):
         for key in asdict(self):
-            if key != "delay_hours":
+            if key not in ("delay_hours", "buy_fee_mode"):
                 object.__setattr__(self, key, number(getattr(self, key)))
         if self.capital <= 0 or not 0 < self.allocation <= 1 or not 0 <= self.fee < 1:
             raise DataError("invalid capital, allocation or fee")
@@ -38,6 +39,8 @@ class Assumptions:
             raise DataError("explicit positive quantity step and minimum required")
         if type(self.delay_hours) is not int or not 1 <= self.delay_hours <= 24:
             raise DataError("use 1..24 complete hours of decision-to-execution delay")
+        if self.buy_fee_mode not in ("quote", "received_base"):
+            raise DataError("buy fee must explicitly use quote or received_base")
 
 
 class Signal:
@@ -103,10 +106,16 @@ def screen(bars: list[Candle], name: str, assumptions: Assumptions, start: int, 
     for bar in bars[max(0, first-168):first]:
         signal.observe(bar)
     cash, quantity, basis, realized = cfg.capital, ZERO, ZERO, ZERO
-    fees, impact, turnover, peak, drawdown = ZERO, ZERO, ZERO, cfg.capital, ZERO
+    fees, base_fees, quote_fees, impact, turnover, peak, drawdown = ZERO, ZERO, ZERO, ZERO, ZERO, cfg.capital, ZERO
     pending, trades, equity = None, [], []
     rejects, cancellations, exposed = 0, 0, 0
     buy_factor, sell_factor = 1+cfg.adverse_bps/10000, 1-cfg.adverse_bps/10000
+    buy_cash_factor = 1+cfg.fee if cfg.buy_fee_mode == "quote" else Decimal(1)
+
+    def tradeable_position(amount, reference):
+        rounded = floor_quantity(amount, cfg.quantity_step)
+        return rounded > 0 and rounded*reference*sell_factor >= cfg.minimum_notional
+
     for i in indices:
         bar = bars[i]
         if pending and i >= pending["due_index"]:
@@ -120,7 +129,7 @@ def screen(bars: list[Candle], name: str, assumptions: Assumptions, start: int, 
             if buy:
                 nav = cash + quantity * bar.open
                 exposure_capacity = max(ZERO, nav * cfg.allocation - quantity * price)
-                wanted = min(wanted, cash/(price*(1+cfg.fee)), exposure_capacity/(price*(1+cfg.fee)))
+                wanted = min(wanted, cash/(price*buy_cash_factor), exposure_capacity/(price*buy_cash_factor))
             else:
                 wanted = min(wanted, quantity)
             fill = floor_quantity(min(wanted, capacity), cfg.quantity_step)
@@ -129,11 +138,13 @@ def screen(bars: list[Candle], name: str, assumptions: Assumptions, start: int, 
                 rejects += 1
             else:
                 fee = notional * cfg.fee
+                base_fee = fill * cfg.fee if buy and cfg.buy_fee_mode == "received_base" else ZERO
+                quote_fee = fee if not buy or cfg.buy_fee_mode == "quote" else ZERO
                 if buy:
-                    spent = notional + fee
+                    spent = notional + quote_fee
                     cash -= spent
                     basis += spent
-                    quantity += fill
+                    quantity += fill - base_fee
                 else:
                     allocated_basis = basis * fill / quantity
                     proceeds = notional - fee
@@ -142,15 +153,23 @@ def screen(bars: list[Candle], name: str, assumptions: Assumptions, start: int, 
                     basis -= allocated_basis
                     quantity -= fill
                 fees += fee
+                base_fees += base_fee
+                quote_fees += quote_fee
                 impact += fill * abs(price-bar.open)
                 turnover += notional
                 trades.append({"decision_time": intent["decision_time"], "execution_time": bar.time,
                                "side": intent["side"], "requested": intent["quantity"], "quantity": fill,
-                               "price": price, "fee": fee, "unused_quantity": intent["quantity"]-fill,
-                               "position_after": quantity})
+                               "price": price, "fee": fee, "fee_quote_equivalent": fee,
+                               "fee_base": base_fee, "fee_quote": quote_fee,
+                               "net_base_change": fill-base_fee if buy else -fill,
+                               "unused_quantity": intent["quantity"]-fill,
+                               "position_after": quantity,
+                               "remaining_position_tradeable": tradeable_position(quantity, bar.open)})
             if cash < 0 or quantity < 0 or basis < 0:
                 raise AssertionError("spot accounting invariant violated")
-        liquidation_mark = cash + quantity * bar.close * sell_factor * (1-cfg.fee)
+        saleable = floor_quantity(quantity, cfg.quantity_step) if tradeable_position(quantity, bar.close) else ZERO
+        # Untradeable dust remains owned but has zero assumed liquidation value.
+        liquidation_mark = cash + saleable * bar.close * sell_factor * (1-cfg.fee)
         peak = max(peak, liquidation_mark)
         drawdown = max(drawdown, (peak-liquidation_mark)/peak)
         equity.append({"time": bar.time+HOUR, "equity": liquidation_mark, "cash": cash, "quantity": quantity})
@@ -159,11 +178,11 @@ def screen(bars: list[Candle], name: str, assumptions: Assumptions, start: int, 
         if pending and (pending["side"] == "buy") != desired:
             pending = None
             cancellations += 1
-        if pending is None and desired != (quantity > 0):
+        if pending is None and desired != tradeable_position(quantity, bar.close):
             if desired:
-                order_quantity = floor_quantity(liquidation_mark * cfg.allocation / (bar.close*buy_factor*(1+cfg.fee)), cfg.quantity_step)
+                order_quantity = floor_quantity(liquidation_mark * cfg.allocation / (bar.close*buy_factor*buy_cash_factor), cfg.quantity_step)
             else:
-                order_quantity = quantity
+                order_quantity = floor_quantity(quantity, cfg.quantity_step)
             if order_quantity > 0:
                 pending = {"side": "buy" if desired else "sell", "quantity": order_quantity,
                            "decision_time": bar.time+HOUR, "due_index": i+1+cfg.delay_hours}
@@ -176,9 +195,13 @@ def screen(bars: list[Candle], name: str, assumptions: Assumptions, start: int, 
             "final_liquidation_mark": final, "net_return": final/cfg.capital-1,
             "max_drawdown": drawdown, "cash": cash, "base_quantity": quantity,
             "realized_pnl": realized, "unrealized_pnl_with_exit_costs": unrealized,
-            "paid_fees": fees, "modeled_adverse_price_cost": impact,
+            "paid_fees": fees, "paid_fees_quote_equivalent": fees,
+            "paid_fees_base": base_fees, "paid_fees_quote": quote_fees,
+            "modeled_adverse_price_cost": impact,
             "turnover_multiple": turnover/cfg.capital, "exposed_bars": exposed,
             "rejected_orders": rejects, "cancelled_intents": cancellations,
             "pending_at_end": pending is not None, "trade_count": len(trades),
-            "completed_sells": sum(t["side"] == "sell" and t["position_after"] == 0 for t in trades),
+            "completed_sells": sum(t["side"] == "sell" and not t["remaining_position_tradeable"] for t in trades),
+            "residual_dust_quantity": quantity-saleable,
+            "dust_reference_value_before_costs": (quantity-saleable)*bars[last].close,
             "trades": trades, "equity": equity}

@@ -107,6 +107,33 @@ class BacktestTests(unittest.TestCase):
         self.assertEqual(report["trade_count"], 0)
         self.assertEqual(report["cash"], 1000)
 
+    def test_received_base_fee_is_not_also_debited_from_quote(self):
+        cfg = replace(self.cfg, buy_fee_mode="received_base", prior_volume_fraction=1)
+        report = self.run_screen(cfg=cfg)
+        trade = report["trades"][0]
+        self.assertEqual(report["cash"], cfg.capital-trade["quantity"]*trade["price"])
+        self.assertEqual(trade["fee_quote"], 0)
+        self.assertEqual(report["base_quantity"], trade["quantity"]*(1-cfg.fee))
+        self.assertEqual(report["paid_fees_base"], trade["quantity"]*cfg.fee)
+        self.assertEqual(report["paid_fees_quote"], 0)
+
+    def test_received_fee_dust_is_retained_and_does_not_block_next_entry(self):
+        prices = [D(100)+i for i in range(180)] + [D(100)]*200
+        prices += [D(100)+i for i in range(180)] + [D(100)]*200
+        bars = [Candle(self.start+i*HOUR, price, price, price, price, 100) for i, price in enumerate(prices)]
+        report = self.run_screen(bars, replace(self.cfg, buy_fee_mode="received_base", quantity_step="0.001"), "trend_24_168")
+        self.assertEqual(report["completed_sells"], 2)
+        self.assertGreater(report["residual_dust_quantity"], 0)
+        self.assertLess(report["residual_dust_quantity"], D("0.001"))
+        self.assertEqual(report["base_quantity"], report["residual_dust_quantity"])
+        self.assertEqual(report["final_liquidation_mark"], report["cash"])
+        self.assertAlmostEqual(report["final_liquidation_mark"]-1000,
+                               report["realized_pnl"]+report["unrealized_pnl_with_exit_costs"])
+
+    def test_unrecognized_fee_mode_rejected(self):
+        with self.assertRaises(DataError):
+            replace(self.cfg, buy_fee_mode="free")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.4.0، ثبت دادهٔ زنده، کنترل تاریخچه، آزمون اولیهٔ استراتژی و دفتر حساب paper. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
+**وضعیت فعلی: نسخهٔ 0.5.0، ثبت دادهٔ زنده، کنترل تاریخچه، آزمون اولیهٔ استراتژی و حسابداری کارمزد در دارایی مربوطه. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 

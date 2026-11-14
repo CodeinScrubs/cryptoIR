@@ -20,3 +20,12 @@ Account API rights, fee tiers, minimums, leverage availability, collateral rules
 Version 0.2.0 also reads public catalogs from [Nobitex options](https://apidocs.nobitex.ir/options/get-system-options), [Wallex markets](https://developers.wallex.ir/docs/basic-services-markets) and [Tabdeal exchangeInfo](https://docs.tabdeal.org/). Unknown rules remain unknown. Wallex's observed `otc_min_notional` is not used as a spot minimum; Nobitex scaled symbols are not collapsed into ordinary coin symbols.
 
 Browser observations are for inspection and integration diagnosis; the production order path is intended to use stable, documented APIs. A separate browser/controller's availability does not prove API reachability, and API reachability does not prove logged-in browser access.
+
+## Fee observation, 2026-11-14
+
+The [official Nobitex pricing page](https://nobitex.ir/pricing/) lists base USDT
+market maker/taker rates of 0.10%/0.13%, with tiers based on 30-day volume. It
+describes charging fees in the asset received. Version 0.5 supports that buy-fee
+mechanism as well as explicit quote-fee scenarios. These published current rates
+do not establish a user's tier or the rates used in historical periods. The
+spot backtester does not model margin renewal charges or profit-sharing fees.

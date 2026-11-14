@@ -1,6 +1,6 @@
 # Historical data and preliminary strategy screens
 
-Implemented in version 0.4.0. A cost screen is a preliminary rejection tool. It
+Implemented in version 0.4.0, with fee-asset support in 0.5.0. A cost screen is a preliminary rejection tool. It
 does not establish tradability, profitable paper operation, or live readiness.
 
 ## Provenance and day boundaries
@@ -40,7 +40,8 @@ to the venue's day open; actual evaluation epochs are included in every trial.
   no earlier than the open one full hour later, with a configurable 1..24-hour
   delay. No signal receives a future bar or the dataset itself.
 - The model buys and sells at that later open with an explicit adverse price
-  adjustment and quote-denominated fees. It makes no maker or touched-limit fill
+  adjustment. Buy fees explicitly use quote or received base; sell fees use quote.
+  It makes no maker or touched-limit fill
   assumption. Price costs can place an assumed execution outside the candle.
 - Quantity is rounded down, checked against an explicit minimum, capped by cash
   and the allocation at entry, and limited to a specified fraction of the
@@ -49,10 +50,14 @@ to the venue's day open; actual evaluation epochs are included in every trial.
 - Unfilled IOC remainder is cancelled. An unfulfilled target may create a new
   intent later. Open positions are not continuously rebalanced to the initial
   allocation; their weight can grow with prices. This is not a full risk engine.
-- Held base asset is marked at close less hypothetical exit price costs and
-  fees. It remains an open position, not a fabricated realized sale. Reporting
+- The sellable part of held base is marked at close less hypothetical exit price
+  costs and fees. Unsellable dust remains in quantity and basis, with zero
+  assumed liquidation value; its reference price value is separately reported.
+  It remains an open position, not a fabricated realized sale. Reporting
   distinguishes realized P&L, unrealized P&L, actual modeled fees and estimated
-  final exit costs. Hourly close drawdown misses intrahour extremes.
+  final exit costs. Completed exits include exits leaving only unsellable dust;
+  that dust cannot block later entries or silently disappear. Hourly close
+  drawdown misses intrahour extremes.
 - Each split starts with the same synthetic reference cash. Prior completed
   candles warm up the signal, but positions and profits do not carry into the
   next split. Results are independent screening segments, not a continuous
@@ -66,7 +71,7 @@ with a 2% entry threshold. These are hypotheses, not recommendations.
 
 Plans also freeze data windows, base/stress costs, synthetic capital, quantity
 rules, allocation and gates. Discovery must pass the positive-return,
-drawdown, completed-exit and equal-allocation BTC-hold gates under the specified
+drawdown, completed-exit and equal-allocation asset-hold gates under the specified
 costs. The winner is selected by worst-cost return with a deterministic tie
 break. Only that unchanged candidate advances to validation, then held-out
 evaluation. Rejected discovery stops without calculating later returns.
@@ -78,10 +83,13 @@ versions. A previously inspected holdout is never made unseen by renaming a
 plan. Data-driven plan amendments and the reason for them belong in
 [the research changelog](../research/CHANGELOG.md).
 
-Initial plans compare USDT cash and equal-allocation BTC holding within each
+Initial plans compare USDT cash and equal-allocation holding of the traded asset within each
 split. Full BTC allocation, IRT performance and actual conversion of personal
 capital remain outstanding. Unknown historical fees, fee denomination,
 precision/minimum rules, symbol selection bias, tax and operating costs remain
 explicit assumptions. No borrowed money, liquidation, funding, queue model,
 statistical confidence claim, calibrated fills or deployment approval is
-included. Passing this screen would justify further research only.
+included. Passing this screen would justify further research only. The v2 plan
+uses the currently documented Nobitex taker fee as a counterfactual across past
+prices; it does not reconstruct historical fee tiers. See [results](../research/RESULTS.md)
+for unsuccessful trials and [amendments](../research/CHANGELOG.md) for all changes.

@@ -1,7 +1,7 @@
 """Durable spot-only paper ledger with conservative next-snapshot IOC fills.
 
-This module cannot communicate with an exchange. Fees are explicit, assumed to
-be quote-denominated. It is a simulation component, not a validated fill model.
+This module cannot communicate with an exchange. Fees have explicit assets.
+It is a simulation component, not a validated fill model.
 """
 
 import hashlib
@@ -22,17 +22,21 @@ class Rules:
     price_tick: Decimal
     minimum_notional: Decimal
     maximum_notional: Decimal
-    quote_fee_rate: Decimal
+    fee_rate: Decimal
+    buy_fee_mode: str = "quote"
 
     def __post_init__(self):
         for name in self.__dataclass_fields__:
-            object.__setattr__(self, name, number(getattr(self, name)))
+            if name != "buy_fee_mode":
+                object.__setattr__(self, name, number(getattr(self, name)))
         if min(self.quantity_step, self.price_tick, self.minimum_notional) <= 0:
             raise DataError("market increments and minimum must be positive")
         if self.maximum_notional < self.minimum_notional:
             raise DataError("finite maximum must cover minimum")
-        if not 0 <= self.quote_fee_rate < 1:
+        if not 0 <= self.fee_rate < 1:
             raise DataError("invalid explicit fee")
+        if self.buy_fee_mode not in ("quote", "received_base"):
+            raise DataError("unsupported buy fee asset")
 
 
 def timestamp(value: int) -> int:
@@ -49,7 +53,7 @@ def pair_assets(pair: str) -> tuple[str, str]:
 
 
 class PaperLedger:
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, *, upgrade=False):
         self.db = sqlite3.connect(path)
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys=ON")
@@ -65,7 +69,9 @@ class PaperLedger:
                 fee_rate TEXT, step TEXT, minimum TEXT, created_ns INTEGER,
                 eligible_ns INTEGER, expires_ns INTEGER, held_asset TEXT, held TEXT,
                 status TEXT, filled TEXT DEFAULT '0', notional TEXT DEFAULT '0',
-                fee TEXT DEFAULT '0', fingerprint TEXT NOT NULL);
+                fee TEXT DEFAULT '0', fingerprint TEXT NOT NULL,
+                fee_mode TEXT NOT NULL DEFAULT 'quote', fee_asset TEXT,
+                fee_quote_equivalent TEXT DEFAULT '0');
             CREATE TABLE IF NOT EXISTS journal (
                 seq INTEGER PRIMARY KEY AUTOINCREMENT, event TEXT, details TEXT);
             CREATE TABLE IF NOT EXISTS snapshots (
@@ -74,10 +80,34 @@ class PaperLedger:
                 key TEXT PRIMARY KEY, value TEXT);
         """)
         with self.db:
-            self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('schema', '1')")
-        if self.db.execute("SELECT value FROM metadata WHERE key='schema'").fetchone()[0] != "1":
+            self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('schema', '2')")
+        schema = self.db.execute("SELECT value FROM metadata WHERE key='schema'").fetchone()[0]
+        if schema == "1" and upgrade:
+            try:
+                # Exclusive, consistent SQLite backup before any migration.
+                backup = path.with_name(path.name + ".schema1-backup.sqlite")
+                with backup.open("xb"):
+                    pass
+                destination = sqlite3.connect(backup)
+                try:
+                    self.db.backup(destination)
+                finally:
+                    destination.close()
+                with self.db:
+                    self.db.execute("BEGIN IMMEDIATE")
+                    self.db.execute("ALTER TABLE orders ADD COLUMN fee_mode TEXT NOT NULL DEFAULT 'quote'")
+                    self.db.execute("ALTER TABLE orders ADD COLUMN fee_asset TEXT")
+                    self.db.execute("ALTER TABLE orders ADD COLUMN fee_quote_equivalent TEXT DEFAULT '0'")
+                    self.db.execute("UPDATE orders SET fee_asset=substr(pair,instr(pair,'/')+1), fee_quote_equivalent=fee")
+                    self.db.execute("UPDATE metadata SET value='2' WHERE key='schema'")
+                    self._event("schema_upgraded", old_schema=1, new_schema=2)
+                schema = "2"
+            except Exception:
+                self.close()
+                raise
+        if schema != "2":
             self.close()
-            raise DataError("unsupported paper database schema")
+            raise DataError("unsupported paper schema; version 1 requires explicit upgrade=True with automatic backup")
 
     def close(self):
         self.db.close()
@@ -135,13 +165,20 @@ class PaperLedger:
             raise DataError("order violates finite notional bounds")
         intent = (venue, pair, side, str(quantity), str(price), str(rules), now_ns, latency_ns, ttl_ns)
         fingerprint = hashlib.sha256(repr(intent).encode()).hexdigest()
+        # v1 order identities remain idempotent after an explicit upgrade.
+        legacy_rules = (f"Rules(quantity_step={rules.quantity_step!r}, price_tick={rules.price_tick!r}, "
+                        f"minimum_notional={rules.minimum_notional!r}, maximum_notional={rules.maximum_notional!r}, "
+                        f"quote_fee_rate={rules.fee_rate!r})")
+        legacy_intent = (venue, pair, side, str(quantity), str(price), legacy_rules, now_ns, latency_ns, ttl_ns)
+        legacy_fingerprint = hashlib.sha256(repr(legacy_intent).encode()).hexdigest()
         asset = quote if side == "buy" else base
-        hold = quantity * price * (1 + rules.quote_fee_rate) if side == "buy" else quantity
+        hold = quantity * price * (1 + rules.fee_rate if rules.buy_fee_mode == "quote" else 1) if side == "buy" else quantity
+        fee_asset = base if side == "buy" and rules.buy_fee_mode == "received_base" else quote
         with self.db:
             self.db.execute("BEGIN IMMEDIATE")
             existing = self.db.execute("SELECT fingerprint FROM orders WHERE id=?", (order_id,)).fetchone()
             if existing:
-                if existing[0] != fingerprint:
+                if existing[0] != fingerprint and not (rules.buy_fee_mode == "quote" and existing[0] == legacy_fingerprint):
                     raise DataError("conflicting reuse of paper order id")
                 return self.order(order_id)
             if not self.db.execute("SELECT 1 FROM metadata WHERE key='seeded'").fetchone():
@@ -153,11 +190,11 @@ class PaperLedger:
             self._adjust(venue, asset, free=-hold, reserved=hold)
             self.db.execute("""INSERT INTO orders
                 (id, venue, pair, side, quantity, price, fee_rate, step, minimum,
-                 created_ns, eligible_ns, expires_ns, held_asset, held, status, fingerprint)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (order_id, venue, pair, side, str(quantity), str(price), str(rules.quote_fee_rate),
+                 created_ns, eligible_ns, expires_ns, held_asset, held, status, fingerprint, fee_mode, fee_asset)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (order_id, venue, pair, side, str(quantity), str(price), str(rules.fee_rate),
                  str(rules.quantity_step), str(rules.minimum_notional), now_ns, now_ns + latency_ns,
-                 now_ns + ttl_ns, asset, str(hold), "PENDING", fingerprint))
+                 now_ns + ttl_ns, asset, str(hold), "PENDING", fingerprint, rules.buy_fee_mode, fee_asset))
             self._event("submitted", order_id=order_id, now_ns=now_ns, reserved=hold, asset=asset)
         return self.order(order_id)
 
@@ -233,18 +270,20 @@ class PaperLedger:
                     if filled == quantity:
                         break
                 base, quote = pair_assets(order["pair"])
-                hold, fee = number(order["held"]), notional * number(order["fee_rate"])
+                hold, quote_equivalent = number(order["held"]), notional * number(order["fee_rate"])
+                fee = filled * number(order["fee_rate"]) if order["fee_asset"] == base else quote_equivalent
                 if order["side"] == "buy":
-                    self._adjust(book.venue, quote, free=hold - notional - fee, reserved=-hold)
-                    self._adjust(book.venue, base, free=filled)
+                    self._adjust(book.venue, quote, free=hold-notional-(fee if order["fee_asset"] == quote else ZERO), reserved=-hold)
+                    self._adjust(book.venue, base, free=filled-(fee if order["fee_asset"] == base else ZERO))
                 else:
                     self._adjust(book.venue, base, free=hold - filled, reserved=-hold)
                     self._adjust(book.venue, quote, free=notional - fee)
                 status = "FILLED" if filled == quantity else "PARTIAL_CANCELED" if filled else "CANCELED"
-                self.db.execute("UPDATE orders SET status=?, held='0', filled=?, notional=?, fee=? WHERE id=?",
-                                (status, str(filled), str(notional), str(fee), order["id"]))
+                self.db.execute("UPDATE orders SET status=?, held='0', filled=?, notional=?, fee=?, fee_quote_equivalent=? WHERE id=?",
+                                (status, str(filled), str(notional), str(fee), str(quote_equivalent), order["id"]))
                 self._event("ioc_result", order_id=order["id"], status=status, filled=filled,
-                            notional=notional, fee=fee, quote=quote, snapshot=snapshot_id,
+                            notional=notional, fee=fee, fee_asset=order["fee_asset"],
+                            fee_quote_equivalent=quote_equivalent, quote=quote, snapshot=snapshot_id,
                             participation=participation, received_ns=book.received_ns)
                 changed.append(self.order(order["id"]))
         return changed
@@ -252,7 +291,7 @@ class PaperLedger:
     def report(self) -> dict:
         return {"kind": "paper_accounting", "live_execution": False, "profitability_established": False,
                 "balances": [dict(row) for row in self.db.execute("SELECT * FROM balances ORDER BY venue, asset")],
-                "orders": [dict(row) for row in self.db.execute("SELECT id,venue,pair,side,status,filled,notional,fee FROM orders ORDER BY seq")],
+                "orders": [dict(row) for row in self.db.execute("SELECT id,venue,pair,side,status,filled,notional,fee,fee_asset,fee_quote_equivalent,fee_mode FROM orders ORDER BY seq")],
                 "journal_events": self.db.execute("SELECT count(*) FROM journal").fetchone()[0]}
 
 
