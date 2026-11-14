@@ -17,4 +17,6 @@ The public names `IRT`, `TMN`, `RLS`, and contract multipliers cannot be assumed
 
 Account API rights, fee tiers, minimums, leverage availability, collateral rules and liquidation behavior need independent verification before execution. A website's advertised maximum leverage does not prove it is available through an API or to a particular account.
 
+Version 0.2.0 also reads public catalogs from [Nobitex options](https://apidocs.nobitex.ir/options/get-system-options), [Wallex markets](https://developers.wallex.ir/docs/basic-services-markets) and [Tabdeal exchangeInfo](https://docs.tabdeal.org/). Unknown rules remain unknown. Wallex's observed `otc_min_notional` is not used as a spot minimum; Nobitex scaled symbols are not collapsed into ordinary coin symbols.
+
 Browser observations are for inspection and integration diagnosis; the production order path is intended to use stable, documented APIs. A separate browser/controller's availability does not prove API reachability, and API reachability does not prove logged-in browser access.

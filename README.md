@@ -2,11 +2,11 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.1.0، زیرساخت اولیهٔ داده و برآورد هزینه. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
+**وضعیت فعلی: نسخهٔ 0.2.0، زیرساخت داده، مشخصات بازار و دفتر حساب paper. ربات سودآور یا آمادهٔ معاملهٔ واقعی نیست.**
 
 This repository currently contains a dependency-free Python foundation for collecting public spot order-book snapshots from Nobitex, Wallex and Tabdeal, auditing their provenance, and replaying conditional cross-exchange spread estimates.
 
-It has **no authenticated API client, live order submission, withdrawal, transfer, paper portfolio or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
+It also includes public market metadata collection and a durable spot paper ledger with an explicitly synthetic demonstration. It has **no authenticated API client, live order submission, withdrawal, transfer, continuous paper bot or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
 
 ## Run
 
@@ -17,13 +17,15 @@ uv run python -m unittest discover -s tests -v
 uv run python -m cryptoir record --pair BTC/USDT --samples 3 --interval 30 --output data/session.jsonl
 uv run python -m cryptoir audit data/session.jsonl
 uv run python -m cryptoir estimate data/session.jsonl --quantity 0.0001 --fee 0.004 --reserve-bps 10
+uv run python -m cryptoir catalog --output data/catalog.jsonl
+uv run python -m cryptoir paper-demo --output data/paper-demo.sqlite
 ```
 
 The fee and reserve in this example are **illustrative assumptions**, not verified account fees. The estimate assumes quote-currency fees and prepositioned inventory at both venues. It does not check minimum order size, asset identity across exchanges, available balances, rounding rules, transfer costs, queue position, cancellation or actual fills. Every result has `executable: false`.
 
 Use a new output filename for each recording. Existing files are never overwritten. Sampling is bounded to 120 batches, uses at least 30 seconds between batches and stops on a source error. This is a diagnostic REST collector, not a continuous live-market service. Do not run overlapping collectors against the same venue.
 
-The bootstrap collector accepts explicit `BASE/USDT` spot pairs; only BTC/USDT has been smoke-tested against all three venues. Full market discovery, fiat adapters, contract multipliers and other instruments remain planned. This is an implementation boundary, not a restriction on the eventual research universe.
+The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/USDT has been smoke-tested against all three venues. Catalog collection preserves broader native market lists. Unified asset identity, fiat adapters, contract multipliers and other instruments remain planned. This is an implementation boundary, not a restriction on the eventual research universe.
 
 ## Current checks
 
@@ -36,7 +38,7 @@ The bootstrap collector accepts explicit `BASE/USDT` spot pairs; only BTC/USDT h
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capability inventory](docs/EXCHANGES.md) and [initial validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [paper model and limits](docs/PAPER.md) and [validation record](docs/VALIDATION.md).
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

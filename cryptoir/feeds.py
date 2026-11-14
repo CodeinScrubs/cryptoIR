@@ -10,6 +10,7 @@ from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
+from . import __version__
 from .domain import Book, DataError, Level, number
 
 VENUES = ("nobitex", "wallex", "tabdeal")
@@ -42,6 +43,8 @@ def normalize(record: dict) -> Book:
     if record.get("schema") != 1 or record.get("kind") != "snapshot":
         raise DataError("not a versioned successful snapshot")
     venue, pair, payload = record["venue"], record["pair"], record["payload"]
+    if not isinstance(payload, dict):
+        raise DataError("order-book payload must be an object")
     if record["url"] != endpoint(venue, pair):
         raise DataError("endpoint provenance mismatch")
     exchange_ns = None
@@ -68,13 +71,12 @@ def normalize(record: dict) -> Book:
                 record["duration_ns"], exchange_ns)
 
 
-def fetch(venue: str, pair: str, timeout: float = 10) -> dict:
-    url = endpoint(venue, pair)
+def public_response(url: str, timeout: float = 10) -> dict:
+    """Bounded unauthenticated GET. Callers supply fixed official endpoints."""
     started_ns, started_mono = time.time_ns(), time.monotonic_ns()
-    record = {"schema": 1, "venue": venue, "pair": pair, "url": url,
-              "started_ns": started_ns}
+    record = {"schema": 1, "url": url, "started_ns": started_ns}
     try:
-        request = Request(url, headers={"User-Agent": "cryptoIR/0.1.0", "Accept": "application/json"}, method="GET")
+        request = Request(url, headers={"User-Agent": "cryptoIR/" + __version__, "Accept": "application/json"}, method="GET")
         with build_opener(NoRedirect).open(request, timeout=timeout) as response:
             raw = response.read(MAX_BYTES + 1)
             received_ns = time.time_ns()
@@ -89,7 +91,6 @@ def fetch(venue: str, pair: str, timeout: float = 10) -> dict:
                            "source": "public_rest_poll"})
             if received_ns < started_ns or abs(received_ns - started_ns - duration_ns) > 1_000_000_000:
                 raise DataError("wall clock changed during request")
-            normalize(record)
     except Exception as exc:
         # Store bounded diagnostics; never headers, cookies, environment or secrets.
         record.update({"kind": "error", "received_ns": time.time_ns(),
@@ -99,6 +100,18 @@ def fetch(venue: str, pair: str, timeout: float = 10) -> dict:
             record["status_code"] = exc.code
         if isinstance(exc, DataError):
             record["reason"] = str(exc)
+    return record
+
+
+def fetch(venue: str, pair: str, timeout: float = 10) -> dict:
+    record = {**public_response(endpoint(venue, pair), timeout), "venue": venue, "pair": pair}
+    if record["kind"] == "snapshot":
+        try:
+            normalize(record)
+        except (ValueError, KeyError, TypeError, IndexError) as exc:
+            record.update(kind="error", error_type=type(exc).__name__)
+            if isinstance(exc, DataError):
+                record["reason"] = str(exc)
     return record
 
 

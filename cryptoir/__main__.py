@@ -115,7 +115,26 @@ def main() -> int:
     estimate.add_argument("--fee", required=True, type=number, help="assumed fee per leg, e.g. 0.004; NOT account-verified")
     estimate.add_argument("--reserve-bps", required=True, type=number)
     estimate.add_argument("--max-age-ms", type=int, default=5000)
+    paper = commands.add_parser("paper-demo", help="synthetic durable accounting exercise, not a trading strategy")
+    paper.add_argument("--output", required=True, type=Path)
+    catalog = commands.add_parser("catalog", help="record current public market metadata; no account requests")
+    catalog.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
+    if args.command == "catalog":
+        from .catalog import collect_catalogs
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        errors = 0
+        with args.output.open("x", encoding="utf-8", newline="\n") as stream:
+            for result in collect_catalogs():
+                stream.write(encode(result) + "\n")
+                errors += result["kind"] == "error"
+                print(encode({"venue": result["venue"], "kind": result["kind"],
+                              "markets": len(result.get("markets", [])), "execution_ready": False}))
+        return int(bool(errors))
+    if args.command == "paper-demo":
+        from .paper import demo
+        print(encode(demo(args.output)))
+        return 0
     if args.command == "estimate":
         if args.quantity <= 0 or not 0 <= args.fee < 1 or not 0 <= args.reserve_bps < 10000 or args.max_age_ms <= 0:
             parser.error("invalid quantity, costs or age")
