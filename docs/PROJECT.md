@@ -69,4 +69,4 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
-Extend prospective paper observation and calibrate execution, IRT valuation and matched holding benchmarks. No candidate has passed the registered screening gates; observation remains experimental. Reconcile account-specific fee/market capabilities through read-only adapters and add a local monitoring dashboard. Extend multi-venue and leveraged-product specifications. Time-box Versland API discovery and mark missing capabilities instead of guessing routes or placing browser orders.
+Extend prospective paper observation and calibrate execution, IRT valuation and matched holding benchmarks. No candidate has passed the registered screening gates; observation remains experimental. A local read-only Persian dashboard is implemented and locally tested. Next reconcile account-specific fee/market capabilities through read-only adapters, and extend multi-venue and leveraged-product specifications. Time-box Versland API discovery and mark missing capabilities instead of guessing routes or placing browser orders.

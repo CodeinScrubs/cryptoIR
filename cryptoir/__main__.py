@@ -126,6 +126,10 @@ def main() -> int:
     forward.add_argument("--max-mb", type=int, default=64)
     paper_status = commands.add_parser("paper-status", help="read local paper status and inspect its OS owner lock")
     paper_status.add_argument("directory", type=Path)
+    dashboard = commands.add_parser("dashboard", help="serve a read-only paper dashboard on local loopback")
+    dashboard.add_argument("directory", type=Path)
+    dashboard.add_argument("--port", type=int, default=8765)
+    dashboard.add_argument("--seconds", type=int, default=3600)
     paper_stop = commands.add_parser("paper-stop", help="create a persistent paper STOP marker; holdings remain owned")
     paper_stop.add_argument("directory", type=Path)
     funding=commands.add_parser("paper-fund",help="prepare an IRT-funded paper account and matched BTC/USDT holding benchmarks")
@@ -183,20 +187,13 @@ def main() -> int:
                       "live_execution":False,"profitability_established":False}))
         return int(report["reason"]!="duration_completed" or not report.get("counts",{}).get(config.venue+":book")
                    or not report.get("counts",{}).get(config.venue+":candle_accepted"))
+    if args.command == "dashboard":
+        from .dashboard import serve_dashboard
+        serve_dashboard(args.directory, port=args.port, seconds=args.seconds)
+        return 0
     if args.command == "paper-status":
-        from .runtime import OwnerLock
-        report=json.loads((args.directory/"status.json").read_text(encoding="utf-8"))
-        valuation=report.get("matched_valuation",{})
-        if valuation.get("available") and time.time_ns()-valuation["last_valuation"]["observed_ns"]>5_000_000_000:
-            valuation.update(available=False,reason="valuation_stale_at_status_read")
-            report["irt_performance_available"]=False
-        try:
-            with OwnerLock(args.directory/"owner.lock"):
-                owner_active=False
-        except DataError:
-            owner_active=True
-        report.update(owner_lock_held=owner_active,heartbeat_age_seconds=(time.time_ns()-report["updated_ns"])/1_000_000_000)
-        print(encode(report))
+        from .monitor import read_status
+        print(encode(read_status(args.directory)))
         return 0
     if args.command == "paper-stop":
         if not (args.directory/"paper.sqlite").is_file():

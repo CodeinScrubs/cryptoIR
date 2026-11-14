@@ -88,6 +88,7 @@ class ForwardEngine:
 
     def __init__(self, ledger: PaperLedger, config: ForwardConfig, *, source_id=None):
         self.ledger, self.config = ledger, config
+        self.latest_book = None
         self.signal = Signal(config.strategy)
         self.guard = SpotRiskGuard(ledger,config.venue,config.pair,config.rules,config.risk)
         identity = hashlib.sha256(dumps({"config":asdict(config),"source":source_id or source_fingerprint()}).encode()).hexdigest()
@@ -218,6 +219,7 @@ class ForwardEngine:
             self._finish_decision("expired_without_execution",now_ns)
 
     def on_book(self, book: Book, *, now_ns: int):
+        self.latest_book = book
         self.advance(now_ns)
         fills=self.guard.on_book(book,now_ns=now_ns)
         state,risk=self.state(),self.guard.state()
@@ -283,7 +285,12 @@ class ForwardEngine:
 
     def report(self):
         state=self.state()
+        book=asdict(self.latest_book) if self.latest_book else None
+        if book:
+            book.update(bids=book["bids"][:10],asks=book["asks"][:10])
         return {**self.ledger.report(),"risk":self.guard.state(),
+                "risk_limits":asdict(self.config.risk),"venue":self.config.venue,"pair":self.config.pair,
+                "last_book":book,
                 "forward":{key:value for key,value in state.items() if key!="bars"},
                 "last_candle":asdict(self.signal.bars[-1]) if self.signal.bars else None,
                 "warmup_bars":len(self.signal.bars),"strategy":self.config.strategy,

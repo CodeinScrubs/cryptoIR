@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.8.0، paper نوبیتکس با سرمایهٔ تومانی، گزارش تومان/تتر و مقایسه با نگهداری تتر و بیت‌کوین. سودآوری و آمادگی معاملهٔ واقعی اثبات نشده است.**
+**وضعیت فعلی: نسخهٔ 0.9.0، paper نوبیتکس با سرمایهٔ تومانی، مقایسه با نگهداری تتر و بیت‌کوین و داشبورد فارسی محلی. سودآوری و آمادگی معاملهٔ واقعی اثبات نشده است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -24,6 +24,7 @@ uv run python -m cryptoir stream --seconds 600 --output data/stream.jsonl.gz
 uv run python -m cryptoir stream-audit data/stream.jsonl.gz
 uv run python -m cryptoir paper-run --config examples/paper-reference.json --directory data/paper-reference --seconds 120
 uv run python -m cryptoir paper-status data/paper-reference
+uv run python -m cryptoir dashboard data/paper-reference --seconds 3600
 ```
 
 The fee and reserve in this example are **illustrative assumptions**, not verified account fees. The estimate assumes quote-currency fees and prepositioned inventory at both venues. It does not check minimum order size, asset identity across exchanges, available balances, rounding rules, transfer costs, queue position, cancellation or actual fills. Every result has `executable: false`.
@@ -43,7 +44,7 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [local dashboard](docs/DASHBOARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

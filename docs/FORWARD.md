@@ -93,8 +93,9 @@ balances; stopping is never reported as liquidation or successful performance.
 
 The current runner covers one Nobitex USDT spot pair per experiment. The funded
 BTC mode adds conditional IRT conversion/attribution and full-capital BTC/USDT
-holding benchmarks. Combined multi-venue portfolios, leveraged accounting,
-a dashboard and external alert channels remain unimplemented. Reports, candles,
+holding benchmarks. A [read-only local dashboard](DASHBOARD.md) is implemented
+from 0.9.0. Combined multi-venue portfolios, leveraged accounting and external
+alert channels remain unimplemented. Reports, candles,
 original stream frames and journals stay local in the
 experiment directory. Short reception/restart tests establish engineering
 behavior only, not positive out-of-sample paper returns.

@@ -1,0 +1,55 @@
+:root { color-scheme: light; font-family: Tahoma, "Segoe UI", sans-serif; color: #192e38; background: #f3f6f7; line-height: 1.8; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; text-decoration-thickness: .06em; text-underline-offset: .25em; }
+button { font: inherit; color: inherit; background: white; border: 1px solid #95a7af; border-radius: .6rem; padding: .6rem 1rem; cursor: pointer; min-block-size: 2.75rem; }
+button:hover { background: #e9f2f2; }
+:focus-visible { outline: 3px solid #007c75; outline-offset: 4px; }
+.topbar { display: flex; flex-wrap: wrap; flex-wrap: balance; align-items: safe center; gap: 1.5rem; padding: 1rem max(1.25rem, calc((100% - 88rem)/2)); background: #fff; border-block-end: 1px solid #d7e0e4; }
+.brand { display: flex; align-items: safe center; gap: .8rem; text-decoration: none; font-size: 1.6rem; font-weight: 800; }
+.accent { color: #00746e; }
+.topbar nav { display: flex; flex-wrap: wrap; flex-wrap: balance; gap: 1rem; margin-inline-start: auto; }
+.topbar nav a { padding-block: .35rem; }
+.local { font-size: .8rem; color: #506672; }
+main { max-inline-size: 88rem; margin-inline: auto; padding: 2rem 1.25rem; }
+.intro, .section-head { display: flex; flex-wrap: wrap; align-items: safe center; justify-content: space-between; gap: 1rem; }
+h1 { margin: .3rem 0; font-size: clamp(1.5rem, 3vw, 2rem); }
+h2 { font-size: 1.1rem; margin: 0; }
+p { margin-block: .5rem; }
+.eyebrow { color: #006b65; font-size: .85rem; }
+.muted, .timestamp, .footnote, footer { color: #516572; }
+.muted { font-size: .875rem; }
+.timestamp, .footnote, footer { font-size: .8rem; }
+.banner { border: 1px solid #c8a568; border-inline-start: .3rem solid #a06b17; background: #fff8e9; border-radius: .65rem; padding: .8rem 1rem; margin-block-start: 1.5rem; }
+.banner[data-tone="ok"] { background: #e9f5f2; border-color: #70a69a; }
+.banner[data-tone="error"] { background: #fdf0ef; border-color: #c38981; }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; margin-block: 1.5rem; }
+.metric, .panel { background: #fff; border: 1px solid #d5dfe3; border-radius: .8rem; padding: 1.25rem; min-inline-size: 0; }
+.metric h2 { font-size: .9rem; font-weight: 400; color: #50636d; }
+.amount { font-size: clamp(1.25rem, 2vw, 1.65rem); font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; margin-block: .5rem; }
+.panel { margin-block: 1rem; }
+.chip { display: inline-block; background: #edf1f3; color: #405862; padding: .15rem .65rem; font-size: .75rem; border-radius: .4rem; font-weight: 400; }
+.chip[data-tone="ok"] { background: #e5f4ed; color: #155d44; }
+.chip[data-tone="stale"] { background: #fff0d5; color: #785016; }
+.two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: 1rem; }
+.two-col .panel { margin-block: 0; }
+.facts { margin: 1rem 0; }
+.facts > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; border-block-end: 1px solid #ecf0f2; padding-block: .55rem; }
+dt { color: #50636d; font-size: .85rem; }
+dd { margin: 0; font-size: .85rem; overflow-wrap: anywhere; }
+.table-wrap { overflow: auto; max-inline-size: 100%; max-block-size: 32rem; container-type: inline-size; scrollbar-gutter: stable; overscroll-behavior: contain; margin-block: .8rem; }
+table { border-collapse: separate; border-spacing: 0; inline-size: 100%; font-size: .85rem; }
+caption { text-align: start; padding-block: .5rem; color: #516572; font-size: .8rem; }
+th, td { text-align: start; padding: .7rem .8rem; border-block-end: 1px solid #e7edef; white-space: nowrap; }
+thead { position: sticky; inset-block-start: 0; z-index: 2; background: #f1f5f6; }
+tbody th { position: sticky; inset-inline-start: 0; background: #fff; z-index: 1; font-weight: 500; }
+tbody tr:first-child th { color: #006e68; }
+td { font-variant-numeric: tabular-nums; }
+.negative { color: #a33129; }
+.positive { color: #076e50; }
+.depth { gap: 1.5rem; }
+#bid-caption { color: #08664d; font-weight: 700; }
+#ask-caption { color: #a33129; font-weight: 700; }
+footer { padding-block: 1rem; }
+@container (inline-size < 34rem) { th, td { padding-inline: .55rem; } }
+@media (width < 40rem) { .topbar { gap: .65rem; } .topbar nav { margin-inline-start: 0; inline-size: 100%; font-size: .85rem; } .local { display: none; } main { padding: 1.25rem .8rem; } .metric, .panel { padding: 1rem; } }

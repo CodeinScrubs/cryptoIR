@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>پایش معاملات آزمایشی | cryptoIR</title>
+  <link rel="stylesheet" href="/dashboard.css">
+  <script src="/dashboard.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#overview"><span lang="en" dir="ltr">crypto<span class="accent">IR</span></span><span class="chip">آزمایشگاه معامله</span></a>
+    <nav aria-label="بخش‌های داشبورد"><a href="#comparison">بازده</a><a href="#risk">ریسک</a><a href="#depth">دفتر سفارش</a><a href="#orders">سفارش‌ها</a></nav>
+    <span class="local">روی همین دستگاه</span>
+  </header>
+  <main>
+    <div class="intro" id="overview">
+      <div><p class="eyebrow">دادهٔ واقعی بازار · پول شبیه‌سازی‌شده</p><h1>پایش حساب آزمایشی</h1><p class="muted">معاملهٔ واقعی غیرفعال است. این آزمایش هنوز شاهد کافی برای تأیید سودآوری ندارد.</p></div>
+      <button id="pause" type="button" aria-pressed="false">توقف تازه‌سازی صفحه</button>
+    </div>
+    <noscript><p class="banner">برای خواندن وضعیت محلی، جاوااسکریپت مرورگر باید فعال باشد.</p></noscript>
+    <div class="banner" id="connection" role="status" aria-live="polite">در انتظار وضعیت حساب…</div>
+    <p class="timestamp">آخرین گزارش حساب: <time id="updated">—</time> · زمان‌ها به وقت تهران</p>
+    <div class="metrics">
+      <section class="metric"><h2>سرمایهٔ آغازین</h2><p class="amount" id="initial">—</p><p class="muted" id="basis">—</p></section>
+      <section class="metric"><h2>آخرین ارزش خروج مشروط</h2><p class="amount" id="liquidation">—</p><p class="muted" id="valuation-state">ارزش‌گذاری در دسترس نیست</p></section>
+      <section class="metric"><h2>موجودی تتر</h2><p class="amount" id="usdt">—</p><p class="muted" id="reserved">—</p></section>
+      <section class="metric"><h2>موجودی دارایی پایه</h2><p class="amount" id="base">—</p><p class="muted" id="position">دارایی نگهداری‌شده؛ توقف به معنی فروش نیست</p></section>
+    </div>
+    <section class="panel" id="comparison">
+      <div class="section-head"><h2>بازده و معیارهای مقایسه</h2><span class="chip" id="valuation-chip">بدون داده</span></div>
+      <p class="muted">محاسبه با کارمزد، اسپرد و عمق مشاهده‌شده؛ فروش واقعی انجام نشده است. معیارهای نگهداری با همان سرمایه و زمان آغاز محاسبه می‌شوند.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="benchmark-caption">
+        <table><caption id="benchmark-caption">آخرین ارزش‌گذاری ثبت‌شده، پس از هزینه‌های مدل</caption><thead><tr><th scope="col">سبد</th><th scope="col">ارزش خروج · تومان</th><th scope="col">بازده تومانی</th><th scope="col">ارزش به تتر</th><th scope="col">بازده بر حسب تتر</th></tr></thead><tbody id="benchmarks"><tr><td colspan="5">هنوز ارزش‌گذاری ثبت نشده است.</td></tr></tbody></table>
+      </div>
+      <p class="footnote">«ارزش به تتر» معادل ارزش خروج تومانی با نرخ میانی تتر است. کارمزدها فرض پژوهشی‌اند؛ مالیات و هزینهٔ خدمات بیرونی در مدل نیست. این جدول سود تحقق‌یافته را نشان نمی‌دهد.</p>
+    </section>
+    <div class="two-col">
+      <section class="panel" id="risk">
+        <div class="section-head"><h2>کنترل ریسک آزمایشی</h2><span class="chip" id="risk-chip">نامشخص</span></div>
+        <dl class="facts"><div><dt>افت از اوج / سقف آزمایش</dt><dd id="drawdown">—</dd></div><div><dt>زیان روزانه / سقف آزمایش</dt><dd id="daily">—</dd></div><div><dt>نسبت سرمایهٔ درگیر / سقف</dt><dd id="exposure">—</dd></div><div><dt>حداکثر مبلغ هر سفارش</dt><dd id="order-cap">—</dd></div><div><dt>وضعیت توقف پایدار</dt><dd id="halt">—</dd></div></dl>
+        <p class="footnote">این محدودیت‌ها برای paper هستند. کنترل افت بر مبنای تتر، ریسک تغییر نرخ تومان را پوشش نمی‌دهد.</p>
+      </section>
+      <section class="panel">
+        <div class="section-head"><h2>وضعیت راهبرد و داده</h2><span class="chip">فرضیهٔ تأییدنشده</span></div>
+        <dl class="facts"><div><dt>بازار</dt><dd id="market">—</dd></div><div><dt>راهبرد</dt><dd id="strategy">—</dd></div><div><dt>تعداد کندل‌های آماده‌سازی</dt><dd id="warmup">—</dd></div><div><dt>هدف راهبرد</dt><dd id="target">—</dd></div><div><dt>تصمیم در انتظار</dt><dd id="decision">—</dd></div><div><dt>دوره‌های اجرا</dt><dd id="sessions">—</dd></div></dl>
+      </section>
+    </div>
+    <section class="panel" id="depth">
+      <div class="section-head"><h2>دفتر سفارش بازار آزمایش</h2><span class="chip" id="book-chip">بدون داده</span></div>
+      <p class="muted" id="book-time">حداکثر ۱۰ ردیف از آخرین مشاهده؛ این صفحه تضمین اجرای سفارش نیست.</p>
+      <div class="two-col depth">
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="bid-caption"><table><caption id="bid-caption">خریداران</caption><thead><tr><th scope="col">قیمت · تتر</th><th scope="col">مقدار دارایی پایه</th></tr></thead><tbody id="bids"></tbody></table></div>
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="ask-caption"><table><caption id="ask-caption">فروشندگان</caption><thead><tr><th scope="col">قیمت · تتر</th><th scope="col">مقدار دارایی پایه</th></tr></thead><tbody id="asks"></tbody></table></div>
+      </div>
+    </section>
+    <section class="panel" id="orders">
+      <div class="section-head"><h2>سفارش‌های شبیه‌سازی‌شده</h2><span class="chip" id="order-count">—</span></div>
+      <p class="muted">تا ۵۰ سفارش آخر؛ مقدار پرشده و کارمزد ثبت‌شده در دفتر حساب paper.</p>
+      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="orders-caption"><table><caption id="orders-caption">سفارش‌های محلی این حساب</caption><thead><tr><th scope="col">شناسه</th><th scope="col">جهت</th><th scope="col">وضعیت</th><th scope="col">مقدار پرشده</th><th scope="col">مبلغ · تتر</th><th scope="col">کارمزد</th></tr></thead><tbody id="order-rows"><tr><td colspan="6">هنوز سفارشی ثبت نشده است.</td></tr></tbody></table></div>
+    </section>
+    <footer><p>منبع این صفحه گزارش محلی حساب است؛ اتصال مستقیم به حساب صرافی یا ارسال سفارش ندارد.</p><p id="counts">—</p></footer>
+  </main>
+</body>
+</html>

@@ -158,3 +158,30 @@ historical fees.
 - The IRT conversion and exit marks are conditional paper calculations, not
   actual exchange fills. Fees remain assumptions, source freshness is bounded,
   and no accepted strategy or profitability evidence is established.
+
+## Version 0.9.0 additions (2026-11-15)
+
+- All 181 local tests passed. Eleven monitoring/HTTP scenarios cover freshness,
+  owner/heartbeat disagreement, clock reversal, changed balances, receipt
+  mismatch, oversized/corrupt reports, bounded order views, no writes, Host and
+  cross-origin checks, path traversal and permitted navigation to the HTML shell.
+- Version 0.8.0 passed all four Windows/Linux, Python 3.11/3.13 CI jobs at
+  `5a05bf3716bd1ecd86ec392a7460bc029807d06b`.
+- The Persian local dashboard was inspected in Chrome through the official
+  browser connection. Desktop and a 390px viewport had no page-level horizontal
+  overflow. Tables retained semantic captions/headers and keyboard-focusable
+  scroll regions; Tab reached the benchmark region. Page refresh pause/resume,
+  simulated offline failure, recovery and the final stopped state were observed.
+  This is scoped browser QA, not full assistive-technology conformance.
+- A 300-second public paper resume recorded 445 books, five accepted candle
+  responses and five matched valuations. Its raw stream replay passed, the
+  session ended by duration, and no risk halt or simulated order occurred.
+  The existing account retained its balances. No account credentials were used.
+- Log SHA-256:
+  `e1b18fe6d1b72bf5d4f6e12570bd2b97314bd26fd987e21dfbde1d6801c45685`.
+  Compressed size: 1,765,584 bytes. Replayed source ages ranged from 0.0359586 to
+  0.3691446 seconds, with no future timestamps or ages over five seconds in that
+  short sample. This does not establish complete market history or future uptime.
+- The dashboard and runner were separate bounded processes. UI availability,
+  simulated fault handling and short market reception do not prove profitability,
+  venue order acceptance or unattended live readiness.
