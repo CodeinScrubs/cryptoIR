@@ -18,7 +18,7 @@ from pathlib import Path
 
 from . import __version__
 from .domain import Book, DataError, Level, number
-from .feeds import endpoint
+from .feeds import endpoint, native_symbol
 
 URLS = {
     "nobitex": "wss://ws.nobitex.ir/connection/websocket",
@@ -51,7 +51,7 @@ class StreamParser:
     def __init__(self, venue: str, pair: str, max_side_skew_ns=2_000_000_000):
         endpoint(venue, pair)  # validated explicit USDT pair; no symbol guessing
         self.venue, self.pair = venue, pair
-        self.symbol = pair.replace("/", "")
+        self.symbol = native_symbol(venue, pair)
         self.max_side_skew_ns = max_side_skew_ns
         if venue == "nobitex":
             self.channels = ["public:orderbook-" + self.symbol]
@@ -181,6 +181,8 @@ class EventWriter:
         self.start_wall, self.start_mono = time.time_ns(), time.monotonic_ns()
 
     def write(self, venue: str, event: dict):
+        if {"schema","run_id","seq","venue","observed_ns","monotonic_ns"}.intersection(event):
+            raise DataError("event must not replace recording envelope fields")
         mono = time.monotonic_ns()
         wall = time.time_ns()
         record = {"schema": 2, "run_id": self.run_id, "seq": self.seq + 1,

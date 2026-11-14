@@ -33,14 +33,23 @@ class ForwardConfig:
     prior_volume_fraction: Decimal
     mode: str = "paper"
     capital_basis: str = "synthetic_reference_usdt"
+    capital_receipt_sha256: str | None = None
 
     def __post_init__(self):
         if self.mode != "paper" or self.venue != "nobitex" or self.strategy not in STRATEGIES:
             raise DataError("forward runner currently requires paper mode, Nobitex and a fixed baseline signal")
-        if self.capital_basis != "synthetic_reference_usdt":
-            raise DataError("personal IRT conversion is not implemented in this reference runner")
+        if self.capital_basis not in ("synthetic_reference_usdt","paper_irt_conversion"):
+            raise DataError("unknown capital basis")
+        if self.capital_basis=="paper_irt_conversion":
+            import re
+            if not isinstance(self.capital_receipt_sha256,str) or not re.fullmatch("[0-9a-f]{64}",self.capital_receipt_sha256):
+                raise DataError("IRT-funded paper config requires a sealed capital receipt")
+        elif self.capital_receipt_sha256 is not None:
+            raise DataError("synthetic reference config cannot claim a funding receipt")
         from .feeds import endpoint
         endpoint(self.venue, self.pair)
+        if not self.pair.endswith("/USDT"):
+            raise DataError("forward strategy requires a USDT quote; FX is separate")
         for key in ("decision_delay_seconds", "decision_expiry_seconds", "order_latency_ms", "order_ttl_seconds", "max_candle_lag_seconds"):
             if type(getattr(self,key)) is not int or getattr(self,key) <= 0:
                 raise DataError("positive integer forward timing settings required")

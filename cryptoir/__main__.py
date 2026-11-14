@@ -128,6 +128,14 @@ def main() -> int:
     paper_status.add_argument("directory", type=Path)
     paper_stop = commands.add_parser("paper-stop", help="create a persistent paper STOP marker; holdings remain owned")
     paper_stop.add_argument("directory", type=Path)
+    funding=commands.add_parser("paper-fund",help="prepare an IRT-funded paper account and matched BTC/USDT holding benchmarks")
+    funding.add_argument("--template",type=Path,required=True)
+    funding.add_argument("--initial-irt",type=number,required=True)
+    funding.add_argument("--fx-fee",type=number,required=True,help="explicit assumed fiat-market fee; not account-verified")
+    funding.add_argument("--directory",type=Path,required=True)
+    upgrade=commands.add_parser("paper-upgrade-empty",help="explicit source upgrade with backup; only accounts that have never placed an order")
+    upgrade.add_argument("--config",type=Path,required=True)
+    upgrade.add_argument("--directory",type=Path,required=True)
     catalog = commands.add_parser("catalog", help="record current public market metadata; no account requests")
     catalog.add_argument("--output", required=True, type=Path)
     stream = commands.add_parser("stream", help="bounded public WebSocket recording with gap markers")
@@ -151,6 +159,18 @@ def main() -> int:
     research.add_argument("--dataset", type=Path, required=True)
     research.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command=="paper-upgrade-empty":
+        from .forward import ForwardConfig
+        from .upgrade import upgrade_empty_account
+        config=ForwardConfig.from_dict(json.loads(args.config.read_text(encoding="utf-8-sig")))
+        print(encode(upgrade_empty_account(args.directory,config)))
+        return 0
+    if args.command=="paper-fund":
+        from .forward import ForwardConfig
+        from .funding import fund_paper
+        config=ForwardConfig.from_dict(json.loads(args.template.read_text(encoding="utf-8-sig")))
+        print(encode(fund_paper(args.directory,args.initial_irt,config,args.fx_fee)))
+        return 0
     if args.command == "paper-run":
         import asyncio
         from .forward import ForwardConfig
@@ -166,6 +186,10 @@ def main() -> int:
     if args.command == "paper-status":
         from .runtime import OwnerLock
         report=json.loads((args.directory/"status.json").read_text(encoding="utf-8"))
+        valuation=report.get("matched_valuation",{})
+        if valuation.get("available") and time.time_ns()-valuation["last_valuation"]["observed_ns"]>5_000_000_000:
+            valuation.update(available=False,reason="valuation_stale_at_status_read")
+            report["irt_performance_available"]=False
         try:
             with OwnerLock(args.directory/"owner.lock"):
                 owner_active=False

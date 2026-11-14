@@ -22,14 +22,18 @@ class NoRedirect(HTTPRedirectHandler):
         raise DataError("unexpected API redirect; investigate endpoint")
 
 
-def endpoint(venue: str, pair: str) -> str:
-    # Fiat and contract-unit mappings need separate evidence before enabling.
-    if not re.fullmatch(r"[A-Z0-9]{2,20}/USDT", pair):
-        raise DataError("bootstrap collector supports explicit BASE/USDT spot pairs only")
+def native_symbol(venue: str, pair: str) -> str:
+    # Nobitex's native IRT suffix has RIAl book prices. Never label them toman.
+    if not re.fullmatch(r"[A-Z0-9]{2,20}/USDT", pair) and not (venue == "nobitex" and pair == "USDT/IRR"):
+        raise DataError("supported: BASE/USDT, plus Nobitex USDT/IRR with explicit rial prices")
     base, quote = pair.split("/")
     if base == quote:
         raise DataError("identical assets")
-    symbol = base + quote
+    return base + ("IRT" if quote == "IRR" else quote)
+
+
+def endpoint(venue: str, pair: str) -> str:
+    symbol = native_symbol(venue, pair)
     if venue == "nobitex":
         return "https://apiv2.nobitex.ir/v3/orderbook/" + symbol
     if venue == "wallex":

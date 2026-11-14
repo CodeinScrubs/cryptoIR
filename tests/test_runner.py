@@ -124,6 +124,49 @@ class RunnerIntegrationTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(DataError):
             await run_paper(self.config,self.directory,5)
 
+    async def test_irt_funded_session_reports_matched_benchmarks(self):
+        from dataclasses import asdict
+        from decimal import Decimal as D
+        from cryptoir.domain import Book,Level
+        from cryptoir.runtime import atomic_json
+        from cryptoir.streams import dumps
+        from cryptoir.valuation import ALL_BOOKS,ConversionRules,create_capital_receipt
+        import hashlib
+        now=time.time_ns()
+        fx=Book("nobitex","USDT/IRR",(Level(999,10000),),(Level(1000,10000),),now,0,now-1_000_000)
+        spot=Book("nobitex","BTC/USDT",(Level(99,10000),),(Level(100,10000),),now,0,now-1_000_000)
+        spot_rules=ConversionRules(self.config.rules.quantity_step,self.config.rules.minimum_notional,
+                                   self.config.rules.fee_rate,self.config.risk.depth_participation)
+        receipt=create_capital_receipt(fx,spot,10000,ConversionRules("0.01",1,"0.0025","0.1"),spot_rules,
+                                       now_ns=now,max_age_ns=5*NS,source_sha256="fixture")
+        config=asdict(self.config)
+        config.update(capital_basis="paper_irt_conversion",capital_receipt_sha256=receipt["receipt_sha256"])
+        config["risk"]["initial_quote"]=receipt["conversion"]["net_base"]
+        self.directory.mkdir()
+        atomic_json(self.directory/"capital-receipt.json",receipt)
+
+        def public(url):
+            self.assertEqual(url,ALL_BOOKS)
+            stamp=time.time_ns()
+            payload={"status":"ok"}
+            for symbol,bid,ask in (("USDTIRT",999,1000),("BTCUSDT",99,100)):
+                payload[symbol]={"lastUpdate":stamp//1_000_000,"bids":[[bid,10000]],"asks":[[ask,10000]]}
+            body=dumps(payload)
+            return {"schema":1,"kind":"snapshot","url":url,"received_ns":stamp,"duration_ns":0,"payload":payload,
+                    "raw_body":body,"body_sha256":hashlib.sha256(body.encode()).hexdigest()}
+
+        with patch("cryptoir.runner.public_response",side_effect=public):
+            report=await run_paper(ForwardConfig.from_dict(config),self.directory,5)
+        marked=report["matched_valuation"]["last_valuation"]
+        self.assertEqual(set(marked["benchmarks"]),{"usdt_hold","btc_hold","irt_cash"})
+        self.assertLess(D(marked["portfolio"]["net_return_irt"]),0)
+        self.assertEqual(D(marked["excess_return_irt_vs_usdt_hold"]),0)
+        self.assertFalse(report["live_execution"])
+        for path in self.directory.glob("market-*.gz"):
+            audit=audit_stream(path)
+            self.assertTrue(audit["ended_cleanly"])
+            self.assertEqual(audit["counts"]["portfolio_valuation"],1)
+
 
 if __name__=="__main__":
     unittest.main()

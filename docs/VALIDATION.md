@@ -134,3 +134,27 @@ historical fees.
 - The user's IRT capital has not been converted or allocated by this runner.
   It is an explicitly synthetic reference experiment, not the accepted owner
   paper account. No authenticated request or real trade was made.
+
+## Version 0.8.0 additions (2026-11-15)
+
+- All 170 local tests passed. New scenarios cover explicit IRR/IRT units,
+  finite funding budgets, received-asset fees, depth participation, minimums,
+  dust, matched independent holding benchmarks, FX attribution, deterministic
+  receipt reconstruction, funded runner integration and backup-first source
+  upgrades that preserve an untouched account.
+- Public Nobitex metadata and the all-market order-book endpoint supplied
+  source-timed BTC/USDT and USDT/IRR books. Native `USDTIRT` prices were retained
+  in IRR. The separate short fiat WebSocket probe received acknowledgements
+  but no books; that probe does not establish a usable fiat stream.
+- An initial funded paper session exposed a log-envelope schema collision in
+  portfolio valuation events. Its original log remains preserved and did not
+  pass stream audit. The writer now rejects reserved envelope fields; valuation
+  payloads are nested. No order was generated in the failed-log session.
+- After a consistent backup and explicit source upgrade, a 15-second resume
+  received 23 books, one candle response and one matched valuation. The corrected
+  log replayed cleanly. Capital was unchanged, no order existed, and the session
+  ended by its duration limit. Log SHA-256:
+  `eaaf493fe142d5493157b3c7b55e7cb7ce67d6b3eed58ca9ff09feb4a6abda36`.
+- The IRT conversion and exit marks are conditional paper calculations, not
+  actual exchange fills. Fees remain assumptions, source freshness is bounded,
+  and no accepted strategy or profitability evidence is established.

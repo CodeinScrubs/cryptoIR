@@ -1,4 +1,4 @@
-# Experimental forward paper sessions (0.7.0)
+# Experimental forward paper sessions (0.7.0 onward)
 
 The runner connects completed hourly observations, the same baseline `Signal`
 class used in screening, public Nobitex depth, the durable paper ledger and the
@@ -18,6 +18,11 @@ of personal IRT capital and is not a production risk configuration. Its current
 fee, market increments, minimums and liquidity participation remain explicit
 research assumptions, not account-verified historical terms. Keep personal
 settings in an ignored local configuration, never in a public example.
+
+Version 0.8 additionally supports a generated IRT-funded paper configuration and
+matched whole-account benchmarks. Use the separate [funding workflow](VALUATION.md)
+to derive and seal capital from recorded public depth; do not manually change
+the reference capital and label it a verified conversion.
 
 The duration is bounded to 5..86,400 seconds; the uncompressed event budget is
 1..512 MiB. The recorder compresses logs and preserves every run. It stops when
@@ -68,8 +73,12 @@ such as breakout exits; it is not reconstructed as a new flat strategy.
 Configuration and executable-source fingerprints are sealed. A different source
 or configuration is refused on resume. Old experiments and their cash/inventory
 remain preserved; starting another reference experiment is not evidence that
-the old portfolio was closed. Explicit experiment-upgrade tooling is not yet
-implemented.
+the old portfolio was closed. `paper-upgrade-empty` permits an explicit source
+upgrade only for an unchanged account with no orders, no unexpected inventory
+and no risk halt. It first makes a consistent SQLite backup and journals the
+identity change without resetting capital, signal state or history. Accounts
+that have traded require a separately reviewed migration; they cannot use this
+shortcut.
 
 `paper-stop` creates a persistent `STOP` file. On the next timer tick the runner
 latches a manual stop, cancels local pending orders and preserves positions.
@@ -82,9 +91,10 @@ terminal and cannot be mistaken for a network retry. Clock discontinuities stop
 the session. Final reports distinguish stopped sessions, data failures and live
 balances; stopping is never reported as liquidation or successful performance.
 
-The current runner covers one Nobitex USDT spot pair per independent reference
-experiment. It has no IRT conversion/attribution, combined multi-venue portfolio,
-full-capital BTC benchmark, leveraged accounting, dashboard or external alert
-channel. Reports, candles, original stream frames and journals stay local in the
+The current runner covers one Nobitex USDT spot pair per experiment. The funded
+BTC mode adds conditional IRT conversion/attribution and full-capital BTC/USDT
+holding benchmarks. Combined multi-venue portfolios, leveraged accounting,
+a dashboard and external alert channels remain unimplemented. Reports, candles,
+original stream frames and journals stay local in the
 experiment directory. Short reception/restart tests establish engineering
 behavior only, not positive out-of-sample paper returns.

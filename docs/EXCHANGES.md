@@ -13,7 +13,7 @@ REST books: Nobitex uses `apiv2.nobitex.ir/v3/orderbook/{symbol}`; Wallex uses `
 
 Nobitex supplies an update timestamp in the inspected response. The inspected Wallex and Tabdeal REST book payloads do not establish a source timestamp, so it remains unknown. Stream semantics and observations are documented in [STREAMS.md](STREAMS.md) and [VALIDATION.md](VALIDATION.md). Wallex documentation discourages repeated REST polling for depth; continuous collection uses its documented streams.
 
-The public names `IRT`, `TMN`, `RLS`, and contract multipliers cannot be assumed interchangeable. The initial network adapters are deliberately restricted to USDT spot pairs until explicit unit and asset identity mappings have been verified. The standalone IRR/IRT arithmetic utility is tested; a fiat network integration is not yet implemented.
+The public names `IRT`, `TMN`, `RLS`, and contract multipliers cannot be assumed interchangeable. The initial network adapters use USDT spot pairs plus a scoped Nobitex USDT/IRR book mapping: native `USDTIRT` prices remain in rial, and reported toman is explicitly divided by ten. See [unit and funding evidence](VALUATION.md). Other fiat network mappings and historical fiat candles are still disabled pending verification.
 
 Account API rights, fee tiers, minimums, leverage availability, collateral rules and liquidation behavior need independent verification before execution. A website's advertised maximum leverage does not prove it is available through an API or to a particular account.
 

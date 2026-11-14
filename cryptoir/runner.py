@@ -17,6 +17,7 @@ from .paper import PaperLedger
 from .runtime import OwnerLock, atomic_json
 from .stream_audit import book_from_dict
 from .streams import ConsumerFailure, EventWriter, RecordingLimit, capture_venue
+from .valuation import ALL_BOOKS, matched_valuation, snapshot_pair, verify_receipt
 
 
 class ClockChanged(ConsumerFailure):
@@ -101,7 +102,22 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
         reason="interrupted"
         failure=None
         session_id=uuid.uuid4().hex
+        capital_receipt=None
+        valuation={"available":False,"reason":"not_requested_for_synthetic_reference"}
         try:
+            if config.capital_basis=="paper_irt_conversion":
+                capital_receipt=json.loads((directory/"capital-receipt.json").read_bytes())
+                verify_receipt(capital_receipt)
+                from .domain import number
+                if (capital_receipt["receipt_sha256"]!=config.capital_receipt_sha256
+                        or number(capital_receipt["conversion"]["net_base"])!=config.risk.initial_quote):
+                    raise DataError("paper capital differs from sealed conversion receipt")
+                if (config.rules.buy_fee_mode!="received_base" or config.pair!=capital_receipt["pair"]
+                        or any(number(capital_receipt["spot_rules"][key])!=getattr(config.rules,key)
+                               for key in ("quantity_step","minimum_notional","fee_rate"))
+                        or number(capital_receipt["spot_rules"]["participation"])!=config.risk.depth_participation):
+                    raise DataError("paper execution and benchmark cost/rule assumptions differ")
+                valuation={"available":False,"reason":"awaiting_fresh_valuation"}
             if not ledger.db.execute("SELECT 1 FROM metadata WHERE key='seeded'").fetchone():
                 ledger.seed({(config.venue,config.pair.split("/")[1]):config.risk.initial_quote})
             engine=ForwardEngine(ledger,config)
@@ -114,7 +130,27 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
             def status(state="running"):
                 atomic_json(directory/"status.json",{"schema":1,"session_id":session_id,"pid":os.getpid(),
                     "updated_ns":clock.safe_now(),"session_status":state,"reason":reason if state!="running" else None,
-                    "counts":dict(writer.counts),"uncompressed_log_bytes":writer.size,**engine.report()})
+                    "counts":dict(writer.counts),"uncompressed_log_bytes":writer.size,**engine.report(),
+                    "matched_valuation":valuation,"irt_performance_available":valuation["available"]})
+
+            async def poll_valuation():
+                nonlocal valuation
+                while True:
+                    record=await asyncio.to_thread(public_response,ALL_BOOKS)
+                    writer.write(config.venue,{"kind":"valuation_response","response":record})
+                    try:
+                        usdt=sum(ledger.balance(config.venue,"USDT"))
+                        btc=sum(ledger.balance(config.venue,"BTC"))
+                        observed=clock.now()
+                        value=matched_valuation(capital_receipt,snapshot_pair(record,"USDT/IRR"),snapshot_pair(record,"BTC/USDT"),
+                                                usdt,btc,now_ns=observed,max_age_ns=5*NS)
+                        valuation={"available":True,"last_valuation":value,"marked_balances":{"usdt":str(usdt),"btc":str(btc)}}
+                        writer.write(config.venue,{"kind":"portfolio_valuation","valuation":value})
+                    except (DataError,KeyError,TypeError) as exc:
+                        valuation={"available":False,"reason":str(exc) if isinstance(exc,DataError) else type(exc).__name__,
+                                   "last_valuation":valuation.get("last_valuation")}
+                        writer.write(config.venue,{"kind":"valuation_unavailable","reason":valuation["reason"]})
+                    await asyncio.sleep(60)
 
             async def poll_candles():
                 failures=0
@@ -141,6 +177,10 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
                 while time.monotonic()-start<seconds:
                     now=clock.now()
                     engine.advance(now)
+                    if valuation["available"]:
+                        current={"usdt":str(sum(ledger.balance(config.venue,"USDT"))),"btc":str(sum(ledger.balance(config.venue,"BTC")))}
+                        if now-valuation["last_valuation"]["observed_ns"]>5*NS or current!=valuation["marked_balances"]:
+                            valuation.update(available=False,reason="valuation_stale_or_balances_changed")
                     if (directory/"STOP").exists():
                         return "manual_stop"
                     if time.monotonic()-saved>=5:
@@ -153,6 +193,8 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
             candles=asyncio.create_task(poll_candles())
             supervisor=asyncio.create_task(supervise())
             tasks=[transport,candles,supervisor]
+            if capital_receipt is not None:
+                tasks.append(asyncio.create_task(poll_valuation()))
             done,_=await asyncio.wait(tasks,return_when=asyncio.FIRST_COMPLETED)
             # Observe errors before treating a coincident duration expiry as success.
             for task in done:
@@ -182,7 +224,8 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
                     writer.close()
                 if engine is not None:
                     report={"schema":1,"session_id":session_id,"pid":os.getpid(),"updated_ns":clock.safe_now(),
-                            "session_status":"stopped","reason":reason,**engine.report()}
+                            "session_status":"stopped","reason":reason,**engine.report(),"matched_valuation":valuation,
+                            "irt_performance_available":valuation["available"]}
                     if writer is not None:
                         report.update(counts=dict(writer.counts),uncompressed_log_bytes=writer.size)
                     if failure is not None:

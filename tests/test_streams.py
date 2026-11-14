@@ -103,6 +103,17 @@ class ParserTests(unittest.TestCase):
             finally:
                 writer.close()
 
+    def test_payload_cannot_replace_recording_schema_or_identity(self):
+        with tempfile.TemporaryDirectory() as folder:
+            writer=EventWriter(Path(folder)/"events.jsonl",10000)
+            try:
+                for key in ("schema","seq","run_id","venue","observed_ns","monotonic_ns"):
+                    with self.assertRaises(DataError):
+                        writer.write("a",{"kind":"test",key:1})
+                self.assertEqual(writer.seq,0)
+            finally:
+                writer.close()
+
 
 class TransportTests(unittest.IsolatedAsyncioTestCase):
     async def test_local_socket_ping_and_reconnect(self):

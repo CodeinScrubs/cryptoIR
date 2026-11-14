@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.7.0، اجرای آزمایشی paper روی دادهٔ عمومی نوبیتکس، همراه با دفتر حساب و کنترل ریسک پایدار. سودآوری و آمادگی معاملهٔ واقعی اثبات نشده است.**
+**وضعیت فعلی: نسخهٔ 0.8.0، paper نوبیتکس با سرمایهٔ تومانی، گزارش تومان/تتر و مقایسه با نگهداری تتر و بیت‌کوین. سودآوری و آمادگی معاملهٔ واقعی اثبات نشده است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -30,7 +30,7 @@ The fee and reserve in this example are **illustrative assumptions**, not verifi
 
 Use a new output filename for each recording. Existing files are never overwritten. Sampling is bounded to 120 batches, uses at least 30 seconds between batches and stops on a source error. This is a diagnostic REST collector, not a continuous live-market service. Do not run overlapping collectors against the same venue.
 
-The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/USDT has been smoke-tested against all three venues. Catalog collection preserves broader native market lists. Unified asset identity, fiat adapters, contract multipliers and other instruments remain planned. This is an implementation boundary, not a restriction on the eventual research universe.
+The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/USDT has been smoke-tested against all three venues. Nobitex `USDT/IRR` has a separate explicit rial mapping for paper conversion and valuation through the all-market endpoint. Catalog collection preserves broader native market lists. Unified asset identity, other fiat adapters, contract multipliers and other instruments remain planned. This is an implementation boundary, not a restriction on the eventual research universe.
 
 ## Current checks
 
@@ -43,7 +43,7 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

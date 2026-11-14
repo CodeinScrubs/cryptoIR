@@ -99,6 +99,8 @@ def download_history(output: Path, venue: str, pair: str, start: int, end: int) 
     if venue not in HISTORY:
         raise DataError("hourly history is currently documented for Nobitex and Wallex")
     endpoint(venue, pair)
+    if not pair.endswith("/USDT"):
+        raise DataError("historical fiat price units are not yet independently verified")
     if type(start) is not int or type(end) is not int or not 0 < start < end <= int(time.time()):
         raise DataError("require an explicit completed UTC interval")
     if end-start > 3 * 366 * DAY:
@@ -171,6 +173,8 @@ def audit_history(directory: Path) -> tuple[dict, list[Candle]]:
         raise DataError("incomplete or unsupported historical dataset")
     venue, pair, start, end = (manifest[key] for key in ("venue", "pair", "start", "end_exclusive"))
     endpoint(venue, pair)
+    if not pair.endswith("/USDT"):
+        raise DataError("historical fiat price units are not yet independently verified")
     if venue not in HISTORY or any(type(t) is not int for t in (start, end)) or not 0 < start < end:
         raise DataError("invalid historical manifest")
     expected = []
