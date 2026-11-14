@@ -119,7 +119,26 @@ def main() -> int:
     paper.add_argument("--output", required=True, type=Path)
     catalog = commands.add_parser("catalog", help="record current public market metadata; no account requests")
     catalog.add_argument("--output", required=True, type=Path)
+    stream = commands.add_parser("stream", help="bounded public WebSocket recording with gap markers")
+    stream.add_argument("--output", required=True, type=Path)
+    stream.add_argument("--pair", default="BTC/USDT")
+    stream.add_argument("--seconds", type=int, default=60)
+    stream.add_argument("--venues", nargs="+", choices=VENUES, default=list(VENUES))
+    stream.add_argument("--max-mb", type=int, default=64)
+    stream_check = commands.add_parser("stream-audit", help="validate stream log and replay original frames")
+    stream_check.add_argument("path", type=Path)
     args = parser.parse_args()
+    if args.command == "stream-audit":
+        from .stream_audit import audit_stream
+        result = audit_stream(args.path)
+        print(encode(result))
+        return int(bool(result["venues_without_books"] or not result["ended_cleanly"]))
+    if args.command == "stream":
+        import asyncio
+        from .streams import record_streams
+        result = asyncio.run(record_streams(args.output, args.pair, args.seconds, args.venues, args.max_mb))
+        print(encode(result))
+        return int(bool(result["venues_without_books"] or result["reason"] != "duration_completed"))
     if args.command == "catalog":
         from .catalog import collect_catalogs
         args.output.parent.mkdir(parents=True, exist_ok=True)

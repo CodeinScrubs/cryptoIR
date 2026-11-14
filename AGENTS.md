@@ -7,5 +7,5 @@
 - Use exact monetary arithmetic and explicit units. Unknown fees, asset identity, order state or data continuity must not silently become favorable assumptions.
 - A backtest must not use data that was unavailable at decision time. Never infer a limit fill merely because a candle touched its price.
 - Keep dependencies and infrastructure modest. Implement one testable milestone at a time; do not build exhaustive algorithm catalogs before testing feasibility.
-- Run meaningful offline tests with `python -m unittest discover -s tests -v`. Keep CI offline and credential-free.
+- Run meaningful tests with `uv run python -m unittest discover -s tests -v`. CI uses synthetic fixtures and local loopback sockets, never exchange requests or credentials.
 - Preserve untracked recordings and private configuration. Do not delete user data as a cleanup step.

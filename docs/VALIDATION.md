@@ -1,6 +1,6 @@
 # Initial validation record
 
-Versions: 0.1.0 and 0.2.0. Date: 2026-11-14.
+Versions: 0.1.0 through 0.3.0. Date: 2026-11-14.
 
 ## Evidence
 
@@ -23,3 +23,11 @@ These checks do not establish market-history completeness, exchange solvency, qu
 - The synthetic paper demo produced a partial fill, released the unused reservation and persisted balances and journal records. It is not a market-performance result.
 - All 54 local Python 3.13 tests passed, including catalog semantics and 23 paper-ledger scenarios.
 - Version 0.1.0 CI passed all four Windows/Linux and Python 3.11/3.13 combinations on commit `3edafb15b0f0b986bcce1592a322223105fce237`.
+
+## Version 0.3.0 additions (2026-11-14)
+
+- All 72 local tests passed. Local WebSocket tests exercised application heartbeat, forced disconnect and resubscription; they do not connect to an exchange.
+- A 60-second public BTC/USDT observation recorded 84 Nobitex books, 318 composed Wallex books and 30 Tabdeal books. No reconnect was observed in this short run. All 432 books were independently reconstructed from captured raw frames.
+- All 318 Wallex composites retain unknown source timestamps and non-atomic-side status. The run establishes reception, not fill feasibility.
+- File SHA-256: `eaff8a9ea35137e704914866355fc1fde8f726a92a8f4989feca2147ccdca8ac`. Uncompressed size: 3,915,945 bytes. Raw market data remains ignored by Git.
+- Compressed logs, record/hash corruption, missing terminal records and disregard of fabricated derived-book fields are covered by offline tests.
