@@ -1,0 +1,20 @@
+# Exchange capability inventory
+
+Reviewed 2026-11-14. Documentation is evidence of advertised interfaces, not account entitlement, matching-engine performance, solvency or trading success.
+
+| Venue | Official sources | Observed documentation | This version |
+| --- | --- | --- | --- |
+| Nobitex | [API](https://apidocs.nobitex.ir/), [getting started](https://apidocs.nobitex.ir/getting-started) | Spot, margin and WebSocket sections | Public BTC/USDT REST book request succeeded |
+| Wallex | [API](https://developers.wallex.ir/docs/), [depth](https://developers.wallex.ir/docs/basic-services-depth) | Spot, margin and WebSocket sections | Public BTC/USDT REST book request succeeded |
+| Tabdeal | [API](https://docs.tabdeal.org/) | Spot, margin, professional leverage API (FAPI) and streams | Public BTC/USDT REST book request succeeded |
+| Versland | [official website](https://versland.io/) | Website advertises leveraged products | Public documented trading API not established; no adapter |
+
+REST books: Nobitex uses `apiv2.nobitex.ir/v3/orderbook/{symbol}`; Wallex uses `api.wallex.ir/v1/depth`; Tabdeal uses `api1.tabdeal.org/r/api/v1/depth`. Bootstrap uses public GET requests only.
+
+Nobitex supplies an update timestamp in the inspected response. The inspected Wallex and Tabdeal REST book payloads do not establish a source timestamp, so it remains unknown. Venue-specific stream and metadata research is still needed. Wallex documentation discourages repeated REST polling for depth; continuous collection should use its documented streams.
+
+The public names `IRT`, `TMN`, `RLS`, and contract multipliers cannot be assumed interchangeable. The initial network adapters are deliberately restricted to USDT spot pairs until explicit unit and asset identity mappings have been verified. The standalone IRR/IRT arithmetic utility is tested; a fiat network integration is not yet implemented.
+
+Account API rights, fee tiers, minimums, leverage availability, collateral rules and liquidation behavior need independent verification before execution. A website's advertised maximum leverage does not prove it is available through an API or to a particular account.
+
+Browser observations are for inspection and integration diagnosis; the production order path is intended to use stable, documented APIs. A separate browser/controller's availability does not prove API reachability, and API reachability does not prove logged-in browser access.

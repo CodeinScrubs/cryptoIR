@@ -1,0 +1,72 @@
+# Scope and acceptance contract
+
+Status: initial design, 2026-11-14. This document describes the destination and gates, not completed capabilities.
+
+## Agreed scope
+
+- Iranian execution venues: Nobitex, Wallex, Tabdeal, and Versland subject to verified integration capabilities. External data may inform research; foreign exchange trading is outside scope.
+- Public GitHub source. Personal capital, account details, keys and production settings remain private.
+- Start on a Windows laptop, using free tools and data. Paid services and cloud compute are not prerequisites; request compute setup only after measured need.
+- Evaluate strategy families incrementally. There is no requirement to enumerate every possible algorithm before producing useful evidence.
+- Report net performance in IRT and USDT, and compare with holding USDT and BTC over matching periods and capital flows. Include transaction and operating costs; separate currency appreciation from strategy alpha.
+- Forward paper evaluation lasts until sufficient evidence exists; no arbitrary deadline or fixed profit promise.
+- High leverage, including 5/10/20/100 scenarios, belongs in research only where venue specifications and data support a faithful simulation. Final live leverage and loss limits are undecided.
+- Live trading requires a later explicit user decision after reviewing results and concrete limits. Withdrawals and transfers between exchanges remain manual. Internal spot/margin wallet funding also remains manual until its scope is separately settled.
+
+## Architecture
+
+Begin with one Python application and independently testable modules; avoid services, distributed queues or GPU work until measurements justify them.
+
+1. Capability registry: venue, spot/margin/derivative product, asset identity, quote unit, quantity multiplier, lot/tick/minimum rules, fee currency/tier, rate limits, margin/funding/expiry/liquidation behavior and allowed operations.
+2. Ingestion: public REST bootstrap, WebSocket streams, immutable raw events, exchange and receive timestamps, monotonic durations, sequence/reset/gap detection and reconnect/resnapshot state.
+3. Normalization and storage: explicit IRR versus IRT; exact decimals or integer units; UTC storage and Tehran display; versioned schemas, checksums and dataset manifests. Start with bounded JSONL; add partitioned columnar storage when needed.
+4. Research: causal event replay and fast preliminary screens. Strategy interfaces receive only information available at the simulated decision time. Record every trial, including failures.
+5. Simulation: the same strategy and risk interfaces in replay and forward paper mode. Separate cash/inventory by venue, reserve funds for open orders, simulate latency, partial fills, cancel races, conservative queue assumptions and both-leg failure in arbitrage.
+6. Execution, later: durable order IDs, intent journal, idempotency, reconciliation against actual exchange state, restart recovery and independent risk checks. Unknown order submission outcome must reconcile before retrying.
+7. Operations: local Persian dashboard, feed age, positions, P&L, risk, process health, alerts and audit trail. Notification channels are still to be chosen; local dashboard is the starting assumption.
+
+## Backtest requirements
+
+- Separate screening, training/validation, untouched out-of-sample tests and forward paper observations. Use walk-forward evaluation, purging/embargo when labels overlap, and account for repeated strategy searches.
+- Preserve delisted markets and point-in-time symbol membership where available. News, fundamentals, on-chain and macro features use their actual availability timestamps, not later revisions.
+- Reconcile historical candles against authoritative venue records when available. Report coverage and gaps explicitly. Never label sampled REST books as complete historical order flow or manufacture order books from candles.
+- A limit price being touched does not prove a fill. Avoid assuming both stop and target fills from an ambiguous candle. Mark unavailable queue and intrabar evidence, use conservative scenarios, and calibrate with forward observations.
+- Include both trading legs, spread, depth/impact, fees in the correct asset, funding/borrowing/renewal costs, liquidation rules, outages, rejected orders, capital locked at venues and eventual manual inventory rebalancing costs.
+- Evaluate volatility regimes and stressed fees, latency, liquidity and outages. Report confidence intervals, maximum drawdown, tail loss, turnover, capacity and capital utilization alongside net returns.
+- Freeze code version, data hash, parameters, seed, fee schedule and assumptions for each run. Changing parameters restarts evaluation on genuinely unseen data; the old holdout is no longer untouched.
+
+## Strategy research queue
+
+Order is provisional and determined by feasibility and evidence, not a commitment to deploy each family.
+
+| Family | First question that can eliminate wasted work |
+| --- | --- |
+| Cross-venue / triangular arbitrage | Does sufficient spread survive realistic costs, inventory constraints and asynchronous execution? |
+| Momentum / trend / breakout | Is there stable net out-of-sample behavior across regimes? |
+| Mean reversion / relative value | Does the effect survive structural breaks and realistic turnover costs? |
+| Market making / order-flow signals | Are timestamped depth, trades and queue assumptions adequate? |
+| Carry / funding / basis | Is the relevant product and settlement mechanism actually accessible? |
+| Fundamental / news / on-chain | Is free historical point-in-time data reliable and incremental? |
+| Statistical / ML combinations | Is there demonstrable improvement over simple baselines after search bias? |
+
+A strategy that finds no qualifying trade must remain idle. Research may conclude that no deployable edge exists under the available capital and costs.
+
+## Release gates
+
+| Gate | Evidence required | Current state |
+| --- | --- | --- |
+| G0: scope | Capital/risk stored privately; agreed trading permissions and venue scope | Scope agreed; live risk limits intentionally unset |
+| G1: data | Verified metadata/units; live streams; reconnect/gap tests; coverage audit | Partial: three public spot REST adapters |
+| G2: simulation | Portfolio accounting; venue-specific rules; causal fills; recovery/invariant tests | Not implemented |
+| G3: research | Reproducible held-out results after all costs and stress scenarios | Not started |
+| G4: paper | Prospective net performance and operational reliability; calibrated fill assumptions | Not started |
+| G5: limited live | User-approved finite limits; account permissions; reconciliation and shutdown exercises | Disabled / not implemented |
+| G6: autonomous operation | Sustained observed live results and ongoing risk/operational monitoring | Not established |
+
+Before G5, specify per-trade risk, per-venue and aggregate exposure, daily loss and drawdown limits, leverage, maximum order size and allowed markets. No unlimited spending or automatic capital replenishment. Stops can slip; finite loss limits cannot guarantee a maximum loss under gaps, liquidation or exchange failure.
+
+Disconnects block new exposure. Managing existing exposure needs an explicit policy and exchange-native protection where supported. Stopping a process alone is not a safe position-management policy. Laptop sleep, loss of power/network and local clock changes require recovery tests before unattended operation.
+
+## Next implementation milestone
+
+Market metadata and WebSocket capture for the three documented venues, including continuity and resnapshot tests; verify fiat and asset-unit mappings. Then implement a spot paper ledger and conservative fill model before adding leveraged products. Time-box Versland API discovery and mark missing capabilities instead of guessing routes or placing browser orders.
