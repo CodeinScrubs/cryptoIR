@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "experiment": "baseline-v2",
+  "purpose": "Reject weak hourly spot hypotheses before order-book and forward validation",
+  "venues": [
+    "nobitex"
+  ],
+  "pairs": [
+    "BTC/USDT",
+    "ETH/USDT",
+    "SOL/USDT"
+  ],
+  "data_start": "2025-07-06",
+  "data_end_exclusive": "2026-11-01",
+  "splits": [
+    {
+      "name": "discovery",
+      "start": "2025-08-01",
+      "end": "2025-11-01"
+    },
+    {
+      "name": "validation",
+      "start": "2025-11-01",
+      "end": "2026-01-01"
+    },
+    {
+      "name": "held_out",
+      "start": "2026-01-01",
+      "end": "2026-11-01"
+    }
+  ],
+  "candidates": [
+    "trend_24_168",
+    "breakout_168_72",
+    "reversion_24_2pct"
+  ],
+  "benchmarks": [
+    "cash",
+    "hold"
+  ],
+  "assumptions": {
+    "capital": "100",
+    "allocation": "0.25",
+    "prior_volume_fraction": "0.01",
+    "quantity_step": "0.000001",
+    "minimum_notional": "5",
+    "delay_hours": 1,
+    "buy_fee_mode": "received_base"
+  },
+  "cost_scenarios": [
+    {
+      "name": "base_assumed",
+      "fee": "0.0013",
+      "adverse_bps": "15"
+    },
+    {
+      "name": "stress_assumed",
+      "fee": "0.0026",
+      "adverse_bps": "30"
+    }
+  ],
+  "gate": {
+    "minimum_completed_sells": 10,
+    "maximum_drawdown": "0.10",
+    "positive_return_in_every_cost_scenario": true,
+    "beat_equal_allocation_hold_in_base": true
+  },
+  "selection": "Discovery gate then highest worst-cost return, deterministic strategy-name tie break; validation must pass unchanged; only then inspect held-out period",
+  "capital_note": "100 USDT is a synthetic reference, not a conversion of personal capital. Allocation is a research assumption, not approved live risk.",
+  "fee_note": "Current-cost counterfactual using public base USDT taker rate observed 2026-11-14; not a historical schedule or account-verified tier. Buy fees in received base, sell fees in quote. Stress doubles the fee.",
+  "limitations": "Current asset choices create selection bias. No liquidation, leverage, tax, FX/IRT attribution or point-in-time historical fees. Hourly proxy fills need independent calibration. This screen cannot authorize deployment.",
+  "fee_source": "https://nobitex.ir/pricing/",
+  "prior_observation": "BTC discovery outcomes from baseline-v1b are already seen; ETH/SOL performance and all validation/held-out performance remain uninspected at registration."
+}
