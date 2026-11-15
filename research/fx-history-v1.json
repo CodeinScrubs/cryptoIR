@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "experiment": "fx-history-v1",
+  "purpose": "Separate external IRT reporting reference for already observed USDT research; no candidate selection or trading conversion",
+  "venue": "wallex",
+  "pair": "USDT/IRT",
+  "native_symbol": "USDTTMN",
+  "start": "2025-07-30",
+  "end_exclusive": "2026-01-01",
+  "unit_identity": {
+    "native_symbol": "USDTTMN",
+    "canonical_pair": "USDT/IRT",
+    "quote_unit": "IRT",
+    "raw_price_multiplier": "1",
+    "evidence_scope": "current_source_declared_currency_identity",
+    "historical_execution_rules_verified": false,
+    "catalog_sha256": "00b60c28735aa1914fe95af440e03298f730fa4d8489cd257ac7878fed105a62"
+  },
+  "unit_catalog_sha256": "00b60c28735aa1914fe95af440e03298f730fa4d8489cd257ac7878fed105a62",
+  "requests": {
+    "hourly_window_days": 20,
+    "daily_window_days": 365,
+    "minimum_spacing_seconds": "1.1",
+    "maximum_requests": 9,
+    "retry": false
+  },
+  "acceptance": "Reconstruct raw responses, exact hourly/daily OHLCV reconciliation for every complete UTC session, no interior gap, usable reported volume and source-declared Toman identity. Preserve all failures; no date trimming or tolerance after outcomes.",
+  "prior_probe": "One Aug 1 2025 hourly availability probe returned 24 bars. No full-window FX return or IRT strategy/benchmark return computed before registration.",
+  "scope": "Nobitex USDTIRT historical requests returned HTTP 403 at both minute and hourly resolutions. Wallex USDTTMN is a separate public source with explicit Toman metadata, not substitute Nobitex history or cross-venue execution evidence.",
+  "future_attribution": "After acceptance pin dataset and already observed trial hashes in a separate evaluation plan before IRT calculations. Only last completed FX closes at or before each portfolio timestamp; no future lookup, interpolation or conversion fills. Report source age, external venue basis and unavailable execution/conversion costs. No 2026 strategy performance or gate revision."
+}

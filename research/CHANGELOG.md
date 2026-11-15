@@ -4,6 +4,22 @@ Plans are immutable after performance evaluation. Data failures and rejected
 trials remain in the record. New plans cannot make previously viewed outcomes
 unseen, even if a new filename is used.
 
+## 2026-11-15: external Toman reporting-reference collection
+
+`fx-history-v1.json` freezes a bounded Wallex USDT/IRT download for 2025-07-30
+through 2026-01-01 exclusive: eight hourly requests and one daily request, with
+no automatic retry. Its current public catalog explicitly identifies USDTTMN's
+quote as Toman; the raw catalog and unit mapping are hash-pinned. This mapping
+is confined to historical reporting and does not enable fiat execution adapters.
+
+Two bounded Nobitex USDTIRT history requests (minute/hourly) returned HTTP 403.
+The official public price page also showed a temporarily unavailable chart;
+neither observation establishes permanent API absence or historical price units.
+The Wallex one-day availability probe returned 24 hourly bars, but no full-window
+FX return or IRT portfolio return has been computed. Exact daily reconciliation
+must pass before registering an attribution evaluation. Cross-venue basis,
+conversion liquidity and fees remain separate unknowns; no prior gate changes.
+
 ## 2026-11-15: shared-cash relative-momentum rotation registration
 
 Outcome after registration `1e35e7c` and implementation `39317f2`: base/stress

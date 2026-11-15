@@ -18,6 +18,42 @@ HISTORY = {"nobitex": "https://apiv2.nobitex.ir/market/udf/history",
 HOUR, DAY = 3600, 86400
 
 
+def history_symbol(venue, pair):
+    if (venue, pair) == ("wallex", "USDT/IRT"):
+        return "USDTTMN"
+    endpoint(venue, pair)
+    if not pair.endswith("/USDT"):
+        raise DataError("historical fiat price units are not yet independently verified")
+    return pair.replace("/", "")
+
+
+def verify_fiat_catalog(content):
+    """Current source-declared quote identity; not historical execution rules."""
+    from .catalog import ENDPOINTS
+    from .triangular import strict_json
+    record = strict_json(content)
+    if (record.get("schema") != 1 or record.get("kind") != "snapshot"
+            or record.get("status_code") != 200 or record.get("url") != ENDPOINTS["wallex"]):
+        raise DataError("invalid fiat unit source")
+    body = record["raw_body"]
+    if hashlib.sha256(body.encode()).hexdigest() != record["body_sha256"] or dumps(strict_json(body)) != dumps(record["payload"]):
+        raise DataError("fiat catalog differs from raw response")
+    payload = record["payload"]
+    if payload.get("success") is not True:
+        raise DataError("fiat catalog unsuccessful")
+    markets = [m for m in payload["result"]["markets"] if m["symbol"] == "USDTTMN"]
+    if len(markets) != 1:
+        raise DataError("unique USDTTMN metadata required")
+    m = markets[0]
+    if (m["base_asset"] != "USDT" or m["quote_asset"] != "TMN"
+            or m["en_quote_asset"] != "Toman" or m["fa_quote_asset"] != "تومان"
+            or m["is_spot"] is not True or m["is_tmn_based"] is not True):
+        raise DataError("explicit Toman quote identity required")
+    return {"native_symbol": "USDTTMN", "canonical_pair": "USDT/IRT", "quote_unit": "IRT",
+            "raw_price_multiplier": "1", "evidence_scope": "current_source_declared_currency_identity",
+            "historical_execution_rules_verified": False, "catalog_sha256": hashlib.sha256(content).hexdigest()}
+
+
 @dataclass(frozen=True)
 class Candle:
     time: int
@@ -120,12 +156,18 @@ def reconcile(hourly: list[Candle], daily: list[Candle], start: int, end: int) -
             "reconciled": bool(table) and all(day["matched"] for day in table) and not gaps and not missing_daily}
 
 
-def download_history(output: Path, venue: str, pair: str, start: int, end: int) -> dict:
+def download_history(output: Path, venue: str, pair: str, start: int, end: int, *, unit_catalog: Path | None = None) -> dict:
     if venue not in HISTORY:
         raise DataError("hourly history is currently documented for Nobitex and Wallex")
-    endpoint(venue, pair)
-    if not pair.endswith("/USDT"):
-        raise DataError("historical fiat price units are not yet independently verified")
+    symbol = history_symbol(venue, pair)
+    unit_bytes, unit_identity = None, None
+    if pair == "USDT/IRT":
+        if unit_catalog is None:
+            raise DataError("fiat history requires preserved source unit metadata")
+        unit_bytes = unit_catalog.read_bytes()
+        unit_identity = verify_fiat_catalog(unit_bytes)
+    elif unit_catalog is not None:
+        raise DataError("unit metadata only supported for Wallex USDT/IRT history")
     if type(start) is not int or type(end) is not int or not 0 < start < end <= int(time.time()):
         raise DataError("require an explicit completed UTC interval")
     if end-start > 3 * 366 * DAY:
@@ -135,6 +177,9 @@ def download_history(output: Path, venue: str, pair: str, start: int, end: int) 
                 "start": start, "end_exclusive": end, "resolution_seconds": HOUR,
                 "status": "incomplete", "raw_files": [], "retrieved_ns": time.time_ns(),
                 "fees_verified": False, "execution_ready": False}
+    if unit_identity is not None:
+        manifest["unit_identity"] = unit_identity
+        (output/"unit-catalog.json").write_bytes(unit_bytes)
     data = {"hourly": {}, "daily": {}}
     # At most 480 hourly candles or 365 daily candles per request.
     requests = [("hourly", "60", 20*DAY), ("daily", "D" if venue == "nobitex" else "1D", 365*DAY)]
@@ -147,7 +192,7 @@ def download_history(output: Path, venue: str, pair: str, start: int, end: int) 
                 if pause > 0:
                     time.sleep(pause)
                 right = min(left + window, end)
-                url = HISTORY[venue] + "?" + urlencode({"symbol": pair.replace("/", ""),
+                url = HISTORY[venue] + "?" + urlencode({"symbol": symbol,
                     "resolution": resolution, "from": left, "to": right-1})
                 last_request = time.monotonic()
                 record = public_response(url)
@@ -197,9 +242,13 @@ def audit_history(directory: Path) -> tuple[dict, list[Candle]]:
             or manifest.get("status") != "downloaded" or manifest.get("resolution_seconds") != HOUR):
         raise DataError("incomplete or unsupported historical dataset")
     venue, pair, start, end = (manifest[key] for key in ("venue", "pair", "start", "end_exclusive"))
-    endpoint(venue, pair)
-    if not pair.endswith("/USDT"):
-        raise DataError("historical fiat price units are not yet independently verified")
+    symbol = history_symbol(venue, pair)
+    if pair == "USDT/IRT":
+        identity = verify_fiat_catalog((directory/"unit-catalog.json").read_bytes())
+        if manifest.get("unit_identity") != identity:
+            raise DataError("historical fiat unit evidence mismatch")
+    elif "unit_identity" in manifest:
+        raise DataError("unexpected fiat unit evidence")
     if venue not in HISTORY or any(type(t) is not int for t in (start, end)) or not 0 < start < end:
         raise DataError("invalid historical manifest")
     expected = []
@@ -207,7 +256,7 @@ def audit_history(directory: Path) -> tuple[dict, list[Candle]]:
         for left in range(start, end, window):
             right = min(left+window, end)
             expected.append((name, left, right, HISTORY[venue] + "?" + urlencode({
-                "symbol": pair.replace("/", ""), "resolution": resolution, "from": left, "to": right-1})))
+                "symbol": symbol, "resolution": resolution, "from": left, "to": right-1})))
     if len(manifest["raw_files"]) != len(expected):
         raise DataError("historical request coverage differs from manifest")
     data = {"hourly": {}, "daily": {}}
@@ -249,4 +298,6 @@ def audit_history(directory: Path) -> tuple[dict, list[Candle]]:
     return {"kind": "historical_reconciliation", "venue": venue, "pair": pair,
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
             "normalized_sha256": manifest["normalized_sha256"],
-            "volume_quality": volume_quality(bars), **expected_fields, **result}, bars
+            "volume_quality": volume_quality(bars),
+            **({"unit_identity": manifest["unit_identity"]} if "unit_identity" in manifest else {}),
+            **expected_fields, **result}, bars

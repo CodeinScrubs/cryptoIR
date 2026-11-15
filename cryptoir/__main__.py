@@ -191,6 +191,7 @@ def main() -> int:
     history.add_argument("--start", required=True, help="UTC date YYYY-MM-DD inclusive")
     history.add_argument("--end", required=True, help="UTC date YYYY-MM-DD exclusive")
     history.add_argument("--output", type=Path, required=True)
+    history.add_argument("--unit-catalog", type=Path, help="preserved public Wallex catalog required only for USDT/IRT history")
     history_check = commands.add_parser("history-audit", help="rebuild historical reconciliation from original responses")
     history_check.add_argument("directory", type=Path)
     research = commands.add_parser("research", help="run preregistered cost screens with sequential holdout gates")
@@ -312,7 +313,7 @@ def main() -> int:
         from .history import download_history
         start = int(datetime.strptime(args.start, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
         end = int(datetime.strptime(args.end, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
-        result = download_history(args.output, args.venue, args.pair, start, end)
+        result = download_history(args.output, args.venue, args.pair, start, end, unit_catalog=args.unit_catalog)
         print(encode(result))
         return int(not result["reconciled"])
     if args.command == "stream-audit":

@@ -9,7 +9,7 @@ from unittest.mock import patch
 from urllib.parse import parse_qs, urlparse
 
 from cryptoir.domain import DataError
-from cryptoir.history import Candle, DAY, HOUR, audit_history, download_history, parse_udf, reconcile, volume_quality
+from cryptoir.history import Candle, DAY, HOUR, audit_history, download_history, parse_udf, reconcile, volume_quality, verify_fiat_catalog, history_symbol
 from cryptoir.streams import dumps
 
 
@@ -116,7 +116,7 @@ class HistoryTests(unittest.TestCase):
         self.assertEqual(quality["blocking_reasons"], ["no_positive_reported_volume"])
         self.assertFalse(quality["usable_for_volume_screen"])
 
-    def make_dataset(self, directory):
+    def make_dataset(self, directory, venue="nobitex", pair="BTC/USDT", unit_catalog=None):
         hourly, daily, start, end = self.fixture()
 
         def response(url):
@@ -128,7 +128,51 @@ class HistoryTests(unittest.TestCase):
                     "body_sha256": hashlib.sha256(body.encode()).hexdigest(), "raw_body": body}
 
         with patch("cryptoir.history.public_response", side_effect=response), patch("cryptoir.history.time.sleep"):
-            download_history(directory, "nobitex", "BTC/USDT", start, end)
+            download_history(directory, venue, pair, start, end, unit_catalog=unit_catalog)
+
+    def unit_catalog(self, **changes):
+        from cryptoir.catalog import ENDPOINTS
+        market={"symbol":"USDTTMN","base_asset":"USDT","quote_asset":"TMN","en_quote_asset":"Toman",
+                "fa_quote_asset":"تومان","is_spot":True,"is_tmn_based":True,**changes}
+        payload={"success":True,"result":{"markets":[market]}};body=dumps(payload)
+        return dumps({"schema":1,"kind":"snapshot","status_code":200,"url":ENDPOINTS["wallex"],
+                      "payload":payload,"raw_body":body,"body_sha256":hashlib.sha256(body.encode()).hexdigest()}).encode()
+
+    def test_fiat_mapping_is_scoped_to_source_declared_toman(self):
+        self.assertEqual(history_symbol("wallex","USDT/IRT"),"USDTTMN")
+        self.assertEqual(verify_fiat_catalog(self.unit_catalog())["raw_price_multiplier"],"1")
+        for venue,pair in (("nobitex","USDT/IRT"),("nobitex","USDT/IRR"),("wallex","BTC/IRT"),("wallex","USDT/TMN")):
+            with self.assertRaises(DataError):history_symbol(venue,pair)
+        for change in ({"quote_asset":"IRR"},{"en_quote_asset":"Rial"},{"base_asset":"BTC"},{"is_spot":False},{"is_tmn_based":False}):
+            with self.assertRaises(DataError):verify_fiat_catalog(self.unit_catalog(**change))
+
+    def test_fiat_history_preserves_raw_prices_and_reconstructs_unit_provenance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);catalog=root/"catalog.json";catalog.write_bytes(self.unit_catalog())
+            directory=root/"history";self.make_dataset(directory,"wallex","USDT/IRT",catalog)
+            report,bars=audit_history(directory)
+            self.assertTrue(report["reconciled"])
+            self.assertEqual(bars[0].open,100)
+            self.assertEqual(report["unit_identity"]["quote_unit"],"IRT")
+            raw=json.loads((directory/"raw-0000.json").read_bytes())
+            self.assertEqual(parse_qs(urlparse(raw["url"]).query)["symbol"],["USDTTMN"])
+            path=directory/"manifest.json";manifest=json.loads(path.read_bytes())
+            manifest["unit_identity"]["raw_price_multiplier"]="10";path.write_text(dumps(manifest),encoding="utf-8")
+            with self.assertRaisesRegex(DataError,"unit evidence mismatch"):audit_history(directory)
+
+    def test_absent_unit_evidence_fails_before_network_or_output_creation(self):
+        with tempfile.TemporaryDirectory() as tmp,patch("cryptoir.history.public_response") as fetch:
+            output=Path(tmp)/"history"
+            with self.assertRaisesRegex(DataError,"unit metadata"):
+                download_history(output,"wallex","USDT/IRT",DAY,DAY*3)
+            self.assertFalse(output.exists());fetch.assert_not_called()
+
+    def test_unit_metadata_raw_tampering_and_duplicate_market_fail(self):
+        record=json.loads(self.unit_catalog());record["payload"]["result"]["markets"][0]["quote_asset"]="IRR"
+        with self.assertRaisesRegex(DataError,"raw response"):verify_fiat_catalog(dumps(record).encode())
+        record=json.loads(self.unit_catalog());record["payload"]["result"]["markets"]*=2
+        record["raw_body"]=dumps(record["payload"]);record["body_sha256"]=hashlib.sha256(record["raw_body"].encode()).hexdigest()
+        with self.assertRaisesRegex(DataError,"unique"):verify_fiat_catalog(dumps(record).encode())
 
     def test_source_replay_audit_and_fabricated_normalized_file(self):
         with tempfile.TemporaryDirectory() as tmp:
