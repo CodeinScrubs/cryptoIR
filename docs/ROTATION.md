@@ -70,6 +70,12 @@ observed. This trial is explicitly exploratory. January-April 2026 validation
 and May-October held-out performance remain behind sequential gates. Renaming
 an experiment never makes viewed data unseen.
 
+The first registered run stopped at discovery: base/stress net returns were
+-4.9882%/-5.7324%, hourly-close maximum drawdowns 13.0482%/13.4428%, with six
+completed exits each. It beat both declining BTC benchmarks but failed the
+profit, drawdown and exit-count gates. No 2026 performance was evaluated and no
+rule changed. [All results and hashes](../research/RESULTS.md) retain the rejection.
+
 ## Limits of the model
 
 Fees use a current-cost counterfactual from [Nobitex's public fee page](https://nobitex.ir/pricing/),

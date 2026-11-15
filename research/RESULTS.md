@@ -3,6 +3,41 @@
 These are preliminary conditional screens, not realized or deployable returns.
 No personal account balances or capital assumptions are published here.
 
+## rotation-v1: weekly relative momentum, rejected at discovery
+
+Plan registration: `1e35e7c`; implementation and evaluation: `39317f2`.
+One shared account started with synthetic 100 USDT and a 25% total entry cap.
+Every 168 completed hours, the candidate chose the highest positive 336-hour
+return among BTC, ETH and SOL, otherwise cash. Exits preceded separately delayed
+entries. No parameter search, asset substitution or post-result revision occurred.
+
+The three pinned v2 histories reconstructed from raw responses with 482 exact
+daily matches each, 11,568 aligned hours and usable reported-volume observations.
+The discovery interval remained 2025-07-31 20:30 UTC to 2025-12-31 20:30 UTC,
+exclusive. This interval was already observed for other hypotheses; the new
+portfolio trial is exploratory, not independent evidence. All trials used the
+same initial cash, dates and declared cost assumptions.
+
+| Portfolio | Base net return | Stress net return | Base maximum hourly-close drawdown | Stress maximum hourly-close drawdown | Completed sells, base/stress |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| USDT cash | 0.0000% | 0.0000% | 0.0000% | 0.0000% | 0 / 0 |
+| BTC holding, 25% entry allocation | -6.2867% | -6.3468% | 9.2676% | 9.2091% | 0 / 0 |
+| BTC holding, full entry allocation | -24.9717% | -25.3882% | 35.2458% | 35.2560% | 0 / 0 |
+| Relative-momentum rotation | -4.9882% | -5.7324% | 13.0482% | 13.4428% | 6 / 6 |
+
+The candidate beat both BTC benchmarks but failed positive return, the 10%
+drawdown ceiling and the ten-exit minimum under both costs. It made twelve
+modeled trades per scenario. Benchmark holdings are marked with hypothetical
+exit costs, not falsely recorded as completed sales. Different costs and entry
+rounding can change the size and drawdown of each counterfactual portfolio.
+
+The engine stopped at discovery. No validation or held-out strategy/benchmark
+performance was calculated; no 2026 performance was inspected. No paper account,
+real order or account allocation changed. The [public evidence](evidence/rotation-v1-summary.json)
+retains every metric, input/source hash and hashes for eight trial artifacts,
+three full daily audits, three date-by-date delta tables and the trial journal.
+Returns remain in USDT; IRT attribution and faithful execution remain outstanding.
+
 ## triangular-v2: catalog-wide exploration, no cost-bearing positives
 
 Plan registration and evaluation code: `b3dd298`, published before calculation.

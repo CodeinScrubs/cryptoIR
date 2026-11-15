@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.16.0، غربالگری اکتشافی سه‌مرحله‌ای USDT/رمزارز/ریال برای ۲۴۸ دارایی روی دادهٔ قبلی؛ برای ۲۲۰ دارایی مقایسهٔ معتبر داشتیم، اما هیچ برآورد مثبتی پس از هزینه‌ها پیدا نشد. پوشش ۲۸ دارایی ناقص ماند. هر ۹ نامزد پژوهش ساعتی نیز در دورهٔ طولانی‌تر رد شده‌اند. ذخیرهٔ محلی کلیدها و خواندن حساب‌ها پیاده‌سازی شده؛ پاسخ کلی حساب تبدیل هنوز partial است. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم.**
+**وضعیت فعلی: نسخهٔ 0.17.0، موتور پژوهش چنددارایی با حساب مشترک و مقایسه با نگهداری بیت‌کوین با کل سرمایه اضافه شد. راهبرد چرخش هفتگی در نخستین آزمون رد شد؛ عملکرد ۲۰۲۶ همچنان ارزیابی نشده است. آربیتراژ سه‌مرحله‌ای برای ۲۲۰ داراییِ قابل‌ارزیابی و ۹ نامزد قبلی نیز شواهد لازم را فراهم نکردند. ذخیرهٔ محلی کلیدها و خواندن حساب‌ها پیاده‌سازی شده؛ پاسخ کلی حساب تبدیل هنوز partial است. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -56,6 +56,11 @@ into realized profit and do not model asynchronous two-leg execution.
 The [single-venue triangular diagnostic](docs/TRIANGULAR.md) separately replays
 both USDT/crypto/IRR directions with three received-asset costs, bounded depth,
 native increments and retained residuals. It also remains a snapshot estimate.
+
+The [shared-cash rotation screen](docs/ROTATION.md) tests one registered relative-
+momentum portfolio across BTC, ETH and SOL. It requires delayed exits before
+new entries, preserves residual holdings and compares the same initial cash
+against both matched-allocation and full-capital BTC holding.
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

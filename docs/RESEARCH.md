@@ -123,3 +123,9 @@ candidates had negative base/stress returns and were rejected. The original
 November-December 2025 validation is now observed exploratory data; no 2026
 strategy or benchmark performance was calculated. This adds rejection evidence,
 not a new parameter choice or a deployable candidate.
+
+Version 0.17.0 adds a separate [shared-cash rotation experiment](ROTATION.md)
+with three synchronized assets, sequential cash-funded switches and both matched
+and full-capital BTC benchmarks. Its fixed weekly relative-momentum candidate
+also failed discovery. This does not alter old plans, single-asset results or
+their comparison rules. Historical IRT attribution remains unavailable.

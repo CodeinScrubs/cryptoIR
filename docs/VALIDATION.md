@@ -448,3 +448,33 @@ historical fees.
   includes every route and rejection, immutable input pins, source hashes and the
   full-report hash. No new recording, order, account allocation, paper mutation,
   tuning after outcomes, live activation or profitability acceptance occurred.
+
+## Version 0.17.0 additions (2026-11-15)
+
+- All 313 local tests passed. Eighteen new rotation scenarios cover deterministic
+  past-window selection, cash/ties, clock alignment and warmup, shared capital,
+  delayed switches, partial exits, previous-volume caps, received-asset fees,
+  dust and cost basis, P&L identity, minimums and lot rounding, late price changes,
+  future-data invariance, fixed decision cadence, obsolete intent cancellation,
+  input pins, data acceptance and sequential discovery/validation/holdout gates.
+- Plan `rotation-v1.json` was published in `1e35e7c` before implementation or
+  portfolio-performance calculation. Implementation `39317f2` passed all four
+  Windows/Linux Python 3.11/3.13 CI jobs in run `43754599269`.
+- All three existing histories reconstructed from raw responses: 482 daily
+  sessions and 11,568 synchronized hourly candles each, zero OHLCV deltas on every
+  date, no gap and accepted reported-volume quality. Full audit JSON and explicit
+  date-by-date delta tables remain local, with hashes in public evidence. No new
+  market download, source replacement or performance calculation was needed for
+  this quality audit, including its 2026 source rows.
+- One registered shared-cash candidate was evaluated alongside cash and two BTC
+  allocations, under both cost scenarios. All eight trial hashes, the three audit
+  hashes, three delta-table hashes and journal hash were verified. Every model
+  source hash matches `39317f2`; the plan hash matches the registered plan.
+- Modeled trades respected at least one complete hour after decision, quantities
+  and cash stayed nonnegative, and realized/unrealized P&L reconciled. These checks
+  establish model invariants, not exchange fills or executable liquidity.
+- Base/stress returns -4.9882%/-5.7324%, maximum hourly-close drawdowns
+  13.0482%/13.4428% and six completed exits failed the unchanged gates. Both BTC
+  comparisons were beaten but no candidate advanced. All 2026 performance stayed
+  unopened. No tuning, paper mutation, account allocation or live action occurred.
+  [Metrics and artifact hashes](../research/evidence/rotation-v1-summary.json).

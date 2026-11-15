@@ -69,6 +69,13 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
+Shared-cash multi-asset screening is implemented and locally tested, including
+separate delayed exits/entries, residual accounting and full-capital BTC holding
+comparison. The registered relative-momentum trial failed profit, drawdown and
+exit-count gates at discovery. No 2026 strategy/benchmark performance opened.
+Historical IRT attribution, execution calibration and an accepted candidate
+remain outstanding; passing software tests does not resolve those requirements.
+
 Catalog-wide triangular exploration is implemented and locally tested. The
 registered v2 reuse examined all 248 metadata-eligible assets in the existing
 twenty-sample observation, with valid comparisons for 220 and incomplete coverage

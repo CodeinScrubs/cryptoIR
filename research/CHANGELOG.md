@@ -6,6 +6,12 @@ unseen, even if a new filename is used.
 
 ## 2026-11-15: shared-cash relative-momentum rotation registration
 
+Outcome after registration `1e35e7c` and implementation `39317f2`: base/stress
+returns were -4.9882%/-5.7324%, with 13.0482%/13.4428% maximum hourly-close
+drawdown and six completed exits. Both BTC benchmarks were beaten, but the
+candidate failed profit, drawdown and exit-count gates. Evaluation stopped at
+discovery; no 2026 performance opened and no parameters changed. [Results](RESULTS.md).
+
 `rotation-v1.json` freezes one new portfolio hypothesis: every seven days choose
 the highest positive fourteen-day return among BTC, ETH and SOL, otherwise hold
 USDT. Decisions use completed hourly closes; exits must realize cash before a
