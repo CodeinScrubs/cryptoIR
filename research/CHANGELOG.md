@@ -4,6 +4,30 @@ Plans are immutable after performance evaluation. Data failures and rejected
 trials remain in the record. New plans cannot make previously viewed outcomes
 unseen, even if a new filename is used.
 
+## 2026-11-15: deterministic broader triangular universe, exploratory reuse
+
+`triangular-v2-universe.json` expands membership using the same pinned catalog:
+every active, scale-one native asset with both USDT and IRT markets, excluding
+fiat/USDT cycle identities. This selects 248 assets and 497 books, with nine
+scaled and ten inactive assets excluded. It includes venue-specific wrapped or
+tokenized assets; membership is not underlying ownership or account eligibility.
+No price, return or liquidity ranking influences universe selection.
+
+The already recorded v1 all-market responses contain these books. This plan pins
+both that recording and its original capture-plan hash before evaluating the
+additional assets. BTC/ETH/SOL outcomes are already known; the other 245 cycle
+outcomes have not been computed at registration. This reuse is explicitly
+retrospective exploration, never new prospective validation. Capital, depth
+participation, costs, freshness and order minimums remain unchanged.
+
+Every direction is retained, including exclusions and missing coverage. Only
+routes with at least ten valid comparisons and at least three positive estimates
+in both base and stress can qualify for a separately registered fresh observation.
+At most five qualify for follow-up priority, ranked by stress positive count,
+then base positive count, then asset/route lexically. This is a resource limit,
+not a statistical or profitability gate. No threshold or cost relaxation follows
+inspection. No download, real order or paper-capital mutation is required.
+
 ## 2026-11-15: single-venue triangular feasibility registration
 
 Outcome after the registered capture: all twenty samples completed. All six

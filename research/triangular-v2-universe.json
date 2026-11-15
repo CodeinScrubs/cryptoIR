@@ -1,0 +1,2793 @@
+{
+  "schema": 1,
+  "experiment": "triangular-v2-universe-exploration",
+  "venue": "nobitex",
+  "assets": [
+    "1INCH",
+    "2Z",
+    "A",
+    "AAPL",
+    "AAVE",
+    "ACH",
+    "ADA",
+    "AERO",
+    "AEVO",
+    "AGLD",
+    "AIXBT",
+    "ALGO",
+    "AMZN",
+    "ANKR",
+    "APE",
+    "API3",
+    "APT",
+    "ARB",
+    "ASTER",
+    "AT",
+    "ATH",
+    "ATOM",
+    "AVAX",
+    "AVNT",
+    "AWE",
+    "AXS",
+    "BABA",
+    "BAL",
+    "BANANA",
+    "BAND",
+    "BANK",
+    "BARD",
+    "BASED",
+    "BAT",
+    "BCH",
+    "BEAMX",
+    "BICO",
+    "BIO",
+    "BLUR",
+    "BNB",
+    "BOME",
+    "BREV",
+    "BTC",
+    "BUSD",
+    "CAKE",
+    "CATI",
+    "CELR",
+    "CETUS",
+    "CFG",
+    "CGPT",
+    "CHIP",
+    "CHZ",
+    "COMP",
+    "COOKIE",
+    "COPXON",
+    "COTI",
+    "COW",
+    "CRV",
+    "CVC",
+    "CVX",
+    "DAI",
+    "DAO",
+    "DASH",
+    "DEXE",
+    "DOGE",
+    "DOGS",
+    "DOOD",
+    "DOT",
+    "DUSK",
+    "DYDX",
+    "EDGE",
+    "EDU",
+    "EGALA",
+    "EGLD",
+    "EIGEN",
+    "ENA",
+    "ENJ",
+    "ENS",
+    "ESP",
+    "ETC",
+    "ETH",
+    "ETHFI",
+    "EUL",
+    "FET",
+    "FIL",
+    "FLOW",
+    "FLR",
+    "FLUID",
+    "FORM",
+    "G",
+    "GALA",
+    "GENIUS",
+    "GIGGLE",
+    "GLM",
+    "GMT",
+    "GMX",
+    "GOOGL",
+    "GPS",
+    "GRAM",
+    "GRASS",
+    "GRT",
+    "HBAR",
+    "HMSTR",
+    "HOLO",
+    "HOME",
+    "HOT",
+    "HUMA",
+    "HYPE",
+    "ID",
+    "IMX",
+    "INJ",
+    "IO",
+    "JASMY",
+    "JST",
+    "JTO",
+    "JUP",
+    "KAITO",
+    "KITE",
+    "KMNO",
+    "LA",
+    "LAYER",
+    "LDO",
+    "LINEA",
+    "LINK",
+    "LIT",
+    "LPT",
+    "LRC",
+    "LTC",
+    "MAGIC",
+    "MAJOR",
+    "MANA",
+    "MASK",
+    "MDT",
+    "ME",
+    "MEME",
+    "MET",
+    "METIS",
+    "MEW",
+    "MMT",
+    "MOODENG",
+    "MORPHO",
+    "MOVE",
+    "MSFT",
+    "NEAR",
+    "NEIRO",
+    "NMR",
+    "NOT",
+    "NVDA",
+    "NXBALANCE",
+    "NXEQUAL",
+    "NXMETAL",
+    "NXSTORE",
+    "NXT70",
+    "NXTOTAL",
+    "OMG",
+    "ONDO",
+    "ONE",
+    "OP",
+    "OPEN",
+    "OPG",
+    "ORCA",
+    "PAXG",
+    "PENDLE",
+    "PENGU",
+    "PGALA",
+    "PLUME",
+    "PMN",
+    "PNUT",
+    "POL",
+    "PROM",
+    "PROVE",
+    "PUMP",
+    "PYTH",
+    "QNT",
+    "RAY",
+    "RDNT",
+    "RE",
+    "RED",
+    "RENDER",
+    "ROBO",
+    "RSR",
+    "S",
+    "SAFE",
+    "SAHARA",
+    "SAND",
+    "SEI",
+    "SENT",
+    "SFP",
+    "SKHY",
+    "SKL",
+    "SKY",
+    "SLP",
+    "SLVON",
+    "SLX",
+    "SNT",
+    "SNX",
+    "SOL",
+    "SPCX",
+    "SPK",
+    "SSV",
+    "STORJ",
+    "STRK",
+    "SUI",
+    "SUN",
+    "SUPER",
+    "SUSHI",
+    "SYN",
+    "SYRUP",
+    "T",
+    "TAO",
+    "TNSR",
+    "TOSHI",
+    "TRB",
+    "TRX",
+    "TSLA",
+    "TSM",
+    "TURBO",
+    "TWT",
+    "UMA",
+    "UNI",
+    "USDC",
+    "USDE",
+    "USOON",
+    "VIRTUAL",
+    "W",
+    "WAL",
+    "WBTC",
+    "WET",
+    "WIF",
+    "WLD",
+    "WOO",
+    "X",
+    "XAUT",
+    "XLM",
+    "XMR",
+    "XRP",
+    "XTZ",
+    "XVS",
+    "YFI",
+    "ZAMA",
+    "ZBT",
+    "ZEC",
+    "ZEN",
+    "ZIL",
+    "ZK",
+    "ZORA",
+    "ZRO",
+    "ZRX"
+  ],
+  "start_asset": "USDT",
+  "start_budget": "10",
+  "depth_participation": "0.10",
+  "samples": 20,
+  "interval_seconds": 30,
+  "max_logical_mb": 64,
+  "max_age_ms": 5000,
+  "catalog_sha256": "875757f2572d8bbce15df846cf01110480175a96370c21b79b0f548973ba033e",
+  "market_rules": {
+    "USDT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "1INCH/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "1INCH/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "2Z/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "2Z/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "A/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "A/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AAPL/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "AAPL/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AAVE/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "AAVE/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ACH/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "ACH/IRR": {
+      "quantity_step": "1",
+      "price_tick": "1",
+      "minimum_notional": "500000"
+    },
+    "ADA/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ADA/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AERO/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "AERO/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AEVO/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "AEVO/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AGLD/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "AGLD/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AIXBT/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "AIXBT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ALGO/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ALGO/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AMZN/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "AMZN/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ANKR/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "ANKR/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "APE/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "APE/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "API3/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "API3/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "APT/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "APT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ARB/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ARB/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ASTER/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ASTER/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AT/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "AT/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ATH/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "ATH/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ATOM/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "ATOM/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AVAX/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "AVAX/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AVNT/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "AVNT/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AWE/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "AWE/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "AXS/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "AXS/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BABA/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "BABA/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BAL/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "BAL/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BANANA/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "BANANA/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BAND/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "BAND/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BANK/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "BANK/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BARD/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "BARD/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BASED/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "BASED/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BAT/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "BAT/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BCH/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "BCH/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BEAMX/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "BEAMX/IRR": {
+      "quantity_step": "1",
+      "price_tick": "1",
+      "minimum_notional": "500000"
+    },
+    "BICO/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "BICO/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BIO/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "BIO/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BLUR/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "BLUR/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BNB/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "BNB/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BOME/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "BOME/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.1",
+      "minimum_notional": "500000"
+    },
+    "BREV/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "BREV/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BTC/USDT": {
+      "quantity_step": "0.000001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "BTC/IRR": {
+      "quantity_step": "0.000001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BUSD/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "BUSD/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CAKE/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "CAKE/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CATI/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "CATI/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CELR/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "CELR/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "0.01",
+      "minimum_notional": "500000"
+    },
+    "CETUS/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "CETUS/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CFG/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "CFG/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CGPT/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "CGPT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CHIP/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "CHIP/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CHZ/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "CHZ/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "COMP/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "COMP/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "COOKIE/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "COOKIE/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "COPXON/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "COPXON/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "COTI/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "COTI/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "COW/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "COW/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CRV/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "CRV/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CVC/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "CVC/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "CVX/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "CVX/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "DAI/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "DAI/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "DAO/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "DAO/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "DASH/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "DASH/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "DEXE/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "DEXE/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "DOGE/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "DOGE/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "1",
+      "minimum_notional": "500000"
+    },
+    "DOGS/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-8",
+      "minimum_notional": "0.5"
+    },
+    "DOGS/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.001",
+      "minimum_notional": "500000"
+    },
+    "DOOD/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "DOOD/IRR": {
+      "quantity_step": "1",
+      "price_tick": "1",
+      "minimum_notional": "500000"
+    },
+    "DOT/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "DOT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "DUSK/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "DUSK/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "DYDX/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "DYDX/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "EDGE/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "EDGE/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "EDU/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "EDU/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "EGALA/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "EGALA/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "EGLD/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "EGLD/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "EIGEN/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "EIGEN/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ENA/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ENA/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ENJ/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ENJ/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ENS/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "ENS/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ESP/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ESP/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ETC/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ETC/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ETH/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "ETH/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ETHFI/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ETHFI/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "EUL/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "EUL/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "FET/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "FET/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "FIL/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "FIL/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "FLOW/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "FLOW/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "FLR/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "FLR/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "FLUID/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "FLUID/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "FORM/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "FORM/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "G/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "G/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GALA/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "GALA/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GENIUS/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "GENIUS/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GIGGLE/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "GIGGLE/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GLM/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "GLM/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GMT/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "GMT/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GMX/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "GMX/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GOOGL/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "GOOGL/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GPS/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "GPS/IRR": {
+      "quantity_step": "1",
+      "price_tick": "1",
+      "minimum_notional": "500000"
+    },
+    "GRAM/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "GRAM/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GRASS/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "GRASS/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "GRT/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "GRT/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "HBAR/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "HBAR/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "HMSTR/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "HMSTR/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.001",
+      "minimum_notional": "500000"
+    },
+    "HOLO/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "HOLO/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "HOME/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "HOME/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "HOT/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "HOT/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.001",
+      "minimum_notional": "500000"
+    },
+    "HUMA/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "HUMA/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "HYPE/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "HYPE/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ID/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ID/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "IMX/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "IMX/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "INJ/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "INJ/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "IO/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "IO/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "JASMY/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "JASMY/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "JST/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "JST/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "JTO/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "JTO/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "JUP/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "JUP/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "KAITO/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "KAITO/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "KITE/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "KITE/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "KMNO/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "KMNO/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LA/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "LA/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LAYER/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "LAYER/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LDO/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "LDO/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LINEA/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "LINEA/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LINK/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "LINK/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LIT/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "LIT/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LPT/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "LPT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LRC/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "LRC/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "LTC/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "LTC/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MAGIC/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "MAGIC/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MAJOR/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "MAJOR/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MANA/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "MANA/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MASK/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "MASK/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MDT/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "MDT/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ME/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ME/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MEME/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "MEME/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.01",
+      "minimum_notional": "500000"
+    },
+    "MET/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "MET/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "METIS/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "METIS/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MEW/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "MEW/IRR": {
+      "quantity_step": "1",
+      "price_tick": "1",
+      "minimum_notional": "500000"
+    },
+    "MMT/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "MMT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MOODENG/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "MOODENG/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MORPHO/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "MORPHO/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MOVE/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "MOVE/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "MSFT/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "MSFT/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NEAR/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NEAR/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NEIRO/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-8",
+      "minimum_notional": "0.5"
+    },
+    "NEIRO/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.001",
+      "minimum_notional": "500000"
+    },
+    "NMR/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NMR/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NOT/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "NOT/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.01",
+      "minimum_notional": "500000"
+    },
+    "NVDA/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "NVDA/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NXBALANCE/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NXBALANCE/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NXEQUAL/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NXEQUAL/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NXMETAL/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NXMETAL/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NXSTORE/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NXSTORE/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NXT70/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NXT70/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "NXTOTAL/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "NXTOTAL/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "OMG/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "OMG/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ONDO/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ONDO/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ONE/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "ONE/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "OP/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "OP/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "OPEN/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "OPEN/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "OPG/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "OPG/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ORCA/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "ORCA/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PAXG/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "1",
+      "minimum_notional": "0.5"
+    },
+    "PAXG/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PENDLE/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "PENDLE/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PENGU/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "PENGU/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PGALA/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "PGALA/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PLUME/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "PLUME/IRR": {
+      "quantity_step": "1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PMN/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "PMN/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PNUT/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "PNUT/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "POL/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "POL/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PROM/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "PROM/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PROVE/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "PROVE/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "PUMP/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "PUMP/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.1",
+      "minimum_notional": "500000"
+    },
+    "PYTH/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "PYTH/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "QNT/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "QNT/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "RAY/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "RAY/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "RDNT/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "RDNT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "RE/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "RE/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "RED/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "RED/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "RENDER/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "RENDER/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ROBO/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ROBO/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "RSR/USDT": {
+      "quantity_step": "1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "RSR/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.01",
+      "minimum_notional": "500000"
+    },
+    "S/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "S/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SAFE/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SAFE/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SAHARA/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SAHARA/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "1",
+      "minimum_notional": "500000"
+    },
+    "SAND/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SAND/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SEI/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SEI/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SENT/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SENT/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SFP/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SFP/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SKHY/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "SKHY/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SKL/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SKL/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SKY/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SKY/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SLP/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "SLP/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.01",
+      "minimum_notional": "500000"
+    },
+    "SLVON/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SLVON/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SLX/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SLX/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SNT/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SNT/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SNX/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SNX/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SOL/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "SOL/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SPCX/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "SPCX/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SPK/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "SPK/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SSV/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "SSV/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "STORJ/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "STORJ/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "STRK/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "STRK/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SUI/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SUI/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SUN/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "SUN/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SUPER/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SUPER/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SUSHI/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "SUSHI/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SYN/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SYN/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SYRUP/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "SYRUP/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "T/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "T/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "TAO/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "TAO/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "TNSR/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "TNSR/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "TOSHI/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "TOSHI/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.1",
+      "minimum_notional": "500000"
+    },
+    "TRB/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "TRB/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "TRX/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "TRX/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "TSLA/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "TSLA/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "TSM/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "TSM/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "TURBO/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-7",
+      "minimum_notional": "0.5"
+    },
+    "TURBO/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.01",
+      "minimum_notional": "500000"
+    },
+    "TWT/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "TWT/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "UMA/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "UMA/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "UNI/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "UNI/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "USDC/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "USDC/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "USDE/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "USDE/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "USOON/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "USOON/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "VIRTUAL/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "VIRTUAL/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "W/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "W/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "WAL/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "WAL/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "WBTC/USDT": {
+      "quantity_step": "0.000001",
+      "price_tick": "0.1",
+      "minimum_notional": "0.5"
+    },
+    "WBTC/IRR": {
+      "quantity_step": "0.000001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "WET/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "WET/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "WIF/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "WIF/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "WLD/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "WLD/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "WOO/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "WOO/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "X/USDT": {
+      "quantity_step": "1",
+      "price_tick": "1E-8",
+      "minimum_notional": "0.5"
+    },
+    "X/IRR": {
+      "quantity_step": "1",
+      "price_tick": "0.001",
+      "minimum_notional": "500000"
+    },
+    "XAUT/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.1",
+      "minimum_notional": "0.5"
+    },
+    "XAUT/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "XLM/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "XLM/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "XMR/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "XMR/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "XRP/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "XRP/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "XTZ/USDT": {
+      "quantity_step": "0.01",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "XTZ/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "XVS/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "XVS/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "YFI/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "1",
+      "minimum_notional": "0.5"
+    },
+    "YFI/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZAMA/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ZAMA/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZBT/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ZBT/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZEC/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "ZEC/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZEN/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "ZEN/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZIL/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.000001",
+      "minimum_notional": "0.5"
+    },
+    "ZIL/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZK/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ZK/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZORA/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.00001",
+      "minimum_notional": "0.5"
+    },
+    "ZORA/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZRO/USDT": {
+      "quantity_step": "0.001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "ZRO/IRR": {
+      "quantity_step": "0.001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ZRX/USDT": {
+      "quantity_step": "0.1",
+      "price_tick": "0.0001",
+      "minimum_notional": "0.5"
+    },
+    "ZRX/IRR": {
+      "quantity_step": "0.1",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    }
+  },
+  "scenarios": [
+    {
+      "name": "zero_cost_diagnostic",
+      "usdt_fee": "0",
+      "irr_fee": "0",
+      "reserve_bps": "0"
+    },
+    {
+      "name": "assumed_base",
+      "usdt_fee": "0.0013",
+      "irr_fee": "0.0025",
+      "reserve_bps": "15"
+    },
+    {
+      "name": "assumed_stress",
+      "usdt_fee": "0.0026",
+      "irr_fee": "0.0050",
+      "reserve_bps": "30"
+    }
+  ],
+  "routes": [
+    "USDT->asset->IRR->USDT",
+    "USDT->IRR->asset->USDT"
+  ],
+  "capital_note": "10 USDT per independent cycle is a synthetic reference, not personal capital or a reserved account balance.",
+  "fee_source": "https://nobitex.ir/pricing/",
+  "fee_note": "Public base taker rates observed 2026-11-15: 0.13 percent USDT markets, 0.25 percent rial markets. Fees deducted from received asset; not account tier verification. Stress doubles fees. Reserve is an additional percentage of gross received units at every leg, not an actual charged fee.",
+  "units_note": "Native IRT-suffixed order-book prices remain IRR, without dividing by ten. USDT closes both fixed cycles. Every selected native asset and USDT has observed scale one in the pinned catalog.",
+  "residual_policy": "Starting-USDT residue is retained in final cash. Intermediate IRR/base residues remain reported but have zero USDT liquidation value. Displayed participation may leave unspent budget; no depth, fee or rounding remainder is reused within another leg.",
+  "observation_policy": "Offline reuse of the pinned twenty-sample v1 all-market recording. No new network call. Existing BTC/ETH/SOL cycle outcomes have been observed; no other asset cycle return has been computed before this registration. This is retrospective universe exploration, not fresh prospective validation.",
+  "interpretation": "Conditional capacity diagnostic, not fill simulation. Each cycle reuses the same synthetic budget and displayed liquidity; estimates cannot be summed into profits or independent trials. No atomic multi-leg guarantee, inventory journal, execution latency, cancel race, calibrated reserve, account entitlement or profitability acceptance. Only positive cost-bearing estimates would justify further asynchronous execution research.",
+  "universe": "catalog_active_unscaled_dual_quote",
+  "replay_recording": {
+    "sha256": "660caff10fa050e15299ff5d89dd2e0fb07904090ac951556678ebc1aba4846a",
+    "capture_plan_sha256": "f4c0d24d04b699c91c7a80b43fffaf08d2688650822850516da66d9647182164",
+    "evaluation_type": "exploratory_existing_recording"
+  },
+  "universe_note": "Every catalog asset with both USDT and native IRT markets, explicit native scale one and active base currency is included; USDT/fiat identities and unsupported names are excluded. Includes venue-specific wrapped or tokenized instruments without claiming underlying ownership or eligibility. No performance/price/liquidity ranking chooses membership. Scaled and inactive assets stay excluded without guessing units.",
+  "exclusions_at_registration": {
+    "scaled_asset": 9,
+    "inactive_currency": 10
+  },
+  "followup_rule": "Only a direction with at least ten valid comparisons and at least three positive estimates in BOTH base and stress may advance to a separately preregistered fresh observation. If more than five qualify, choose the five with highest stress positive count, then highest base positive count, then ascending asset and route. This is a resource-priority rule, not profitability acceptance. No cost, age, minimum, allocation or threshold changes after viewing results."
+}

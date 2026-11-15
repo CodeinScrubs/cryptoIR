@@ -1,7 +1,8 @@
 # Single-venue triangular diagnostics
 
-Version 0.15.0 implements bounded recording and replay for Nobitex BTC, ETH and
-SOL cycles through USDT and IRR. This is a conditional feasibility screen, not
+Version 0.16.0 extends bounded recording and replay from Nobitex BTC, ETH and
+SOL to a deterministic catalog universe of cycles through USDT and IRR.
+This is a conditional feasibility screen, not
 three-leg execution, realized profit or a strategy acceptance test.
 
 The fixed [first plan](../research/triangular-v1.json) was published before
@@ -82,3 +83,35 @@ Hash consistency is not exchange authentication. Snapshot freshness does not
 model latency, partial fills, cancel races, three-leg failure, inventory recovery
 or a guarantee that displayed orders remain available. No account key, actual
 balance, order, transfer or paper-ledger mutation is used by these commands.
+
+## Broader exploratory universe
+
+The [second plan](../research/triangular-v2-universe.json) selects every active
+native asset with scale one and both USDT and IRT catalog markets: 248 assets,
+497 books. Nine scaled and ten inactive assets are excluded. Membership uses
+metadata only; no price or return ranking is applied. Wrapped and tokenized
+instruments may appear without establishing underlying ownership or eligibility.
+The catalog-scoped parser maps native IRT suffixes to IRR only after validating
+membership and recorded rules. General paper and funding adapters retain their
+existing narrower scope.
+
+This is offline reuse of the twenty previously recorded all-market responses.
+Both the recording hash and original capture-plan hash are pinned separately
+from the new exploration plan. BTC/ETH/SOL outcomes were already observed.
+Changing the plan does not make existing data prospective or untouched. Replay
+plans cannot start a new capture.
+
+```powershell
+uv run python -m cryptoir triangle-screen --plan research/triangular-v2-universe.json --catalog data/triangular-v1-setup/catalog.json --recording data/triangular-v1-observation.jsonl.gz --output data/triangular-v2-universe-result
+```
+
+Capture completion and universe coverage are reported separately: coverage
+requires at least one valid comparison for every route/scenario, not twenty.
+Per-route counts and rejection reasons retain all missing evidence. An integrity
+error invalidates both completion flags. Counts remain correlated observations.
+
+Only a route with at least ten valid comparisons and three positive estimates
+under both base and stress qualifies for separately registered fresh observation.
+The frozen plan limits follow-up priority to five routes by stress positive count,
+then base positive count, then ascending asset/route. This is a research resource
+rule, not a statistical confidence threshold or profitability acceptance.

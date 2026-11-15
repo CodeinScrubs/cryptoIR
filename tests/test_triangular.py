@@ -236,6 +236,85 @@ class TriangleTests(unittest.TestCase):
         for raw in ('{"x":1,"x":2}','{"x":NaN}'):
             with self.assertRaises(DataError):t.strict_json(raw)
 
+    def test_catalog_membership_excludes_scaled_unknown_inactive_and_missing_pairs(self):
+        _,encoded=fixture();base=json.loads(encoded)["markets"][0]
+        rows=[]
+        for asset,scale,active in (("A","1",True),("BTC","1",True),("SCALED","1000",True),
+                                   ("UNKNOWN",None,True),("INACTIVE","1",False),("USDT","1",True)):
+            for quote in ("USDT","IRT"):
+                rows.append({**base,"native_symbol":asset+quote,"base":asset,"quote":quote,
+                             "native_scale":scale,"base_currency_active":active})
+        rows.append({**base,"native_symbol":"MISSINGUSDT","base":"MISSING","quote":"USDT"})
+        result=t.catalog_universe(rows)
+        self.assertEqual(result["assets"],["A","BTC"])
+        self.assertEqual(result["exclusions"],{"scaled_asset":1,"unknown_scale":1,"inactive_currency":1,
+                                               "unsupported_identity":1,"missing_dual_quote":1})
+
+    def test_broad_universe_must_match_whole_catalog_without_price_selection(self):
+        self.plan["universe"]=t.CATALOG_UNIVERSE
+        t.validate_plan(self.plan)
+        with tempfile.TemporaryDirectory() as tmp:
+            _,catalog,_=self.paths(Path(tmp));t.verify_catalog(catalog,self.plan)
+            self.plan["assets"]=["ETH"]
+            self.plan["market_rules"]={p.replace("BTC/","ETH/"):v for p,v in self.plan["market_rules"].items()}
+            t.validate_plan(self.plan)
+            with self.assertRaisesRegex(DataError,"deterministic catalog"):
+                t.verify_catalog(catalog,self.plan)
+
+    def test_catalog_pair_parser_handles_single_and_digit_names_without_global_aliases(self):
+        for asset in ("A","1INCH","WRAPPED_X"):
+            record=snapshot()
+            record["payload"][asset+"IRT"]=record["payload"]["BTCIRT"]
+            book=t.snapshot_book(record,asset+"/IRR")
+            self.assertEqual(book.pair,asset+"/IRR")
+            self.assertEqual(book.bids[0].price,1100)
+        for pair in ("BTC/IRT","IRR/USDT","USDT/USDT","../../BTC/IRR"):
+            with self.assertRaises(DataError):t.pair_symbol(pair)
+
+    def test_existing_recording_replay_requires_both_pins_and_discloses_exploration(self):
+        for bad in (None,"sha256","capture_plan_sha256"):
+            with self.subTest(bad=bad),tempfile.TemporaryDirectory() as tmp:
+                root=Path(tmp);plan,catalog,recording=self.paths(root)
+                self.recording(recording,plan)
+                pin={"evaluation_type":"exploratory_existing_recording","sha256":t.digest(recording.read_bytes()),
+                     "capture_plan_sha256":t.digest(plan.read_bytes())}
+                if bad:pin[bad]="a"*64
+                changed={**self.plan,"replay_recording":pin}
+                t.validate_plan(changed);plan.write_text(dumps(changed),encoding="utf-8")
+                if bad:
+                    with self.assertRaises(DataError):t.run_screen(plan,catalog,recording,root/"output")
+                else:
+                    report=t.run_screen(plan,catalog,recording,root/"output")
+                    self.assertEqual(report["evaluation_type"],"exploratory_existing_recording")
+                    self.assertTrue(report["capture_complete"])
+                    self.assertTrue(report["universe_coverage_complete"])
+                    self.assertNotEqual(report["plan_sha256"],report["capture"]["plan_sha256"])
+
+    def test_replay_plan_cannot_launch_fresh_capture_or_mislabel_new_evidence(self):
+        self.plan["replay_recording"]={"evaluation_type":"exploratory_existing_recording", "sha256":"a"*64,
+                                       "capture_plan_sha256":"b"*64}
+        with tempfile.TemporaryDirectory() as tmp:
+            plan,catalog,recording=self.paths(Path(tmp))
+            with patch.object(t,"public_response") as request:
+                with self.assertRaisesRegex(DataError,"cannot capture"):
+                    t.capture(plan,catalog,recording)
+                request.assert_not_called()
+                self.assertFalse(recording.exists())
+        for value in ({},None,{**self.plan["replay_recording"],"evaluation_type":"fresh_independent"}):
+            with self.assertRaises(DataError):t.validate_plan({**self.plan,"replay_recording":value})
+
+    def test_corrupt_record_after_footer_cannot_claim_complete_capture_or_coverage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);plan,catalog,recording=self.paths(root)
+            self.recording(recording,plan)
+            with gzip.open(recording,"at",encoding="utf-8") as stream:
+                stream.write('{}\n')
+            with self.assertRaisesRegex(DataError,"records after capture end"):
+                t.run_screen(plan,catalog,recording,root/"output")
+            report=json.loads((root/"output/report.json").read_bytes())
+            self.assertFalse(report["capture_complete"])
+            self.assertFalse(report["universe_coverage_complete"])
+
 
 if __name__ == "__main__":
     unittest.main()

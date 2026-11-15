@@ -11,14 +11,15 @@ from pathlib import Path
 
 from . import __version__
 from .catalog import ENDPOINTS, parse_catalog
-from .domain import DataError, number
-from .feeds import endpoint, native_symbol, normalize, public_response
-from .streams import dumps
+from .domain import Book, DataError, Level, number
+from .feeds import public_response
+from .streams import dumps, millis
 from .valuation import ALL_BOOKS, ConversionRules, buy_budget, sell_value
 
 ROUTES = ("USDT->asset->IRR->USDT", "USDT->IRR->asset->USDT")
 SCENARIOS = ("zero_cost_diagnostic", "assumed_base", "assumed_stress")
 MAX_LINE = 16 * 1024 * 1024
+CATALOG_UNIVERSE = "catalog_active_unscaled_dual_quote"
 
 
 def strict_json(value):
@@ -46,13 +47,71 @@ def required_pairs(plan):
     return ["USDT/IRR"] + [asset+"/"+quote for asset in plan["assets"] for quote in ("USDT", "IRR")]
 
 
+def pair_symbol(pair):
+    """Nobitex-only diagnostic mapping, after catalog membership verification."""
+    if not isinstance(pair, str) or not re.fullmatch(r"[A-Z0-9][A-Z0-9_]{0,19}/(?:USDT|IRR)", pair):
+        raise DataError("unsupported native cycle pair")
+    base, quote = pair.split("/")
+    if base in ("IRR", "IRT") or base == quote:
+        raise DataError("invalid cycle pair identity")
+    return base+("IRT" if quote == "IRR" else quote)
+
+
+def catalog_universe(markets):
+    """Determine membership from metadata only, never price or performance."""
+    by_symbol = {m["native_symbol"]:m for m in markets}
+    eligible, exclusions = [], Counter()
+    for market in markets:
+        if market["quote"] != "USDT":
+            continue
+        base = market["base"]
+        other = by_symbol.get(base+"IRT")
+        if base in ("USDT", "IRT", "IRR") or not re.fullmatch(r"[A-Z0-9][A-Z0-9_]{0,19}", base):
+            exclusions["unsupported_identity"] += 1
+        elif other is None:
+            exclusions["missing_dual_quote"] += 1
+        elif any(m["native_scale"] is None for m in (market, other)):
+            exclusions["unknown_scale"] += 1
+        elif any(number(m["native_scale"]) != 1 for m in (market, other)):
+            exclusions["scaled_asset"] += 1
+        elif any(m["base_currency_active"] is not True for m in (market, other)):
+            exclusions["inactive_currency"] += 1
+        else:
+            eligible.append(base)
+    return {"assets":sorted(eligible), "exclusions":dict(exclusions)}
+
+
+def snapshot_book(record, pair):
+    # Caller verifies the full raw response once per sample, then uses catalog pairs.
+    payload = record["payload"][pair_symbol(pair)]
+    def levels(name):
+        return tuple(Level(row[0], row[1]) for row in payload[name])
+    return Book("nobitex", pair, levels("bids"), levels("asks"), record["received_ns"],
+                record["duration_ns"], millis(payload["lastUpdate"]))
+
+
 def validate_plan(plan):
     if (plan.get("schema") != 1 or plan.get("venue") != "nobitex"
             or plan.get("start_asset") != "USDT" or plan.get("routes") != list(ROUTES)):
         raise DataError("unsupported triangular plan or units")
     assets = plan["assets"]
-    if not assets or len(assets) != len(set(assets)) or any(a not in ("BTC", "ETH", "SOL") for a in assets):
+    if (not isinstance(assets, list) or not 1 <= len(assets) <= 500
+            or any(not isinstance(a, str) or not re.fullmatch(r"[A-Z0-9][A-Z0-9_]{0,19}", a)
+                   or a in ("USDT", "IRR", "IRT") for a in assets)
+            or len(assets) != len(set(assets))):
         raise DataError("explicit unscaled triangular asset universe required")
+    universe = plan.get("universe", "explicit_legacy")
+    if universe not in ("explicit_legacy", CATALOG_UNIVERSE):
+        raise DataError("unknown universe selection rule")
+    if universe == "explicit_legacy" and any(a not in ("BTC", "ETH", "SOL") for a in assets):
+        raise DataError("broader universe must be reconstructed from catalog")
+    if "replay_recording" in plan:
+        pin = plan["replay_recording"]
+        if (not isinstance(pin, dict) or set(pin) != {"sha256", "capture_plan_sha256", "evaluation_type"}
+                or pin["evaluation_type"] != "exploratory_existing_recording"
+                or any(not isinstance(pin[k], str) or not re.fullmatch(r"[a-f0-9]{64}", pin[k])
+                       for k in ("sha256", "capture_plan_sha256"))):
+            raise DataError("explicit exploratory recording pins required")
     for key, low, high in (("samples", 2, 120), ("interval_seconds", 30, 3600),
                            ("max_logical_mb", 1, 512), ("max_age_ms", 1, 60000)):
         if type(plan[key]) is not int or not low <= plan[key] <= high:
@@ -105,8 +164,10 @@ def verify_catalog(path, plan):
     if dumps(rebuilt) != dumps(record["markets"]):
         raise DataError("catalog normalization mismatch")
     markets = {m["native_symbol"]:m for m in rebuilt}
+    if plan.get("universe") == CATALOG_UNIVERSE and plan["assets"] != catalog_universe(rebuilt)["assets"]:
+        raise DataError("registered universe differs from deterministic catalog membership")
     for pair in required_pairs(plan):
-        market = markets[native_symbol("nobitex", pair)]
+        market = markets[pair_symbol(pair)]
         if number(market["native_scale"]) != 1 or market["base_currency_active"] is not True:
             raise DataError("scaled or inactive asset")
         quote = "rls" if pair.endswith("/IRR") else "usdt"
@@ -120,6 +181,8 @@ def capture(plan_path, catalog_path, output):
     plan_bytes = plan_path.read_bytes()
     plan = strict_json(plan_bytes)
     validate_plan(plan)
+    if "replay_recording" in plan:
+        raise DataError("exploratory replay plan cannot capture new evidence")
     verify_catalog(catalog_path, plan)
     output.parent.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
@@ -219,6 +282,7 @@ def run_screen(plan_path, catalog_path, recording, output):
               "source_sha256":source_hashes(), "execution_ready":False,
               "portfolio_return_available":False, "estimates_are_independent_trials":False,
               "account_fees_verified":False, "capacity_reused_per_comparison":True}
+    report["evaluation_type"] = plan.get("replay_recording", {}).get("evaluation_type", "registered_capture")
     counts, summaries, footer = Counter(), {}, None
     for scenario in plan["scenarios"]:
         for asset in plan["assets"]:
@@ -229,11 +293,15 @@ def run_screen(plan_path, catalog_path, recording, output):
         if recording.stat().st_size > (plan["max_logical_mb"]+1)*1024*1024:
             raise DataError("compressed recording exceeds bound")
         report["recording_sha256"] = digest(recording.read_bytes())
+        pin = plan.get("replay_recording")
+        if pin and report["recording_sha256"] != pin["sha256"]:
+            raise DataError("recording differs from exploratory source pin")
+        capture_plan_hash = pin["capture_plan_sha256"] if pin else report["plan_sha256"]
         total, previous_received = 0, 0
         with gzip.open(recording, "rt", encoding="utf-8") as stream:
             header = strict_json(stream.readline(MAX_LINE+1))
             if (header.get("schema") != 1 or header.get("kind") != "triangular_capture_start"
-                    or header.get("plan_sha256") != report["plan_sha256"]
+                    or header.get("plan_sha256") != capture_plan_hash
                     or type(header.get("observed_ns")) is not int or header["observed_ns"] <= 0):
                 raise DataError("recording header differs from plan")
             report["capture"] = header
@@ -265,9 +333,7 @@ def run_screen(plan_path, catalog_path, recording, output):
                 books = {}
                 for pair in required_pairs(plan):
                     try:
-                        payload = record["payload"][native_symbol("nobitex", pair)]
-                        books[pair] = normalize({**record, "venue":"nobitex", "pair":pair,
-                            "url":endpoint("nobitex", pair), "payload":{"status":"ok", **payload}})
+                        books[pair] = snapshot_book(record, pair)
                     except (ValueError, TypeError, KeyError, IndexError):
                         counts["invalid_or_missing_books"] += 1
                 for scenario in plan["scenarios"]:
@@ -293,6 +359,9 @@ def run_screen(plan_path, catalog_path, recording, output):
             report["reason"] = str(exc)
         raise
     finally:
+        report["capture_complete"] = bool("error_type" not in report and footer and footer["stop_reason"] == "sample_limit"
+            and counts["samples"] == plan["samples"] and not counts["source_errors"])
+        report["universe_coverage_complete"] = "error_type" not in report and all(s["comparisons"] for s in summaries.values())
         report.update(counts=dict(counts), capture_end=footer, scenarios_and_routes=list(summaries.values()))
         (output/"report.json").write_text(dumps(report), encoding="utf-8")
     return report
