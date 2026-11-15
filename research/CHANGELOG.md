@@ -4,6 +4,22 @@ Plans are immutable after performance evaluation. Data failures and rejected
 trials remain in the record. New plans cannot make previously viewed outcomes
 unseen, even if a new filename is used.
 
+## 2026-11-15: shared-cash relative-momentum rotation registration
+
+`rotation-v1.json` freezes one new portfolio hypothesis: every seven days choose
+the highest positive fourteen-day return among BTC, ETH and SOL, otherwise hold
+USDT. Decisions use completed hourly closes; exits must realize cash before a
+separately delayed entry. The total entry allocation remains 25% of synthetic
+100-USDT capital. Existing base/stress costs, ten completed exits and 10% drawdown
+gates remain; both matched-allocation and full-capital BTC holds are benchmarks.
+
+This uses the existing pinned v2 histories and v4 stage boundaries. Discovery
+prices and prior single-asset results have been observed; relative-rotation
+performance has not. It is exploratory, with one fixed lookback and schedule and
+no parameter search. No 2026 performance opens unless the preceding stage passes.
+Current per-asset increments and an explicitly hypothetical 5-USDT minimum are
+fixed before calculation. No live order, wallet allocation or download is needed.
+
 ## 2026-11-15: deterministic broader triangular universe, exploratory reuse
 
 Outcome after registration in `b3dd298`: 220 assets had valid comparisons in both
