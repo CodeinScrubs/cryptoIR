@@ -232,7 +232,10 @@ async def capture_venue(venue: str, pair: str, writer: EventWriter):
                     await ws.send(dumps({"id": 1, "connect": {}}))
                 last_wall, last_mono = time.time_ns(), time.monotonic_ns()
                 while True:
-                    raw = await asyncio.wait_for(ws.recv(), timeout=40 if subscribed else 10)
+                    # Python 3.11 wait_for may swallow external cancellation when
+                    # recv finishes concurrently. Keep the timeout in this task.
+                    async with asyncio.timeout(40 if subscribed else 10):
+                        raw = await ws.recv()
                     received_ns, received_mono = time.time_ns(), time.monotonic_ns()
                     clock_error = (received_ns - last_wall) - (received_mono - last_mono)
                     last_wall, last_mono = received_ns, received_mono
@@ -293,7 +296,8 @@ async def record_streams(path: Path, pair: str, seconds: int, venues: list[str],
                              "venues": venues, "version": __version__, "max_mb": max_mb})
         tasks = [asyncio.create_task(capture_venue(venue, pair, writer)) for venue in venues]
         try:
-            await asyncio.wait_for(asyncio.gather(*tasks), timeout=seconds)
+            async with asyncio.timeout(seconds):
+                await asyncio.gather(*tasks)
             reason = "all_venues_stopped"
         except TimeoutError:
             reason = "duration_completed"

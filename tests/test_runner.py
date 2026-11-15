@@ -118,7 +118,8 @@ class RunnerIntegrationTests(unittest.IsolatedAsyncioTestCase):
         task=asyncio.create_task(run_paper(self.config,self.directory,30))
         await asyncio.sleep(0.5)
         (self.directory/"STOP").touch()
-        report=await task
+        async with asyncio.timeout(5):
+            report=await task
         self.assertEqual(report["reason"],"manual_stop")
         self.assertEqual(report["risk"]["halt"],"manual_stop")
         with self.assertRaises(DataError):

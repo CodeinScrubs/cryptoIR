@@ -116,6 +116,36 @@ class ParserTests(unittest.TestCase):
 
 
 class TransportTests(unittest.IsolatedAsyncioTestCase):
+    async def test_cancel_when_receive_completes_does_not_leave_capture_running(self):
+        from unittest.mock import AsyncMock, MagicMock
+        from cryptoir.streams import capture_venue
+
+        calls=0
+        async def receive():
+            nonlocal calls
+            calls+=1
+            if calls==1:
+                # Complete recv and cancel its owner in the same event-loop turn.
+                asyncio.get_running_loop().call_soon(task.cancel)
+                return '{"id":1,"connect":{}}'
+            await asyncio.Event().wait()
+
+        ws=MagicMock()
+        ws.recv=receive
+        ws.send=AsyncMock()
+        context=MagicMock()
+        context.__aenter__=AsyncMock(return_value=ws)
+        context.__aexit__=AsyncMock(return_value=False)
+        with patch('websockets.asyncio.client.connect',return_value=context):
+            task=asyncio.create_task(capture_venue('nobitex','BTC/USDT',MagicMock()))
+            try:
+                done,_=await asyncio.wait([task],timeout=0.5)
+                self.assertIn(task,done,'capture swallowed cancellation when recv completed')
+                self.assertTrue(task.cancelled())
+            finally:
+                task.cancel()
+                await asyncio.gather(task,return_exceptions=True)
+
     async def test_local_socket_ping_and_reconnect(self):
         from websockets.asyncio.server import serve
         sessions = 0

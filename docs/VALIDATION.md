@@ -188,11 +188,21 @@ historical fees.
 
 ## Version 0.10.0 additions (2026-11-15)
 
-- All 202 local tests passed, including 21 new account scenarios: exact Ed25519
+- The account milestone initially passed 202 local tests, including 21 new scenarios: exact Ed25519
   method/path/body signing, HMAC timestamp units, explicit legacy authentication,
   endpoint and venue restrictions, hidden input, redirect refusal over loopback,
   response limits, redacted failures, unknown fee units, duplicate assets,
   unrounded Decimal totals and private output. CI uses only synthetic credentials.
+- The first release CI exposed a Python 3.11 receive/cancel race during the paper
+  STOP test; the stuck job was canceled and its log retained. A deterministic
+  regression failed on the old transport: a completed receive could swallow
+  cancellation and keep capture alive. The transport now uses `asyncio.timeout`
+  around direct awaits instead of the affected `wait_for` pattern. See the
+  [upstream issue](https://github.com/python/cpython/issues/86296) and
+  [Python timeout documentation](https://docs.python.org/3.11/library/asyncio-task.html#timeouts).
+  The stop test has a five-second deadline and CI jobs a five-minute cap.
+- After the correction, all 203 tests passed locally on both Python 3.11.15 and
+  3.13.15, including the new simultaneous receive/cancel regression.
 - Read-only account adapters are implemented and locally tested. No actual
   account credential, authenticated exchange response, order or transfer was used.
   Account acceptance and actual fee semantics remain unverified.
