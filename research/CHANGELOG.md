@@ -4,6 +4,26 @@ Plans are immutable after performance evaluation. Data failures and rejected
 trials remain in the record. New plans cannot make previously viewed outcomes
 unseen, even if a new filename is used.
 
+## 2026-11-15: prospective BTC cross-venue feasibility diagnostic
+
+`arbitrage-v1.json` freezes a single 900-second public observation, three cost
+scenarios, gross buy size, independent synthetic capacity ceilings and observed
+market increments before collecting or evaluating the new recording. The older
+ten-minute comparison is already known and is not reused as independent evidence.
+
+The new diagnostic accounts for buy fees in received base and rounds down the
+sell quantity without consuming aggregate base inventory. Residual base is
+reported, not credited as quote profit. Missing source timestamps or minimum
+notional blocks the strict comparison. Unknown account fees, fee assets and
+other filters remain explicit; Wallex/Tabdeal rates are hypotheses. Zero-cost
+results are an optimistic diagnostic, never a deployment case. Comparisons
+reuse capacity ceilings and cannot be summed into a portfolio return.
+
+There is no profitability-acceptance gate here. Positive estimates under base
+and stressed costs would justify testing asynchronous legs and actual inventory
+accounting. A failed or partial recording remains evidence; no automatic retry
+or favorable window search is permitted by this plan.
+
 ## 2026-11-15: v3 source rejection and volume acceptance guard
 
 The registered v3 download completed for all three assets but failed daily

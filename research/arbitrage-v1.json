@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "experiment": "arbitrage-v1-btc-feasibility",
+  "pair": "BTC/USDT",
+  "venues": [
+    "nobitex",
+    "wallex",
+    "tabdeal"
+  ],
+  "capture_seconds": 900,
+  "capture_max_mb": 192,
+  "max_age_ms": 5000,
+  "gross_buy_quantity": "0.0001",
+  "buy_quote_budget": "10",
+  "sell_base_inventory": "0.0001",
+  "market_rules": {
+    "nobitex": {
+      "quantity_step": "0.000001",
+      "minimum_notional": "0.5",
+      "minimum_quantity": null
+    },
+    "wallex": {
+      "quantity_step": "0.00000001",
+      "minimum_notional": null,
+      "minimum_quantity": null
+    },
+    "tabdeal": {
+      "quantity_step": "0.000001",
+      "minimum_notional": "1",
+      "minimum_quantity": "0.000001"
+    }
+  },
+  "catalog_sha256": "7af65da7fd08e350b3cb8b8fc6a3541433248b109fcce8229a42198392252ef4",
+  "scenarios": [
+    {
+      "name": "zero_cost_diagnostic",
+      "reserve_bps": "0",
+      "fees": {
+        "nobitex": {
+          "rate": "0",
+          "buy_asset": "received_base"
+        },
+        "wallex": {
+          "rate": "0",
+          "buy_asset": "received_base"
+        },
+        "tabdeal": {
+          "rate": "0",
+          "buy_asset": "received_base"
+        }
+      }
+    },
+    {
+      "name": "assumed_base",
+      "reserve_bps": "15",
+      "fees": {
+        "nobitex": {
+          "rate": "0.0013",
+          "buy_asset": "received_base"
+        },
+        "wallex": {
+          "rate": "0.002",
+          "buy_asset": "received_base"
+        },
+        "tabdeal": {
+          "rate": "0.002",
+          "buy_asset": "received_base"
+        }
+      }
+    },
+    {
+      "name": "assumed_stress",
+      "reserve_bps": "30",
+      "fees": {
+        "nobitex": {
+          "rate": "0.0026",
+          "buy_asset": "received_base"
+        },
+        "wallex": {
+          "rate": "0.004",
+          "buy_asset": "received_base"
+        },
+        "tabdeal": {
+          "rate": "0.004",
+          "buy_asset": "received_base"
+        }
+      }
+    }
+  ],
+  "cost_note": "Nobitex base USDT taker rate is a public current-rate counterfactual observed 2026-11-14, not account-verified. Wallex and Tabdeal 0.2% and received-base buy fees are explicit hypotheses, not verified rates or fee currencies. Sell fees are assumed quote-denominated. Zero-cost is a non-deployable diagnostic.",
+  "inventory_note": "Synthetic independent capacity ceilings per comparison, not personal capital or a funded portfolio. No balances are mutated and estimates must never be summed as profit. Residual base is retained and valued at zero in the quote-cash comparison.",
+  "source_note": "The catalog hash identifies the bounded public metadata observation. Native BTC/USDT identity, spot permission and full filters remain unverified. Missing source time or minimum notional blocks a strict comparison; unknown minimum quantity is disclosed.",
+  "selection": "One prospective bounded recording after registration. Report every scenario and both directions, including exclusions; no parameter sweep, favorable window selection, automatic retry or performance acceptance. Positive base/stress estimates only justify later asynchronous two-leg paper research.",
+  "limitations": "Snapshot liquidity, finite depth, receive/source timestamps and static inventory ceilings do not prove execution. No order latency, queue, both-leg failure, cash/inventory recycling, rebalancing/transfer costs, fiat attribution, funding, leverage or realized profit."
+}
