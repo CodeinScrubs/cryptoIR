@@ -225,3 +225,41 @@ historical fees.
 - No strategy has passed the research gates; no-profitability and no-live-readiness
   boundaries remain unchanged. Longer observation with no orders cannot calibrate
   fill quality or establish profitable trading.
+
+## Version 0.11.0 additions (2026-11-15)
+
+- All 220 local tests passed. Seventeen new product/calculation tests cover
+  native symbol resolution, product separation, ambiguous markets, absent rules,
+  precision versus increments, strict payload/clock/hash checks, malformed books,
+  exclusive artifacts, truncated recordings, missing requested books, partial
+  failures, fixed calculation routes, fee currencies, quoted term mismatches,
+  HTTP validation errors and offline reconstruction after tampering.
+- Public Nobitex margin, Wallex margin and Tabdeal FAPI catalogs returned 131,
+  36 and 96 markets. The observed Nobitex maximum was 5 for all returned markets;
+  Wallex's maximum native credit ratio was 10. Tabdeal's catalog supplied no
+  maximum leverage or maintenance-margin schedule. These are public observations,
+  not account verification or evidence of 20x/100x availability.
+- Tabdeal FAPI depth succeeded with catalog-native `BTC_USDT`, after the
+  documentation example `BTCUSDT` returned HTTP 400. The accepted book had
+  `E: 0`; source freshness and contract-unit semantics remain unverified.
+- Final catalog/book artifact reconstructed all four observations. SHA-256:
+  `5aee746a13166f96e4b7cd14f758e6bb9a6a529e8687e4559d4ac3bfa63fbb46`.
+  An earlier development artifact without the final completeness envelope is
+  retained separately and is not the final-format acceptance artifact.
+- Wallex's documented public collateral calculation and two accepted pre-position
+  calculations were probed without authentication. Initial dated-price requests
+  returned 422; a separately submitted price within the reported range succeeded.
+  Long and short responses retained different fee/loan currencies, a 14,400-second
+  renewal interval and 1,814,400-second maximum age. No position was created.
+- Both accepted quote artifacts replayed from raw responses. Long SHA-256:
+  `d4180d46ac2ba8565cbeef8514a1e6a8ea97aeae0d3df17dcd9a65322313354b`;
+  short SHA-256:
+  `94c47704f06286842896546d4adb43ec63aa46fcb4399d06a324099fcd8e116c`.
+  These are hypothetical inputs and current quoted terms, not actual account
+  balances, historical cost schedules or realized performance.
+- Versland public API discovery remains unresolved. Official-domain research did
+  not establish a documented interface; Chrome tab inventory worked but two
+  bounded navigations to the linked trading panel timed out. No browser order or
+  authenticated action was performed. Lack of verification is not proof of absence.
+- Leveraged simulation, account entitlements and profitability remain unproven.
+  No paper capital, existing strategy configuration or live permission was changed.

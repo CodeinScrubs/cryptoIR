@@ -9,6 +9,11 @@ account-verified**. See [ACCOUNTS.md](ACCOUNTS.md) for official sources, hidden
 local key entry, exact endpoints and unresolved fee/balance semantics. The table
 below describes public-market integration, not authenticated account evidence.
 
+Version 0.11 adds [leveraged-product observations](LEVERAGE.md): public Nobitex
+and Wallex margin catalogs, Tabdeal FAPI catalog and scoped depth, plus Wallex
+public pre-position calculations. Observed metadata and quoted terms are distinct
+from account eligibility, a calibrated liquidation model and order acceptance.
+
 | Venue | Official sources | Observed documentation | This version |
 | --- | --- | --- | --- |
 | Nobitex | [API](https://apidocs.nobitex.ir/), [getting started](https://apidocs.nobitex.ir/getting-started) | Spot, margin and WebSocket sections | Public catalog, REST/WS BTC books, and audited BTC/ETH/SOL hourly windows |

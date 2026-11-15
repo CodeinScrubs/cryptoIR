@@ -102,6 +102,20 @@ def estimates(path: Path, *, quantity: Decimal, fee: Decimal, reserve_bps: Decim
 def main() -> int:
     parser = argparse.ArgumentParser(description="cryptoIR: research and read-only account checks; no real orders")
     commands = parser.add_subparsers(dest="command", required=True)
+    products=commands.add_parser("products",help="record public leveraged-product catalogs; optional separate FAPI book")
+    products.add_argument("--output",type=Path,required=True)
+    products.add_argument("--tabdeal-book",help="explicit BASE/QUOTE resolved from the current FAPI catalog")
+    products_audit=commands.add_parser("products-audit",help="reconstruct product observations from their public raw responses")
+    products_audit.add_argument("path",type=Path)
+    quote=commands.add_parser("margin-quote",help="Wallex public calculation only; creates no position")
+    quote.add_argument("--market",required=True)
+    quote.add_argument("--side",choices=("long","short"),required=True)
+    quote.add_argument("--collateral",type=number,required=True)
+    quote.add_argument("--credit-ratio",type=number,required=True)
+    quote.add_argument("--open-price",type=number,required=True)
+    quote.add_argument("--output",type=Path,required=True)
+    quote_audit=commands.add_parser("margin-quote-audit",help="reconstruct an accepted public calculation; no network")
+    quote_audit.add_argument("path",type=Path)
     account=commands.add_parser("account-check",help="interactive read-only account assessment; keys entered hidden and never saved")
     account.add_argument("--venue",choices=("nobitex","wallex","tabdeal"),required=True)
     account.add_argument("--legacy-token",action="store_true",help="Nobitex legacy token instead of the default Ed25519 API key")
@@ -166,6 +180,25 @@ def main() -> int:
     research.add_argument("--dataset", type=Path, required=True)
     research.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command=="products":
+        from .products import collect_products
+        report=collect_products(args.output,args.tabdeal_book)
+        print(encode(report))
+        return int(not report["all_requests_observed"])
+    if args.command=="products-audit":
+        from .products import audit_products
+        report=audit_products(args.path)
+        print(encode(report))
+        return int(not report["all_requests_observed"])
+    if args.command=="margin-quote":
+        from .products import margin_quote
+        report=margin_quote(args.output,args.market,args.side,args.collateral,args.credit_ratio,args.open_price)
+        print(encode(report))
+        return int(report["status"]!="observed")
+    if args.command=="margin-quote-audit":
+        from .products import audit_quote
+        print(encode(audit_quote(args.path)))
+        return 0
     if args.command=="account-check":
         from .accounts import account_check
         return account_check(args.venue,legacy_token=args.legacy_token)
