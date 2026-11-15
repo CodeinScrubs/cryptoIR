@@ -185,3 +185,33 @@ historical fees.
 - The dashboard and runner were separate bounded processes. UI availability,
   simulated fault handling and short market reception do not prove profitability,
   venue order acceptance or unattended live readiness.
+
+## Version 0.10.0 additions (2026-11-15)
+
+- All 202 local tests passed, including 21 new account scenarios: exact Ed25519
+  method/path/body signing, HMAC timestamp units, explicit legacy authentication,
+  endpoint and venue restrictions, hidden input, redirect refusal over loopback,
+  response limits, redacted failures, unknown fee units, duplicate assets,
+  unrounded Decimal totals and private output. CI uses only synthetic credentials.
+- Read-only account adapters are implemented and locally tested. No actual
+  account credential, authenticated exchange response, order or transfer was used.
+  Account acceptance and actual fee semantics remain unverified.
+- The preceding v0.9.0 release passed all four Windows/Linux, Python 3.11/3.13
+  CI jobs at `1446e0657407109b309c7c73840c7bc75b23f8c6`.
+- A frozen v0.9.0 runtime completed a two-hour public paper observation on Python
+  3.13.15: 10,666 books, 120 accepted candle responses and 119 matched valuations.
+  There were no simulated orders or risk halts. The raw stream replay passed,
+  with a clean duration-limited end. No capital reset or account-key use occurred.
+- Log SHA-256:
+  `0bff051ba9fed72ba08597b975d3bb0200319a670a5ee7a85c7e94b9227114a2`.
+  Compressed size: 42,095,472 bytes. Replayed source ages ranged from 0.0260917 to
+  4.8225379 seconds, with no future source timestamps or ages over five seconds.
+  The largest receive interval between books was 10.0083364 seconds. This is
+  observed reception, not proof that no source events were missed.
+- An earlier launch used an unintended interpreter and was forcibly interrupted.
+  Its recording is preserved and is not counted as a clean session. The owner
+  lock was verified released before the corrected launch. The two-hour account
+  and frozen source remain preserved; the runner stopped at its duration limit.
+- No strategy has passed the research gates; no-profitability and no-live-readiness
+  boundaries remain unchanged. Longer observation with no orders cannot calibrate
+  fill quality or establish profitable trading.

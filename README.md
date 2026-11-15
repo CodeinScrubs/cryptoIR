@@ -2,15 +2,15 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.9.0، paper نوبیتکس با سرمایهٔ تومانی، مقایسه با نگهداری تتر و بیت‌کوین و داشبورد فارسی محلی. سودآوری و آمادگی معاملهٔ واقعی اثبات نشده است.**
+**وضعیت فعلی: نسخهٔ 0.10.0، بررسی فقط‌خواندنی حساب‌های نوبیتکس، والکس و تبدیل؛ paper نوبیتکس با سرمایهٔ تومانی و داشبورد فارسی محلی. اتصال حساب واقعی و سودآوری هنوز تأیید نشده است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
-It also includes public market metadata collection, audited hourly history, preregistered strategy cost screens, and bounded experimental forward paper sessions on Nobitex with a durable spot ledger and risk guard. It has **no authenticated API client, live order submission, withdrawal, transfer, accepted trading strategy or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
+It also includes public market metadata collection, audited hourly history, preregistered strategy cost screens, bounded experimental forward paper sessions on Nobitex with a durable spot ledger and risk guard, and an interactive read-only account assessment client. It has **no live order submission, withdrawal, transfer, accepted trading strategy or complete backtest engine**. An estimate is not an executable opportunity or realized profit.
 
 ## Run
 
-Python 3.11 or later; run from the repository root. `uv run` installs locked dependencies. Without uv, install with `python -m pip install --require-hashes -r requirements.txt`, then replace `uv run python` with `python`. WebSocket capture uses one pinned transport dependency; accounting and REST code use the standard library.
+Python 3.11 or later; run from the repository root. `uv run` installs locked dependencies. Without uv, install with `python -m pip install --require-hashes -r requirements.txt`, then replace `uv run python` with `python`. Dependencies are locked: `websockets` for streams and `cryptography` for Nobitex Ed25519 signing. Accounting and HTTP transport use the standard library.
 
 ```powershell
 uv run python -m unittest discover -s tests -v
@@ -44,10 +44,10 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [local dashboard](docs/DASHBOARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [read-only account setup](docs/ACCOUNTS.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [local dashboard](docs/DASHBOARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 
 ## Private information
 
-Keep credentials, account exports, personal risk settings and recordings outside version control (`.local/`, `data/` and `.env*` are ignored). Do not paste keys into issues, chats or notebooks. Ignoring files is only one precaution: inspect every staged diff before publication. The current code needs no credentials.
+Keep credentials, account exports, personal risk settings and recordings outside version control (`.local/`, `data/` and `.env*` are ignored). Do not paste keys into issues, chats or notebooks. Ignoring files is only one precaution: inspect every staged diff before publication. Public collectors and paper trading need no credentials. The optional `account-check` command prompts for credentials invisibly in a local terminal, retains them only in memory and saves a normalized private report under `.local/accounts/`.

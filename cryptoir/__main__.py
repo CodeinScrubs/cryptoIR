@@ -100,8 +100,11 @@ def estimates(path: Path, *, quantity: Decimal, fee: Decimal, reserve_bps: Decim
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="cryptoIR: public data only; no real orders")
+    parser = argparse.ArgumentParser(description="cryptoIR: research and read-only account checks; no real orders")
     commands = parser.add_subparsers(dest="command", required=True)
+    account=commands.add_parser("account-check",help="interactive read-only account assessment; keys entered hidden and never saved")
+    account.add_argument("--venue",choices=("nobitex","wallex","tabdeal"),required=True)
+    account.add_argument("--legacy-token",action="store_true",help="Nobitex legacy token instead of the default Ed25519 API key")
     capture = commands.add_parser("record", help="bounded public REST sampling")
     capture.add_argument("--pair", default="BTC/USDT")
     capture.add_argument("--samples", type=int, default=1)
@@ -163,6 +166,9 @@ def main() -> int:
     research.add_argument("--dataset", type=Path, required=True)
     research.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command=="account-check":
+        from .accounts import account_check
+        return account_check(args.venue,legacy_token=args.legacy_token)
     if args.command=="paper-upgrade-empty":
         from .forward import ForwardConfig
         from .upgrade import upgrade_empty_account

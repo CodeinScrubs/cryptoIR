@@ -2,6 +2,13 @@
 
 Reviewed 2026-11-14. Documentation is evidence of advertised interfaces, not account entitlement, matching-engine performance, solvency or trading success.
 
+Account addendum reviewed 2026-11-15: version 0.10 implements bounded read-only
+Nobitex profile/spot wallets, Wallex fee/main-wallet and Tabdeal spot-account
+assessment. Authentication and normalization are locally tested, **not
+account-verified**. See [ACCOUNTS.md](ACCOUNTS.md) for official sources, hidden
+local key entry, exact endpoints and unresolved fee/balance semantics. The table
+below describes public-market integration, not authenticated account evidence.
+
 | Venue | Official sources | Observed documentation | This version |
 | --- | --- | --- | --- |
 | Nobitex | [API](https://apidocs.nobitex.ir/), [getting started](https://apidocs.nobitex.ir/getting-started) | Spot, margin and WebSocket sections | Public catalog, REST/WS BTC books, and audited BTC/ETH/SOL hourly windows |
