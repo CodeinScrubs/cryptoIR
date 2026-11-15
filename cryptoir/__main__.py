@@ -116,9 +116,14 @@ def main() -> int:
     quote.add_argument("--output",type=Path,required=True)
     quote_audit=commands.add_parser("margin-quote-audit",help="reconstruct an accepted public calculation; no network")
     quote_audit.add_argument("path",type=Path)
-    account=commands.add_parser("account-check",help="interactive read-only account assessment; keys entered hidden and never saved")
+    account=commands.add_parser("account-check",help="read-only account assessment; optional local Windows credential storage")
     account.add_argument("--venue",choices=("nobitex","wallex","tabdeal"),required=True)
     account.add_argument("--legacy-token",action="store_true",help="Nobitex legacy token instead of the default Ed25519 API key")
+    account.add_argument("--save-credentials",action="store_true",help="prompt once and save/replace in local Windows Credential Manager")
+    credential_status=commands.add_parser("credentials-status",help="check this checkout's local vault entry without showing secrets")
+    credential_status.add_argument("--venue",choices=VENUES,required=True)
+    credential_forget=commands.add_parser("credentials-forget",help="remove this checkout's saved key; does not revoke it at the exchange")
+    credential_forget.add_argument("--venue",choices=VENUES,required=True)
     capture = commands.add_parser("record", help="bounded public REST sampling")
     capture.add_argument("--pair", default="BTC/USDT")
     capture.add_argument("--samples", type=int, default=1)
@@ -206,7 +211,15 @@ def main() -> int:
         return 0
     if args.command=="account-check":
         from .accounts import account_check
-        return account_check(args.venue,legacy_token=args.legacy_token)
+        return account_check(args.venue,legacy_token=args.legacy_token,save=args.save_credentials)
+    if args.command=="credentials-status":
+        from .credentials import credential_status
+        print(encode(credential_status(args.venue)))
+        return 0
+    if args.command=="credentials-forget":
+        from .credentials import forget_credentials
+        print(encode(forget_credentials(args.venue)))
+        return 0
     if args.command=="paper-upgrade-empty":
         from .forward import ForwardConfig
         from .upgrade import upgrade_empty_account

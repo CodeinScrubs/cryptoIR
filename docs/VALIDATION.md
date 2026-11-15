@@ -319,3 +319,29 @@ historical fees.
   Full counts, stale-book exclusions and estimates are in the
   [public result](../research/evidence/arbitrage-v1-summary.json). No real or paper
   order, account allocation or transfer was performed.
+
+## Version 0.13.0 additions (2026-11-15)
+
+- All 266 local tests passed. Four additional account scenarios retain unique
+  Tabdeal rows while quarantining identical, conflicting and case-variant
+  duplicates, validate every amount, preserve exact sums and return a partial
+  assessment with a nonzero exit status. Duplicate funds are never chosen,
+  deduplicated, added together or silently interpreted as zero.
+- Fourteen credential scenarios cover native vault serialization, checkout and
+  venue isolation, malformed payloads, platform limits, temporary native buffer
+  clearing, exact-target removal, hidden entry, explicit persistence, automatic
+  reuse, saved authentication schemes and redacted failures. Existing account
+  unit tests explicitly block access to the developer's real vault. CI uses only
+  synthetic fixtures and local loopback sockets.
+- A separate native Windows probe wrote a unique synthetic credential, read it
+  in a second process and removed only that probe's entry. No actual account
+  credentials were used in the probe.
+- Following explicit local entry, all three venue credentials were stored in
+  Windows Credential Manager. Fresh normal CLI processes retrieved them without
+  prompts: Nobitex profile/balance and Wallex fee/balance reads were accepted;
+  Tabdeal returned `partial / ambiguous_duplicate_balances`. Secret values were
+  not printed or written into project files. [Storage details](CREDENTIALS.md).
+- Tabdeal's duplicate observations remain unresolved even when the numbers
+  match. Its read is not marked fully accepted, and none of these account
+  observations allocates funds or establishes order permissions, a complete
+  cost model or profitability. Live trading remains disabled.

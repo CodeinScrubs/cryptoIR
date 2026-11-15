@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.12.0، ارزیابی اختلاف قیمت با کارمزد هر صرافی، گردکردن مقدار و سقف موجودی؛ همراه با کنترل کیفیت داده و paper نوبیتکس. خواندن موجودی و کارمزد حساب والکس تأیید شده؛ سودآوری هنوز تأیید نشده است.**
+**وضعیت فعلی: نسخهٔ 0.13.0، ذخیره و بازیابی محلی کلیدها در Windows Credential Manager؛ خواندن حساب نوبیتکس و والکس تأیید شده و پاسخ تبدیل به‌دلیل موجودی‌های تکراری مبهم، partial است. ارزیابی اختلاف قیمت، کنترل کیفیت داده و paper نوبیتکس پیاده‌سازی شده‌اند؛ سودآوری هنوز تأیید نشده است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -46,7 +46,7 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 
 ## Roadmap and evidence
 
-See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [leveraged-product observations](docs/LEVERAGE.md), [read-only account setup](docs/ACCOUNTS.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [local dashboard](docs/DASHBOARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
+See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [leveraged-product observations](docs/LEVERAGE.md), [read-only account setup](docs/ACCOUNTS.md), [local credential storage](docs/CREDENTIALS.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [local dashboard](docs/DASHBOARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
 
 The [registered cross-venue diagnostic](docs/ARBITRAGE.md) also checks received-base
 buy fees, independent inventory ceilings and observed minimums. It retains
@@ -57,4 +57,4 @@ The intended progression is collection -> faithful replay -> out-of-sample strat
 
 ## Private information
 
-Keep credentials, account exports, personal risk settings and recordings outside version control (`.local/`, `data/` and `.env*` are ignored). Do not paste keys into issues, chats or notebooks. Ignoring files is only one precaution: inspect every staged diff before publication. Public collectors and paper trading need no credentials. The optional `account-check` command prompts for credentials invisibly in a local terminal, retains them only in memory and saves a normalized private report under `.local/accounts/`.
+Keep credentials, account exports, personal risk settings and recordings outside version control (`.local/`, `data/` and `.env*` are ignored). Do not paste keys into issues, chats or notebooks. Ignoring files is only one precaution: inspect every staged diff before publication. Public collectors and paper trading need no credentials. The optional `account-check` command reuses this checkout's saved Windows Credential Manager entry, or prompts invisibly if none exists. Only the explicit `--save-credentials` option saves/replaces a key in the native Windows vault; there is no plaintext storage fallback. Normalized private reports under `.local/accounts/` contain no credentials and are separate from the vault. See [setup, replacement and removal](docs/CREDENTIALS.md).

@@ -154,7 +154,13 @@ class AccountTransportTests(unittest.TestCase):
             thread.join(2)
 
 
-class AccountNormalizationTests(unittest.TestCase):
+class NoStoredAccountKeys(unittest.TestCase):
+    def setUp(self):
+        # Unit tests must never load the developer's actual credential vault.
+        self.enterContext(patch('cryptoir.credentials.load_credentials',return_value=None))
+
+
+class AccountNormalizationTests(NoStoredAccountKeys):
     def test_profile_pii_is_discarded_and_legacy_fee_unit_unknown(self):
         data=a.parse_account('nobitex','profile',{'status':'ok','profile':{
             'email':'PRIVATE','bankAccounts':['PRIVATE'],'options':{'fee':'0.35','feeUsdt':'0.2','websocketToken':'PRIVATE'}}})
@@ -224,11 +230,64 @@ class AccountNormalizationTests(unittest.TestCase):
 
     def test_duplicate_assets_are_not_merged_or_double_counted(self):
         samples=[('nobitex','balances',{'status':'ok','wallets':[{'currency':s,'balance':'1'} for s in ('BTC','btc')]}),
-                 ('wallex','balances',{'success':True,'result':{'balances':{s:{'value':'1','locked':'0'} for s in ('BTC','btc')}}}),
-                 ('tabdeal','account',{'accountType':'SPOT','balances':[{'asset':s,'free':'1','freeze':'0'} for s in ('BTC','btc')]})]
+                 ('wallex','balances',{'success':True,'result':{'balances':{s:{'value':'1','locked':'0'} for s in ('BTC','btc')}}})]
         for venue,op,value in samples:
             with self.subTest(venue=venue),self.assertRaisesRegex(a.AccountReadError,'duplicate_native_asset'):
                 a.parse_account(venue,op,value)
+
+    def test_tabdeal_identical_or_conflicting_duplicates_never_become_usable_funds(self):
+        for first,second in (('0','0'),('1','1'),('1','2'),('0','1')):
+            with self.subTest(first=first,second=second):
+                value={'accountType':'SPOT','balances':[
+                    {'asset':'BTC','free':first,'freeze':'0'},
+                    {'asset':'btc','free':second,'freeze':'0'},
+                    {'asset':'USDT','free':'5','freeze':'2'}]}
+                data=a.parse_account('tabdeal','account',value)
+                self.assertFalse(data['balance_data_complete'])
+                self.assertEqual(data['ambiguous_balance_groups'],1)
+                ambiguous,unique=data['balances']
+                self.assertTrue(all(ambiguous[k] is None for k in ('free','locked','total')))
+                self.assertEqual(ambiguous['balance_state'],'ambiguous_duplicate_asset')
+                self.assertEqual(ambiguous['reported_values_identical'],first==second)
+                self.assertEqual([r['free'] for r in ambiguous['observations']],list(map(Decimal,(first,second))))
+                self.assertEqual(unique['free'],5)
+                self.assertEqual(unique['total'],7)
+
+    def test_tabdeal_duplicate_classification_includes_locked_amount_and_validates_every_row(self):
+        value={'accountType':'SPOT','balances':[
+            {'asset':'BTC','free':'1','freeze':'0'}, {'asset':'BTC','free':'1','freeze':'2'}]}
+        data=a.parse_account('tabdeal','account',value)
+        self.assertFalse(data['balances'][0]['reported_values_identical'])
+        value['balances'][1]['free']='-1'
+        with self.assertRaises(a.AccountReadError):
+            a.parse_account('tabdeal','account',value)
+
+    def test_tabdeal_partial_read_keeps_other_fields_and_returns_nonzero_exit(self):
+        # Synthetic numeric observations only; arbitrary response fields disappear.
+        value={'accountType':'SPOT','makerCommission':40,'privateProfile':'PRIVATE',
+               'balances':[{'asset':'BTC','free':'1','freeze':'0','privateField':'PRIVATE'}]*2}
+        with patch.object(a,'read_operation',return_value=(value,{'body_sha256':'test'})):
+            report=a.inspect_account('tabdeal',TAB)
+        op=report['results'][0]
+        self.assertEqual(op['status'],'partial')
+        self.assertEqual(op['reason'],'ambiguous_duplicate_balances')
+        self.assertFalse(report['all_requested_reads_accepted'])
+        self.assertEqual(len(op['data']['fee_observations']),1)
+        self.assertNotIn('PRIVATE',json.dumps(report,default=str))
+        out=io.StringIO()
+        with patch.object(a,'prompt_credentials',return_value=TAB),patch.object(a,'inspect_account',return_value=report),\
+                patch.object(a,'save_assessment',return_value=Path('tabdeal-synthetic.json')),redirect_stdout(out):
+            self.assertEqual(a.account_check('tabdeal'),1)
+        console=json.loads(out.getvalue())
+        self.assertEqual(console['operations'],[{'operation':'account','status':'partial','reason':'ambiguous_duplicate_balances'}])
+        self.assertNotIn('balances',console)
+
+    def test_tabdeal_unique_rows_keep_exact_reported_amounts(self):
+        value={'accountType':'SPOT','balances':[{'asset':'BTC','free':'0.00000001','freeze':'0.00000002'}]}
+        data=a.parse_account('tabdeal','account',value)
+        self.assertTrue(data['balance_data_complete'])
+        self.assertEqual(data['ambiguous_balance_groups'],0)
+        self.assertEqual(data['balances'][0]['total'],Decimal('0.00000003'))
 
     def test_malformed_balances_fail_and_exact_totals_do_not_round(self):
         for value in ('-1','NaN','1e9999',True,0.1):
@@ -250,7 +309,7 @@ class AccountNormalizationTests(unittest.TestCase):
             self.assertFalse(report['paper_capital_modified'])
 
 
-class AccountPrivateOutputTests(unittest.TestCase):
+class AccountPrivateOutputTests(NoStoredAccountKeys):
     def test_fee_failure_retains_only_allowlisted_shape_and_response_hash(self):
         raw={'success':True,'result':{'PRIVATE-EMAIL':{'makerFeeRate':'PRIVATE-AMOUNT',
              'PRIVATE-KEY':'PRIVATE-SECRET','nested-private':{'takerFeeRate':'PRIVATE'}}}}
@@ -323,7 +382,7 @@ class AccountPrivateOutputTests(unittest.TestCase):
         with patch('sys.argv',['cryptoir','account-check','--venue','nobitex','--legacy-token']),\
                 patch.object(a,'account_check',return_value=0) as command:
             self.assertEqual(main(),0)
-            command.assert_called_once_with('nobitex',legacy_token=True)
+            command.assert_called_once_with('nobitex',legacy_token=True,save=False)
 
 
 if __name__=='__main__':

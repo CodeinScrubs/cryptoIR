@@ -1,9 +1,11 @@
 # Read-only account assessment
 
-Introduced in 0.10.0, compatibility correction in 0.12.0: **implemented and
-locally tested; Wallex fee and balance reads accepted in an interactive account
-check**. Nobitex and Tabdeal account acceptance remains unverified. Successful
-reads do not establish trading entitlement, key permissions or order acceptance.
+Introduced in 0.10.0, updated in 0.13.0: **implemented and locally tested;
+Nobitex profile/balance and Wallex fee/balance reads account-verified**. Tabdeal's
+signed account read returns a partial assessment because duplicate asset balances
+remain ambiguous. All three were verified again using saved Windows credentials,
+without another prompt. Successful reads do not establish trading entitlement,
+key permissions or order acceptance.
 
 ## راه‌اندازی روی لپ‌تاپ
 
@@ -15,6 +17,9 @@ uv run python -m cryptoir account-check --venue wallex
 uv run python -m cryptoir account-check --venue tabdeal
 ```
 
+اگر کلید ذخیره شده باشد، این دستورها آن را خودکار از مخزن ویندوز می‌خوانند.
+برای ذخیرهٔ یک‌باره، گزینهٔ `--save-credentials` را به هر دستور اضافه کنید؛
+[راهنمای ذخیره و مدیریت کلیدها](CREDENTIALS.md) را ببینید.
 کلیدها را فقط در همان پنجره، هنگام نمایش درخواست ورودی مخفی وارد کنید.
 هنگام تایپ یا چسباندن چیزی نمایش داده نمی‌شود. کلید یا secret را در چت،
 خط فرمان، فایل تنظیمات یا GitHub ننویسید. برای این بررسی، کلید دارای دسترسی
@@ -82,8 +87,15 @@ describes signed authentication for this GET; the client does not submit a trade
   when all three exist. Missing or inconsistent components remain flagged.
 - Wallex `value` and `locked` are retained, but whether `value` includes locked
   funds is not established. Spendable and total balances stay null.
-- Tabdeal documented `free` and `freeze` are summed exactly. Duplicate native
-  assets, negative balances and invalid numeric values are rejected.
+- Tabdeal documented `free` and `freeze` are summed exactly within each row.
+  Case-insensitive duplicate native assets are grouped as unresolved observations:
+  their usable `free`, `locked` and `total` remain null. Identical observations,
+  including all-zero duplicates, are not selected, deduplicated or added together.
+  Unique rows and other allowlisted fields are retained. Any duplicate group marks
+  the operation `partial / ambiguous_duplicate_balances`, with
+  `balance_data_complete: false` and a nonzero exit status. Official documentation
+  has not established how to resolve these duplicates. Negative or invalid
+  amounts still reject normalization.
 - Native asset/market identifiers stay venue-specific. No cross-venue asset
   identity, fiat conversion, portfolio allocation or balance transfer is inferred.
 - Account capability flags are observations, not verified API-key permissions.
@@ -95,11 +107,13 @@ describes signed authentication for this GET; the client does not submit a trade
 
 ## Private output and failure behavior
 
-Credentials are accepted only through hidden terminal prompts. An input path
-that would echo them is refused. They are not written to files or logs; Python
-strings cannot guarantee memory zeroization. Raw responses, bank details, names,
-emails and websocket tokens are not retained. The profile response is read in
-memory because that endpoint supplies the legacy fee observations.
+Credentials come from hidden terminal prompts or this checkout's native Windows
+Credential Manager entries. An input path that would echo them is refused.
+Explicit saving uses the Windows vault, never a plaintext project file or log;
+see [storage and its limits](CREDENTIALS.md). Python strings cannot guarantee
+memory zeroization. Raw responses, bank details, names, emails and websocket
+tokens are not retained. The profile response is read in memory because that
+endpoint supplies the legacy fee observations.
 
 Only allowlisted normalized fields, response hashes, timing, parser hash and
 client version go into a new private report. The output location is fixed under
@@ -119,7 +133,8 @@ redirect following apply. There are no retries. Duplicate JSON keys, non-finite
 numbers, oversized responses and malformed schemas fail closed. HTTP/network
 errors expose fixed diagnostic codes, not response bodies, signed URLs or
 exception details. A partial assessment stays partial; exit status is nonzero
-when any requested read is unavailable. Exit zero does not resolve unknown fees.
+when any requested read is unavailable or partial. Exit zero does not resolve
+unknown fees. Credential persistence is reported independently of read acceptance.
 
 The paper runner remains independent of this optional command. Its source seal
 includes Python modules, so changing versions requires the documented upgrade

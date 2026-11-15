@@ -65,7 +65,7 @@ class Credentials:
         return "<Credentials redacted>"
 
 
-def prompt_credentials(venue: str, scheme: str | None = None) -> Credentials:
+def prompt_credentials(venue: str, scheme: str | None = None, *, saving=False) -> Credentials:
     defaults={"nobitex":"nobitex_ed25519","wallex":"wallex_key","tabdeal":"tabdeal_hmac"}
     if venue not in defaults:
         raise AccountReadError("unsupported_venue")
@@ -76,8 +76,9 @@ def prompt_credentials(venue: str, scheme: str | None = None) -> Credentials:
     with warnings.catch_warnings():
         warnings.simplefilter("error",getpass.GetPassWarning)
         try:
-            key=getpass.getpass("API key/token (hidden; never saved): ")
-            secret=(getpass.getpass("Signing secret/private key (hidden; never saved): ")
+            destination="hidden; save to Windows Credential Manager" if saving else "hidden; not saved by this prompt"
+            key=getpass.getpass("API key/token ("+destination+"): ")
+            secret=(getpass.getpass("Signing secret/private key ("+destination+"): ")
                     if scheme in ("nobitex_ed25519","tabdeal_hmac") else None)
         except (getpass.GetPassWarning, EOFError):
             raise AccountReadError("interactive_hidden_input_required") from None
@@ -202,6 +203,31 @@ def exact_sum(a, b):
         return a+b
 
 
+def tabdeal_balance_observations(rows):
+    """Retain ambiguous duplicates without choosing, adding or deduplicating funds."""
+    groups={}
+    for row in rows:
+        native=native_name(row["asset"])
+        free,locked=nonnegative(row["free"]),nonnegative(row["freeze"])
+        groups.setdefault(native.upper(),[]).append({"native_asset":native,"free":free,
+                                                     "locked":locked,"total":exact_sum(free,locked)})
+    balances=[]
+    ambiguous=0
+    for observations in groups.values():
+        if len(observations)==1:
+            balances.append({**observations[0],"balance_state":"single_reported_entry"})
+            continue
+        ambiguous+=1
+        balances.append({"native_asset":observations[0]["native_asset"],
+                         "free":None,"locked":None,"total":None,
+                         "balance_state":"ambiguous_duplicate_asset",
+                         "reported_values_identical":all((r["free"],r["locked"])==
+                             (observations[0]["free"],observations[0]["locked"]) for r in observations),
+                         "observations":observations})
+    return {"balances":balances,"balance_data_complete":ambiguous==0,
+            "ambiguous_balance_groups":ambiguous}
+
+
 def parse_account(venue: str, operation: str, value: dict) -> dict:
     """Whitelist fields. Preserve unknown units/roles; do not invent usable funds."""
     if venue not in READS or operation not in READS[venue]:
@@ -285,11 +311,8 @@ def parse_account(venue: str, operation: str, value: dict) -> dict:
             if key in value:
                 fees.append({"reported_field":key,"liquidity_role":role,"reported_value":nonnegative(value[key]),
                              "normalized_rate":None,"unit":"unverified"})
-        balances=[]
-        for row in value["balances"]:
-            free,locked=nonnegative(row["free"]),nonnegative(row["freeze"])
-            balances.append({"native_asset":native_name(row["asset"]),"free":free,"locked":locked,"total":exact_sum(free,locked)})
-        return {"wallet_type":"spot","balances":distinct_balances(balances),"fee_observations":fees,"fee_rates_usable":False,
+        balances=tabdeal_balance_observations(value["balances"])
+        return {"wallet_type":"spot",**balances,"fee_observations":fees,"fee_rates_usable":False,
                 "fee_status":"commission_unit_unverified" if fees else "missing",
                 "reported_capabilities":{key:boolean_or_unknown(value.get(key)) for key in ("canTrade","canWithdraw","canDeposit")},
                 "capability_scope":"account_response_not_proof_of_key_permissions"}
@@ -344,7 +367,12 @@ def inspect_account(venue: str, credentials: Credentials) -> dict:
         try:
             raw,evidence=read_operation(venue,operation,credentials)
             normalized=parse_account(venue,operation,raw)
-            results.append({"operation":operation,"status":"accepted","data":normalized,"evidence":evidence})
+            partial=normalized.get("balance_data_complete") is False
+            result={"operation":operation,"status":"partial" if partial else "accepted",
+                    "data":normalized,"evidence":evidence}
+            if partial:
+                result["reason"]="ambiguous_duplicate_balances"
+            results.append(result)
         except AccountReadError as exc:
             results.append({"operation":operation,"status":"unavailable","reason":str(exc)})
         except (ValueError,TypeError,KeyError,ArithmeticError,AttributeError):
@@ -382,28 +410,49 @@ def save_assessment(report: dict) -> Path:
     return path
 
 
-def account_check(venue: str, *, legacy_token=False) -> int:
+def account_check(venue: str, *, legacy_token=False, save=False) -> int:
     """Interactive boundary: no secret arguments, raw errors, balances or profile output."""
+    stored=None
     try:
+        from .credentials import CredentialStoreError, load_credentials, save_credentials, supported
         if legacy_token and venue != "nobitex":
             raise AccountReadError("legacy_token_only_for_nobitex")
-        credentials=prompt_credentials(venue,"nobitex_token" if legacy_token else None)
+        if save and not supported():
+            raise AccountReadError("windows_credential_manager_required")
+        credentials=None if save else load_credentials(venue)
+        stored=credentials is not None
+        source="windows_credential_manager" if stored else "hidden_prompt"
+        if credentials is not None and legacy_token and credentials.scheme!="nobitex_token":
+            raise AccountReadError("stored_scheme_mismatch_use_save_credentials")
+        if credentials is None:
+            credentials=prompt_credentials(venue,"nobitex_token" if legacy_token else None,saving=save)
         try:
+            if save:
+                # Explicit save is independent of network availability or parser acceptance.
+                save_credentials(venue,credentials)
+                stored=True
             report=inspect_account(venue,credentials)
+            report.update(credentials_stored=stored,credential_source=source,
+                          credential_storage="windows_credential_manager" if stored else None)
         finally:
-            del credentials  # No persistence; Python strings cannot promise memory zeroization.
+            del credentials  # Release this reference; Python strings cannot promise memory zeroization.
         path=save_assessment(report)
         print(json.dumps({"kind":"account_read_summary","venue":venue,
                           "operations":[{k:v for k,v in r.items() if k in ("operation","status","reason")} for r in report["results"]],
                           "private_report":".local/accounts/"+path.name,
-                          "live_trading_enabled":False,"credentials_stored":False}))
+                          "live_trading_enabled":False,"credentials_stored":stored,
+                          "credential_source":source,
+                          "credential_storage":"windows_credential_manager" if stored else None}))
         return int(not report["all_requested_reads_accepted"])
     except (KeyboardInterrupt,EOFError):
         reason="input_cancelled"
     except AccountReadError as exc:
         reason=str(exc)
+    except CredentialStoreError as exc:
+        reason=str(exc)
     except Exception:
         # Account HTTP libraries may include signed URLs or bodies in exceptions.
         reason="account_check_failed_details_redacted"
-    print(json.dumps({"kind":"account_read_unavailable","reason":reason,"live_trading_enabled":False}))
+    print(json.dumps({"kind":"account_read_unavailable","reason":reason,"live_trading_enabled":False,
+                      "credentials_stored":stored}))
     return 1
