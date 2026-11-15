@@ -345,3 +345,24 @@ historical fees.
   match. Its read is not marked fully accepted, and none of these account
   observations allocates funds or establishes order permissions, a complete
   cost model or profitability. Live trading remains disabled.
+
+## Version 0.14.0 additions (2026-11-15)
+
+- All 268 local tests passed. New research tests reject absent, malformed,
+  duplicate, incomplete and out-of-universe pins; even otherwise accepted data
+  with a changed manifest or normalized hash cannot start a trial or inspect
+  later-stage performance. The existing sequential-gate test also verifies a
+  matching pinned dataset advances to discovery and stops there on rejection.
+- The fixed v4 plan and input-hash enforcement were published in `86de86d`
+  before performance calculation. Each of three preserved v2 datasets replayed
+  482 complete days with exactly zero OHLCV deltas, 11,568 hours, no interior gap
+  and accepted reported-volume quality. Complete date-by-date audit tables were
+  regenerated locally without downloading or overwriting any source data.
+- Three runs completed and all nine candidates were rejected at discovery for
+  negative returns under both base and stressed costs. Thirty artifacts include
+  benchmarks and cost scenarios. Their hashes, plan hash and every Python source
+  hash were checked against the registered code. [Public evidence](../research/evidence/baseline-v4-summary.json).
+- No validation or held-out performance was calculated. November-December 2025
+  was consumed as discovery; no 2026 strategy or benchmark return was inspected.
+  No parameters, gates, account capital, live permission or existing paper
+  configuration changed after observing these outcomes.

@@ -3,6 +3,52 @@
 These are preliminary conditional screens, not realized or deployable returns.
 No personal account balances or capital assumptions are published here.
 
+## baseline-v4: fixed longer discovery, all candidates rejected
+
+Plan and code registration: `86de86d`, published before evaluation. The same
+three v2 datasets passed raw-response reconstruction and the new manifest and
+normalized-data pins. Each contains 482 exact daily matches, 11,568 hourly bars,
+no interior gaps and usable reported volume under the existing acceptance guard.
+Full daily delta tables remain local; hashes and all trial metrics are in the
+[public audit summary](evidence/baseline-v4-summary.json).
+
+Discovery: 2025-07-31 20:30 UTC through 2025-12-31 20:30 UTC, exclusive.
+Signal parameters, synthetic 100-USDT reference cash, 25% entry allocation,
+quantity rules, one-hour decision delay, base/stress costs and advancement gates
+are unchanged from v2. This extends an already observed discovery interval; it
+is exploratory evidence, not an independent replication.
+
+| Asset | Strategy | Base net return | Stress net return | Base max hourly-close drawdown | Completed sells |
+| --- | --- | ---: | ---: | ---: | ---: |
+| BTC | Hold, 25% entry budget | -6.2867% | -6.3468% | 9.2676% | 0 |
+| BTC | 24/168 trend | -4.8490% | -7.2271% | 7.8321% | 17 |
+| BTC | 168/72 breakout | -2.4241% | -3.3437% | 5.3054% | 7 |
+| BTC | 24-hour mean reversion | -4.1787% | -7.1190% | 5.2405% | 23 |
+| ETH | Hold, 25% entry budget | -5.1143% | -5.2257% | 14.2338% | 0 |
+| ETH | 24/168 trend | -1.4051% | -3.7068% | 7.4754% | 16 |
+| ETH | 168/72 breakout | -5.2854% | -6.3160% | 10.3711% | 8 |
+| ETH | 24-hour mean reversion | -7.7067% | -13.3985% | 9.0538% | 46 |
+| SOL | Hold, 25% entry budget | -7.0252% | -7.1246% | 17.0577% | 0 |
+| SOL | 24/168 trend | -6.5978% | -8.8271% | 11.4088% | 17 |
+| SOL | 168/72 breakout | -6.7369% | -7.9997% | 9.4527% | 9 |
+| SOL | 24-hour mean reversion | -6.7982% | -14.1231% | 11.9422% | 59 |
+
+USDT cash returned zero. Every candidate had a negative return in both cost
+scenarios; some also failed the exit-count, drawdown or asset-hold gate. Returns
+are relative to total synthetic starting cash, not only its invested portion.
+The extended BTC trend sample now has enough completed exits, but loses under
+both cost scenarios. The earlier favorable short-window result did not persist
+through the registered extension. This does not establish performance outside
+the tested conditional model or reject every possible strategy.
+
+All three experiments stopped at discovery. No January-October 2026 strategy or
+benchmark return was calculated. The original v2 November-December validation
+has now been consumed as exploratory discovery; it cannot be described as
+unseen validation. There is no automatic further date search or relaxed gate.
+Neither leverage nor reversing a losing signal is justified by these results.
+Historical fees, IRT attribution, intrahour drawdown and execution calibration
+remain unresolved; no real or paper order was made by this study.
+
 ## arbitrage-v1: prospective BTC capacity diagnostic
 
 Plan registration: `77d5f4b`; evaluation code: `5e9ea7a`. One 900-second public

@@ -116,3 +116,10 @@ assets. It supplies no strategy-performance evidence. The public
 failed daily deltas and source hashes. Original recordings and full day-by-day
 tables remain local; no replacement candles, volume imputation or date trimming
 was used to make this experiment pass.
+
+The registered v4 extension reused the accepted, pinned post-gap datasets with
+five months of discovery and unchanged candidates, costs and gates. All nine
+candidates had negative base/stress returns and were rejected. The original
+November-December 2025 validation is now observed exploratory data; no 2026
+strategy or benchmark performance was calculated. This adds rejection evidence,
+not a new parameter choice or a deployable candidate.

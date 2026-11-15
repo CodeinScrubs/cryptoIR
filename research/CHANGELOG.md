@@ -6,6 +6,12 @@ unseen, even if a new filename is used.
 
 ## 2026-11-15: v4 fixed post-gap discovery extension
 
+Outcome after registration: all nine candidates had negative base and stress
+discovery returns and were rejected. November-December 2025 is now observed for
+all three assets. No 2026 strategy or benchmark return was calculated; no window
+or gate revision followed. The results and artifact hashes are in
+[the research ledger](RESULTS.md).
+
 `baseline-v4-post-gap.json` reuses the three v2 datasets after a fresh raw-response
 replay: each has 482 complete daily matches, 11,568 hourly bars, no interior gap
 and usable reported volume under the existing guard. Both manifest and normalized

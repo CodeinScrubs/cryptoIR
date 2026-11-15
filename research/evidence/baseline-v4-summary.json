@@ -1,0 +1,451 @@
+{
+  "schema": 1,
+  "experiment": "baseline-v4-post-gap-extension",
+  "registration_and_code_commit": "86de86d93b4e294d7069b7c0677e05a414ce4c4c",
+  "plan_sha256": "dd733302d7cd22cd24fe13fdfb79f739232967892ba109a9f361ce378e5f7214",
+  "execution_ready": false,
+  "no_strategy_accepted": true,
+  "limitations": "Exploratory window extension informed by prior discovery rejection. Current asset choices and post-gap window selection create bias. Excludes June 2025 outage. Hypothetical current-cost and order-rule assumptions; no historical fee reconstruction, IRT attribution, execution calibration, leverage or statistical significance claim. Reusing data cannot create independent evidence. Any pass only justifies further validation and prospective paper research.",
+  "performance_exposure": "All three assets have now been evaluated through December 2025. No January-October 2026 strategy or benchmark return was computed. Original v2 validation is consumed as exploratory discovery.",
+  "assets": [
+    {
+      "pair": "BTC/USDT",
+      "status": "rejected_at_discovery",
+      "selected": null,
+      "held_out_inspected": false,
+      "dataset_pin_verified": true,
+      "dataset": {
+        "venue": "nobitex",
+        "pair": "BTC/USDT",
+        "manifest_sha256": "f84749adb30da70e9b8ea667806c95d2b712ebbd1bd0d406aabdba454ead51c7",
+        "normalized_sha256": "cafdb285307878a12193e8135be7f1fa3620edcab019cf0d351bedbad98f3c0a",
+        "reconciled": true,
+        "volume_quality": {
+          "bars": 11568,
+          "positive_volume_bars": 11561,
+          "zero_volume_bars": 7,
+          "zero_volume_with_price_range_bars": 0,
+          "first_inconsistent_epoch": null,
+          "last_inconsistent_epoch": null,
+          "usable_for_volume_screen": true,
+          "blocking_reasons": [],
+          "volume_units_verified": false
+        }
+      },
+      "report_sha256": "625216e70d7d22397469dbf83fd89e18ce8efd3e8f12cd337803e8c15109fe09",
+      "journal_sha256": "58846e5524c02fa0c435f74312e3f4d74ffdfdf9f685a4f29688cffa8143b834",
+      "audit_sha256": "885c9c973e5f541f058e2f02b3bee1a7c29580c31921f386cca771fb92917fa9",
+      "daily_table_sha256": "15ef80f25581fb04f130d32a86950aa07478201d5c97ddbbd7c8e0a480500b1c",
+      "reconciliation": {
+        "days": 482,
+        "matched": 482,
+        "hours": 11568,
+        "gaps": 0
+      },
+      "evaluated_start": 1753993800,
+      "evaluated_end_exclusive": 1767213000,
+      "trials": [
+        {
+          "strategy": "cash",
+          "scenario": "base_assumed",
+          "net_return": "0E-10",
+          "max_drawdown": "0",
+          "completed_sells": 0,
+          "sha256": "35ef738c14ff2584789e27011a4e2d56f2ea43023c328395bbf6d63f8b7990c8",
+          "gate_failures": []
+        },
+        {
+          "strategy": "cash",
+          "scenario": "stress_assumed",
+          "net_return": "0E-9",
+          "max_drawdown": "0",
+          "completed_sells": 0,
+          "sha256": "8f7b373ab3e24373d535b8ead06451f0ac708b3b8ccd698d69a0384d895b0681",
+          "gate_failures": []
+        },
+        {
+          "strategy": "hold",
+          "scenario": "base_assumed",
+          "net_return": "-0.062866675752219805",
+          "max_drawdown": "0.09267573631200279966648831697",
+          "completed_sells": 0,
+          "sha256": "7c68be2acf477f65da0857ee8d1daf02d624d01589e6f4ca5c2bbd80ce6e255f",
+          "gate_failures": []
+        },
+        {
+          "strategy": "hold",
+          "scenario": "stress_assumed",
+          "net_return": "-0.06346820588635528",
+          "max_drawdown": "0.09209109343178865142586962777",
+          "completed_sells": 0,
+          "sha256": "3a7178771e317b026de98d224604fc67d9880684904bc8fe5c4ebde564ef4062",
+          "gate_failures": []
+        },
+        {
+          "strategy": "trend_24_168",
+          "scenario": "base_assumed",
+          "net_return": "-0.04848974785390647",
+          "max_drawdown": "0.07832115476761938189065586733",
+          "completed_sells": 17,
+          "sha256": "dd0c83465c00a1ca64f49c3176bbc9df9a8785acac21f7d424e1125a81625802",
+          "gate_failures": [
+            "nonpositive_return"
+          ]
+        },
+        {
+          "strategy": "trend_24_168",
+          "scenario": "stress_assumed",
+          "net_return": "-0.07227074089307422",
+          "max_drawdown": "0.09544062827191805988990561078",
+          "completed_sells": 17,
+          "sha256": "673209d49d044845bec1a5886e283748497dfb12ba2ed3a9a162d5df8b50b474",
+          "gate_failures": [
+            "nonpositive_return"
+          ]
+        },
+        {
+          "strategy": "breakout_168_72",
+          "scenario": "base_assumed",
+          "net_return": "-0.02424065921085518",
+          "max_drawdown": "0.05305400892693814989054082550",
+          "completed_sells": 7,
+          "sha256": "b2ed8a9fccb72b7c3e313aa9f6573e6f3cb5b6ee990625b9e3f82c592cb8142e",
+          "gate_failures": [
+            "nonpositive_return",
+            "insufficient_completed_sells"
+          ]
+        },
+        {
+          "strategy": "breakout_168_72",
+          "scenario": "stress_assumed",
+          "net_return": "-0.03343668025824584",
+          "max_drawdown": "0.05779130644919252717737562021",
+          "completed_sells": 7,
+          "sha256": "36482e95c8e0fa40ce3f7dc096970c9e47580729d12adaf16db0785eb4477f15",
+          "gate_failures": [
+            "nonpositive_return",
+            "insufficient_completed_sells"
+          ]
+        },
+        {
+          "strategy": "reversion_24_2pct",
+          "scenario": "base_assumed",
+          "net_return": "-0.04178709933886317",
+          "max_drawdown": "0.052405052901672085",
+          "completed_sells": 23,
+          "sha256": "b8108b4dd5d1138d24fd4b9066a030bb1918004b96ba388d15046a3d27c0c8ab",
+          "gate_failures": [
+            "nonpositive_return"
+          ]
+        },
+        {
+          "strategy": "reversion_24_2pct",
+          "scenario": "stress_assumed",
+          "net_return": "-0.07118953672425152",
+          "max_drawdown": "0.07738052162688698",
+          "completed_sells": 23,
+          "sha256": "5626c456d922b8c839862bcaf8b4c308b77aeae53ec5ae1ec385141497e269a8",
+          "gate_failures": [
+            "nonpositive_return"
+          ]
+        }
+      ]
+    },
+    {
+      "pair": "ETH/USDT",
+      "status": "rejected_at_discovery",
+      "selected": null,
+      "held_out_inspected": false,
+      "dataset_pin_verified": true,
+      "dataset": {
+        "venue": "nobitex",
+        "pair": "ETH/USDT",
+        "manifest_sha256": "30e52b233c1bee7368c2a1a8b25036db77dc5b8482e46fa185b060166352c091",
+        "normalized_sha256": "0271ab4809c3a30214991f146acbcf579889dc47da8fe19ae564911dd03d8c82",
+        "reconciled": true,
+        "volume_quality": {
+          "bars": 11568,
+          "positive_volume_bars": 11560,
+          "zero_volume_bars": 8,
+          "zero_volume_with_price_range_bars": 0,
+          "first_inconsistent_epoch": null,
+          "last_inconsistent_epoch": null,
+          "usable_for_volume_screen": true,
+          "blocking_reasons": [],
+          "volume_units_verified": false
+        }
+      },
+      "report_sha256": "5cb212dfffee5b7cd963e1c2a0c9a408ffdab51268256e04581f0ef61d9e688b",
+      "journal_sha256": "6727c3125da7a6842ef52a55bd3a3890246cb6eb214c4f12989feb978f8bc83d",
+      "audit_sha256": "e8a0e7860157b7821a629877f2a0e3c65e2159aaeb85e9c8cf438ea663185ba4",
+      "daily_table_sha256": "43c009d0347053d921535b143a106286e6437e12f385bbf9535f37c8b6d834a9",
+      "reconciliation": {
+        "days": 482,
+        "matched": 482,
+        "hours": 11568,
+        "gaps": 0
+      },
+      "evaluated_start": 1753993800,
+      "evaluated_end_exclusive": 1767213000,
+      "trials": [
+        {
+          "strategy": "cash",
+          "scenario": "base_assumed",
+          "net_return": "0E-9",
+          "max_drawdown": "0",
+          "completed_sells": 0,
+          "sha256": "2d636c4bf0ce6c8f6bad3e19e11d13ed3077195da465706941ed2a3e59fc814d",
+          "gate_failures": []
+        },
+        {
+          "strategy": "cash",
+          "scenario": "stress_assumed",
+          "net_return": "0E-8",
+          "max_drawdown": "0",
+          "completed_sells": 0,
+          "sha256": "ce5b61a51e94ce59748feee1947a50101a1a32472651accbc59714e379fb8bf1",
+          "gate_failures": []
+        },
+        {
+          "strategy": "hold",
+          "scenario": "base_assumed",
+          "net_return": "-0.051143308535880",
+          "max_drawdown": "0.1423382655071126408247851195",
+          "completed_sells": 0,
+          "sha256": "b5da0f9f453756eedb2838533b0d81e8cdcdbb03fa1f96e3258fb9087c41476b",
+          "gate_failures": []
+        },
+        {
+          "strategy": "hold",
+          "scenario": "stress_assumed",
+          "net_return": "-0.052256530546242",
+          "max_drawdown": "0.1417779385701974169633361519",
+          "completed_sells": 0,
+          "sha256": "5a9d81513ff91aeacfe2860d5a0e8363545e29b6b77d4ed8ad1c7c08fe173c62",
+          "gate_failures": []
+        },
+        {
+          "strategy": "trend_24_168",
+          "scenario": "base_assumed",
+          "net_return": "-0.01405134687192949",
+          "max_drawdown": "0.07475435014981616532043192791",
+          "completed_sells": 16,
+          "sha256": "dd93294c6706f3ca761098d5177dee98d523ce3f5dfc27b1e4a0d335f8428197",
+          "gate_failures": [
+            "nonpositive_return"
+          ]
+        },
+        {
+          "strategy": "trend_24_168",
+          "scenario": "stress_assumed",
+          "net_return": "-0.03706812827131016",
+          "max_drawdown": "0.09234036474605935965303388789",
+          "completed_sells": 16,
+          "sha256": "fb1feeafea83c99ee743f8e834f91434210ffcb859fcc06c4de5f344cfef65ac",
+          "gate_failures": [
+            "nonpositive_return"
+          ]
+        },
+        {
+          "strategy": "breakout_168_72",
+          "scenario": "base_assumed",
+          "net_return": "-0.05285425285936115",
+          "max_drawdown": "0.1037114518116931631456309916",
+          "completed_sells": 8,
+          "sha256": "86157ac4b8f9c38777fcdba9944fb8f6d87debd695de60a28db45396558907bb",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit",
+            "insufficient_completed_sells",
+            "does_not_beat_equal_allocation_hold"
+          ]
+        },
+        {
+          "strategy": "breakout_168_72",
+          "scenario": "stress_assumed",
+          "net_return": "-0.06316041394104462",
+          "max_drawdown": "0.1120436844091519165774639236",
+          "completed_sells": 8,
+          "sha256": "41923f18d74131e4dd77d252d4beba55b879f293806a669886782df5338529b2",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit",
+            "insufficient_completed_sells"
+          ]
+        },
+        {
+          "strategy": "reversion_24_2pct",
+          "scenario": "base_assumed",
+          "net_return": "-0.077067221915675875",
+          "max_drawdown": "0.09053818777508745",
+          "completed_sells": 46,
+          "sha256": "efd4e352841d43dd5c48adc9c362cf436070b1d07ae7add4a170df472ac71942",
+          "gate_failures": [
+            "nonpositive_return",
+            "does_not_beat_equal_allocation_hold"
+          ]
+        },
+        {
+          "strategy": "reversion_24_2pct",
+          "scenario": "stress_assumed",
+          "net_return": "-0.13398546636439858",
+          "max_drawdown": "0.13505371779963164",
+          "completed_sells": 46,
+          "sha256": "f3c197643e01f019bbb7c505c1f7c186208511f09251a7c7e32c1e8667fc4f91",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit"
+          ]
+        }
+      ]
+    },
+    {
+      "pair": "SOL/USDT",
+      "status": "rejected_at_discovery",
+      "selected": null,
+      "held_out_inspected": false,
+      "dataset_pin_verified": true,
+      "dataset": {
+        "venue": "nobitex",
+        "pair": "SOL/USDT",
+        "manifest_sha256": "ca2c645d109699119b5a7838dc26f6575309cfb5496088dd6a96771dfa534933",
+        "normalized_sha256": "735fa75b85abf03c5dfc6ef3bc20ee753af0c09b7c71ce7e5deaaf90c90a5080",
+        "reconciled": true,
+        "volume_quality": {
+          "bars": 11568,
+          "positive_volume_bars": 11547,
+          "zero_volume_bars": 21,
+          "zero_volume_with_price_range_bars": 0,
+          "first_inconsistent_epoch": null,
+          "last_inconsistent_epoch": null,
+          "usable_for_volume_screen": true,
+          "blocking_reasons": [],
+          "volume_units_verified": false
+        }
+      },
+      "report_sha256": "442d8696d5a327ff10a3128a1c58f1dd56b4ece918d20452767750fc30375da8",
+      "journal_sha256": "b1e72a98789ce56167a7ad19a8709baa89b34fa399554222aea82e0783ff9a2a",
+      "audit_sha256": "d4899e70779ff31381d9fba66f0d3cb328b044e245f6cdd055d9c679fc6f31e4",
+      "daily_table_sha256": "4912a60512449eacf3dcec9acaaee428e86bea9d672f87cf33f790070374886e",
+      "reconciliation": {
+        "days": 482,
+        "matched": 482,
+        "hours": 11568,
+        "gaps": 0
+      },
+      "evaluated_start": 1753993800,
+      "evaluated_end_exclusive": 1767213000,
+      "trials": [
+        {
+          "strategy": "cash",
+          "scenario": "base_assumed",
+          "net_return": "0E-10",
+          "max_drawdown": "0",
+          "completed_sells": 0,
+          "sha256": "fbb7c4e5cb8a6ea9dd7bd088bf8d688b001cd977a7398a59603c50b849b0a57e",
+          "gate_failures": []
+        },
+        {
+          "strategy": "cash",
+          "scenario": "stress_assumed",
+          "net_return": "0E-9",
+          "max_drawdown": "0",
+          "completed_sells": 0,
+          "sha256": "b46032dd656fd52c2374fabf7b13f3788133de91e17e06b0889f8b06834dd105",
+          "gate_failures": []
+        },
+        {
+          "strategy": "hold",
+          "scenario": "base_assumed",
+          "net_return": "-0.070251866244079675",
+          "max_drawdown": "0.1705770192226821414184864984",
+          "completed_sells": 0,
+          "sha256": "c88713947f7c5f79596bfe1a56d9020bf5ff83f8af28287a2a4845658e98f6d9",
+          "gate_failures": []
+        },
+        {
+          "strategy": "hold",
+          "scenario": "stress_assumed",
+          "net_return": "-0.0712462659506167",
+          "max_drawdown": "0.1699289095021096772385828733",
+          "completed_sells": 0,
+          "sha256": "1d50d2098e6c8cd75c03748ef710c27f2a2f2a92a1f835ae6512c2af0cee402d",
+          "gate_failures": []
+        },
+        {
+          "strategy": "trend_24_168",
+          "scenario": "base_assumed",
+          "net_return": "-0.065977854717139341",
+          "max_drawdown": "0.1140875841675041412139123357",
+          "completed_sells": 17,
+          "sha256": "04cbff3370b291d857c28d0afec2950f77a1f01e731821095e36e640af79c886",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit"
+          ]
+        },
+        {
+          "strategy": "trend_24_168",
+          "scenario": "stress_assumed",
+          "net_return": "-0.08827062199348614",
+          "max_drawdown": "0.1340782581131127037185441568",
+          "completed_sells": 17,
+          "sha256": "01bf4c7a27c065bdd4de1a7d24b4651536145fb27885d2dcd4c29f85c41d2327",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit"
+          ]
+        },
+        {
+          "strategy": "breakout_168_72",
+          "scenario": "base_assumed",
+          "net_return": "-0.0673689591655465145",
+          "max_drawdown": "0.09452685914941923333542549713",
+          "completed_sells": 9,
+          "sha256": "385cc7edfeb474b86ed441c5063ca479aeb618ed2c438962c3c005ed7def6d64",
+          "gate_failures": [
+            "nonpositive_return",
+            "insufficient_completed_sells"
+          ]
+        },
+        {
+          "strategy": "breakout_168_72",
+          "scenario": "stress_assumed",
+          "net_return": "-0.079996588621108446",
+          "max_drawdown": "0.1041794100156243248645177838",
+          "completed_sells": 9,
+          "sha256": "a41924d7ab03f443720bb278412f1748b35159efaaf561f0160e8137943182e3",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit",
+            "insufficient_completed_sells"
+          ]
+        },
+        {
+          "strategy": "reversion_24_2pct",
+          "scenario": "base_assumed",
+          "net_return": "-0.0679819428043940335",
+          "max_drawdown": "0.1194219054358396975",
+          "completed_sells": 59,
+          "sha256": "fc57292920294da9f89283c0029db1765eb5f9c73411c9dd81f8e04eb812e851",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit"
+          ]
+        },
+        {
+          "strategy": "reversion_24_2pct",
+          "scenario": "stress_assumed",
+          "net_return": "-0.14123105636415522",
+          "max_drawdown": "0.174065030854351772",
+          "completed_sells": 59,
+          "sha256": "ec67a006276beb05ea5d03b9fabb4229cdeb823feb9bd334d6d1121c9427e4d8",
+          "gate_failures": [
+            "nonpositive_return",
+            "drawdown_above_limit"
+          ]
+        }
+      ]
+    }
+  ]
+}
