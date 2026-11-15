@@ -3,6 +3,23 @@
 These are preliminary conditional screens, not realized or deployable returns.
 No personal account balances or capital assumptions are published here.
 
+## fx-history-v1: Toman reference rejected before return calculation
+
+Registration/collection code: `6f3d97e`. The scoped Wallex USDT/IRT adapter uses
+source-declared Toman metadata, retains raw prices and seals the original catalog
+in the dataset. The fixed July 30 through December 31, 2025 window completed nine
+successful public requests: 3,720 hours, 155 days, no gaps and positive hourly
+volume. Exact hourly/daily reconciliation still failed on October 3, November 3,
+December 9, December 28 and December 29. Three dates have price discrepancies;
+all five have volume discrepancies. The other 150 dates match exactly.
+
+The [failure table](../docs/HISTORICAL_FX.md) and [artifact hashes](evidence/fx-history-v1-summary.json)
+preserve the disagreement without choosing which resolution is correct. No IRT
+return or currency attribution was calculated. No rows were dropped, replaced
+or interpolated, and no tolerance, window revision or retry followed. This is a
+failed data acceptance step, not a strategy result. Prior experiments and all
+2026 performance gates remain unchanged. No account action or paper mutation occurred.
+
 ## rotation-v1: weekly relative momentum, rejected at discovery
 
 Plan registration: `1e35e7c`; implementation and evaluation: `39317f2`.

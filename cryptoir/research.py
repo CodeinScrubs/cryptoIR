@@ -26,6 +26,9 @@ def session_boundary(date: str, phase: int) -> int:
 def validate_plan(plan: dict):
     if plan.get("schema") != 1 or plan.get("benchmarks") != ["cash", "hold"]:
         raise DataError("unsupported research plan")
+    if (not isinstance(plan.get("pairs"), list) or not plan["pairs"]
+            or any(not isinstance(pair, str) or not pair.endswith("/USDT") for pair in plan["pairs"])):
+        raise DataError("strategy research requires explicit USDT-quoted history")
     candidates = plan["candidates"]
     if (not candidates or len(candidates) != len(set(candidates))
             or any(s not in STRATEGIES or s in ("cash", "hold") for s in candidates)):

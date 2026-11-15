@@ -6,6 +6,11 @@ unseen, even if a new filename is used.
 
 ## 2026-11-15: external Toman reporting-reference collection
 
+Outcome: all nine requests completed, yielding 3,720 hours and 155 daily sessions.
+Five dates failed exact OHLCV reconciliation, so the reference was rejected before
+any IRT return calculation. No date trimming, source patching, tolerance or retry
+followed. [All failures](evidence/fx-history-v1-summary.json) are retained.
+
 `fx-history-v1.json` freezes a bounded Wallex USDT/IRT download for 2025-07-30
 through 2026-01-01 exclusive: eight hourly requests and one daily request, with
 no automatic retry. Its current public catalog explicitly identifies USDTTMN's

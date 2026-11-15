@@ -69,6 +69,12 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
+Historical Toman reporting remains blocked on accepted FX evidence. A scoped
+Wallex USDT/IRT collector now preserves source-declared currency metadata, but
+five of the first 155 daily comparisons disagreed. Nobitex USDTIRT history probes
+returned HTTP 403. No historical IRT returns or conversion fills were inferred.
+These are evidence gaps in this reporting component, not overall project completion.
+
 Shared-cash multi-asset screening is implemented and locally tested, including
 separate delayed exits/entries, residual accounting and full-capital BTC holding
 comparison. The registered relative-momentum trial failed profit, drawdown and

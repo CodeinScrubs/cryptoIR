@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.17.0، موتور پژوهش چنددارایی با حساب مشترک و مقایسه با نگهداری بیت‌کوین با کل سرمایه اضافه شد. راهبرد چرخش هفتگی در نخستین آزمون رد شد؛ عملکرد ۲۰۲۶ همچنان ارزیابی نشده است. آربیتراژ سه‌مرحله‌ای برای ۲۲۰ داراییِ قابل‌ارزیابی و ۹ نامزد قبلی نیز شواهد لازم را فراهم نکردند. ذخیرهٔ محلی کلیدها و خواندن حساب‌ها پیاده‌سازی شده؛ پاسخ کلی حساب تبدیل هنوز partial است. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم.**
+**وضعیت فعلی: نسخهٔ 0.18.0، پشتیبانی محدود از تاریخچهٔ تتر/تومان والکس با سند واحد قیمت اضافه شد. مجموعهٔ ۱۵۵روزه به‌علت اختلاف دادهٔ ساعتی و روزانه در ۵ روز پذیرفته نشد؛ گزارش تاریخی بازده تومانی هنوز آماده نیست. موتور پژوهش چنددارایی موجود است، اما راهبرد چرخش هفتگی، نامزدهای قبلی و آربیتراژ بررسی‌شده شواهد لازم را فراهم نکردند. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم؛ معاملهٔ واقعی غیرفعال است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -61,6 +61,10 @@ The [shared-cash rotation screen](docs/ROTATION.md) tests one registered relativ
 momentum portfolio across BTC, ETH and SOL. It requires delayed exits before
 new entries, preserves residual holdings and compares the same initial cash
 against both matched-allocation and full-capital BTC holding.
+
+The [historical Toman-reference audit](docs/HISTORICAL_FX.md) preserves explicit
+Wallex quote-unit metadata and rejects the first FX dataset for five daily
+disagreements. Historical IRT portfolio returns remain unavailable.
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

@@ -129,3 +129,8 @@ with three synchronized assets, sequential cash-funded switches and both matched
 and full-capital BTC benchmarks. Its fixed weekly relative-momentum candidate
 also failed discovery. This does not alter old plans, single-asset results or
 their comparison rules. Historical IRT attribution remains unavailable.
+
+Version 0.18.0 adds scoped Wallex USDT/IRT historical collection with original
+catalog evidence of the Toman quote unit. Its first 155-day reference failed exact
+reconciliation on five dates and was rejected before attribution. Existing USDT
+strategy plans now explicitly reject fiat-quoted inputs. [Unit and audit details](HISTORICAL_FX.md).

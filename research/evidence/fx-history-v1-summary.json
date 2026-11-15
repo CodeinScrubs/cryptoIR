@@ -1,0 +1,226 @@
+{
+  "schema": 1,
+  "experiment": "fx-history-v1",
+  "status": "rejected_at_data_acceptance",
+  "collection_registration_and_implementation_commit": "6f3d97eea590bec24fd1e86fa9fb95575c1c8b65",
+  "plan_sha256": "4014125445cf8f041b6b1f4c4828ab872c41ca82b4a6b2ba7a77a7066b3e61f3",
+  "dataset": {
+    "venue": "wallex",
+    "pair": "USDT/IRT",
+    "manifest_sha256": "7b6292a6a5c2f72ee4b4eba66c5a9eb8a6c67db8108852b866d37a16e8139197",
+    "normalized_sha256": "3be05569bdd216c21ff36df7b2aa3005865ad510ea876e16b4822f414f39a2e9",
+    "unit_identity": {
+      "native_symbol": "USDTTMN",
+      "canonical_pair": "USDT/IRT",
+      "quote_unit": "IRT",
+      "raw_price_multiplier": "1",
+      "evidence_scope": "current_source_declared_currency_identity",
+      "historical_execution_rules_verified": false,
+      "catalog_sha256": "00b60c28735aa1914fe95af440e03298f730fa4d8489cd257ac7878fed105a62"
+    },
+    "reconciled": false,
+    "volume_quality": {
+      "bars": 3720,
+      "positive_volume_bars": 3720,
+      "zero_volume_bars": 0,
+      "zero_volume_with_price_range_bars": 0,
+      "first_inconsistent_epoch": null,
+      "last_inconsistent_epoch": null,
+      "usable_for_volume_screen": true,
+      "blocking_reasons": [],
+      "volume_units_verified": false
+    },
+    "day_phase_utc_seconds": 0,
+    "bars": 3720,
+    "gap_count": 0,
+    "covered_start": 1753833600,
+    "covered_end": 1767225600
+  },
+  "days": 155,
+  "matched_days": 150,
+  "failed_days": [
+    {
+      "date_utc": "2025-10-03",
+      "day_open_epoch": 1759449600,
+      "hour_count": 24,
+      "deltas": {
+        "open": "476",
+        "high": "833",
+        "low": "-362",
+        "close": "0",
+        "volume": "5287462.93225376"
+      },
+      "matched": false
+    },
+    {
+      "date_utc": "2025-11-03",
+      "day_open_epoch": 1762128000,
+      "hour_count": 24,
+      "deltas": {
+        "open": "232",
+        "high": "3",
+        "low": "0",
+        "close": "0",
+        "volume": "2271926.32736756"
+      },
+      "matched": false
+    },
+    {
+      "date_utc": "2025-12-09",
+      "day_open_epoch": 1765238400,
+      "hour_count": 24,
+      "deltas": {
+        "open": "-1373",
+        "high": "0",
+        "low": "0",
+        "close": "0",
+        "volume": "1084360.35587866"
+      },
+      "matched": false
+    },
+    {
+      "date_utc": "2025-12-28",
+      "day_open_epoch": 1766880000,
+      "hour_count": 24,
+      "deltas": {
+        "open": "0",
+        "high": "0",
+        "low": "0",
+        "close": "0",
+        "volume": "131.70000000"
+      },
+      "matched": false
+    },
+    {
+      "date_utc": "2025-12-29",
+      "day_open_epoch": 1766966400,
+      "hour_count": 24,
+      "deltas": {
+        "open": "0",
+        "high": "0",
+        "low": "0",
+        "close": "0",
+        "volume": "-917.32000000"
+      },
+      "matched": false
+    }
+  ],
+  "minimum_request_start_spacing_ns": 1100306000,
+  "request_count": 9,
+  "http_statuses": [
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "artifact_sha256": {
+    "manifest.json": "7b6292a6a5c2f72ee4b4eba66c5a9eb8a6c67db8108852b866d37a16e8139197",
+    "unit-catalog.json": "00b60c28735aa1914fe95af440e03298f730fa4d8489cd257ac7878fed105a62",
+    "hourly.jsonl": "3be05569bdd216c21ff36df7b2aa3005865ad510ea876e16b4822f414f39a2e9",
+    "reconciliation.json": "9194f4da225ff1ea0b047ffa26c0f773c1e3150d88a651946f541cf969a6ef00",
+    "replayed-audit.json": "4dc14b0a341e559f72502dc775fdf5884d8292abcfb88abd2c8e69c47b0b8332",
+    "daily-deltas.txt": "5d831cdd433b7e9cdcd2480fbb403a445355d30e6b9c545cfa967e50cd8e1bf5"
+  },
+  "raw_artifacts": [
+    {
+      "name": "raw-0000.json",
+      "sha256": "1f2f486a97fe7f6d6d23cc98501b0ce1b51bf6692b5817cfbf856d9bc8c600d4"
+    },
+    {
+      "name": "raw-0001.json",
+      "sha256": "e983c5559c20667403cacef373c7e2efed95a88837268f84d4923bcf7a6950ae"
+    },
+    {
+      "name": "raw-0002.json",
+      "sha256": "3f00c186cd5362e6e1b786c718a549730be5250b2d1be8f4e5d648b62bdd9b46"
+    },
+    {
+      "name": "raw-0003.json",
+      "sha256": "7592d73eb3f4856e33948fbe53d85f2521473ed08f969cb06d5b871cea634fd3"
+    },
+    {
+      "name": "raw-0004.json",
+      "sha256": "ca8d9932fbe4a375211e36fd9afcb31aaf307623f07f3954e1b022c9aabb8c4a"
+    },
+    {
+      "name": "raw-0005.json",
+      "sha256": "bc83fef7bf56c66bc20ba8d612a6c7aa46a58daa341c3055570c252a65e3ee83"
+    },
+    {
+      "name": "raw-0006.json",
+      "sha256": "169b35cdcf36ea07ab23c99c023518d3c063afeb274c67b39c6934bbc622878c"
+    },
+    {
+      "name": "raw-0007.json",
+      "sha256": "6b7ced800aa2682bee43805b8da69abb3dba0e4bae369b810c2e429e15559e73"
+    },
+    {
+      "name": "raw-0008.json",
+      "sha256": "b8ae1a18b5dcfd0992fe39c6ded29d49569558a1ca1fb7708ac258b0df057a00"
+    }
+  ],
+  "audit_module_sha256": {
+    "history.py": "1cd4bf0d419fc8f20085af69bfc8853e1674217a7f0993dbfcceeaafa0ede01e",
+    "feeds.py": "e2ab29ccb324b79e8e8a5470e2131044960011e580ad7af41d642b492e840dae",
+    "catalog.py": "a38caf67e863ccaf850ba564271ac19b9a674d9eba56e5470a1d16287da000d0",
+    "domain.py": "33e9588594fa0cd481b60a2b799c10d29ddf25364ba84963070b946de59d140a",
+    "streams.py": "ab65b81b064458b79683dd6cbfb2471a74f9c68095b9b12fe14fbe3502406e56",
+    "triangular.py": "3c447a7c451babe17a60f99439e5ee8e2c3aa5f1ba90b575275179195b7df335"
+  },
+  "bounded_source_attempts": [
+    {
+      "artifact": "trades.json",
+      "sha256": "6201d2846f2b0f2bf8a50334cfa6a729dff3079cd918adc0c92b3e854745f45b",
+      "url": "https://apiv2.nobitex.ir/v2/trades/USDTIRT",
+      "kind": "snapshot",
+      "http_status": 200,
+      "started_ns": 1794772533894900700,
+      "received_ns": 1794772534454051300
+    },
+    {
+      "artifact": "minute-candles.json",
+      "sha256": "193cbb5e4072e41dfb6e8a5e3df0e2c8e84380fb9bc0750bd7a981e2fc017bc0",
+      "url": "https://apiv2.nobitex.ir/market/udf/history?symbol=USDTIRT&resolution=1&from=1794772440&to=1794772559",
+      "kind": "error",
+      "http_status": 403,
+      "started_ns": 1794772543824337200,
+      "received_ns": 1794772544111391900
+    },
+    {
+      "artifact": "hourly-candles.json",
+      "sha256": "8793c94721a79472613e620ea2b24a0178710f8f710d502c2f35589ca53f84d5",
+      "url": "https://apiv2.nobitex.ir/market/udf/history?symbol=USDTIRT&resolution=60&from=1794682800&to=1794769199",
+      "kind": "error",
+      "http_status": 403,
+      "started_ns": 1794772573057957800,
+      "received_ns": 1794772573360333200
+    },
+    {
+      "artifact": "wallex-hourly-probe.json",
+      "sha256": "769d51295938ed98252e72f26d56571261808c1a6426b8345b272f6bd5e8e91b",
+      "url": "https://api.wallex.ir/v1/udf/history?symbol=USDTTMN&resolution=60&from=1754006400&to=1754092799",
+      "kind": "snapshot",
+      "http_status": 200,
+      "started_ns": 1794772679100933400,
+      "received_ns": 1794772679327462500
+    },
+    {
+      "artifact": "wallex-catalog.json",
+      "sha256": "00b60c28735aa1914fe95af440e03298f730fa4d8489cd257ac7878fed105a62",
+      "url": "https://api.wallex.ir/hector/web/v1/markets",
+      "kind": "snapshot",
+      "http_status": 200,
+      "started_ns": 1794772691100452900,
+      "received_ns": 1794772692649716200
+    }
+  ],
+  "historical_irt_return_computed": false,
+  "currency_attribution_available": false,
+  "execution_ready": false,
+  "interpretation": "All 155 complete UTC sessions and 3720 hourly bars were retained. Five exact OHLCV disagreements block the registered FX reference. No interpolation, day trimming, tolerated delta, replacement candle or retry. Current source-declared Toman identity is established; historical reference quality and conversion liquidity remain separate requirements. No 2026 strategy/benchmark return, new strategy trial, paper mutation or account action."
+}

@@ -478,3 +478,29 @@ historical fees.
   comparisons were beaten but no candidate advanced. All 2026 performance stayed
   unopened. No tuning, paper mutation, account allocation or live action occurred.
   [Metrics and artifact hashes](../research/evidence/rotation-v1-summary.json).
+
+## Version 0.18.0 additions (2026-11-15)
+
+- All 318 local tests passed. Four new history scenarios cover source-declared
+  Toman identity, strict venue/pair scope, raw-price preservation, copied unit
+  provenance, absent metadata before any network/output, changed multipliers,
+  raw/payload tampering and duplicate metadata. One new research scenario blocks
+  fiat or mixed-quote histories from being modeled as USDT strategy capital.
+- Collection registration/implementation `6f3d97e` passed all four Windows/Linux
+  Python 3.11/3.13 CI jobs in run `43755622467`. The current public Wallex catalog
+  explicitly identifies USDTTMN's quote as Toman; it is copied into the dataset,
+  hash-sealed and reconstructed during audit. No magnitude-based scaling is used.
+- The nine registered requests all returned HTTP 200, with minimum start spacing
+  1.100306 seconds. Raw replay retained 3,720 hours and 155 daily sessions, with
+  no gaps/missing days and positive reported volume in each hour.
+- Exact daily reconciliation failed on five dates; 150 matched with zero deltas.
+  All failed dates have 24 hours. Three have price disagreements and all five
+  have volume disagreements. Complete per-date delta tables and original raw
+  evidence remain local. Relevant audit-module bytes match `6f3d97e`.
+- Two separate bounded Nobitex USDTIRT history probes returned HTTP 403; a public
+  trade request and the one-day Wallex availability probe succeeded. No permanent
+  service-availability conclusion or alternate-host workaround was inferred.
+- [Public evidence](../research/evidence/fx-history-v1-summary.json) preserves
+  every source attempt, failed date, input/artifact hash and unit interpretation.
+  No IRT return, window trimming, delta tolerance, source repair, retry, strategy
+  trial, 2026 performance inspection, account action or paper mutation followed.

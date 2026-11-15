@@ -21,6 +21,11 @@ class ResearchTests(unittest.TestCase):
     def test_preregistered_plan_is_valid(self):
         validate_plan(self.plan)
 
+    def test_fiat_reference_cannot_be_mislabeled_as_usdt_strategy_capital(self):
+        for pairs in (["USDT/IRT"],["BTC/USDT","USDT/IRT"],[],None):
+            with self.subTest(pairs=pairs),self.assertRaisesRegex(DataError,"USDT-quoted"):
+                validate_plan({**self.plan,"pairs":pairs})
+
     def test_overlapping_splits_are_rejected(self):
         self.plan["splits"][1]["start"] = "2025-10-01"
         with self.assertRaises(DataError):
