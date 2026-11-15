@@ -286,3 +286,18 @@ historical fees.
 - [Public audit evidence](../research/evidence/baseline-v3-data-audit.json) records
   every failed day, manifest/data hashes, the fresh-request hashes and v2 checks.
   Complete daily tables and original public responses are preserved locally.
+
+## Version 0.12.0 additions (2026-11-15)
+
+- All 243 local tests passed. Eighteen added scenarios cover received-base and
+  quote buy fees, residual inventory and rounding, depth-weighted costs, both-leg
+  reserves, independent cash/base ceilings, known minimums, unknown/stale/future
+  timestamps, invalid costs, causal replay, invalidation, corrupt source frames,
+  pinned catalog/rule mismatch, exclusive output, absent routes and truncated observations.
+- Registered rule values were independently reconstructed from the current
+  public catalog bodies. Catalog SHA-256:
+  `7af65da7fd08e350b3cb8b8fc6a3541433248b109fcce8229a42198392252ef4`.
+  Wallex's spot minimum remains unknown; an OTC minimum is not substituted.
+- The new command is a conditional capacity diagnostic. It does not simulate
+  orders, sum overlapping estimates, mutate balances or establish profitability.
+  See [its assumptions and boundaries](ARBITRAGE.md).

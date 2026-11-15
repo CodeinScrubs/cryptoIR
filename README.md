@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.11.1، کنترل مستقل کیفیت حجم تاریخی؛ همراه با مشخصات عمومی بازارهای اهرمی، محاسبات عمومی مارجین والکس، بررسی فقط‌خواندنی حساب‌ها و paper نوبیتکس. اتصال حساب واقعی و سودآوری هنوز تأیید نشده است.**
+**وضعیت فعلی: نسخهٔ 0.12.0، ارزیابی اختلاف قیمت با کارمزد هر صرافی، گردکردن مقدار و سقف موجودی؛ همراه با کنترل کیفیت داده، بررسی فقط‌خواندنی حساب‌ها و paper نوبیتکس. اتصال حساب واقعی و سودآوری هنوز تأیید نشده است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -47,6 +47,11 @@ The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/U
 ## Roadmap and evidence
 
 See [project scope and architecture](docs/PROJECT.md), [exchange capabilities](docs/EXCHANGES.md), [leveraged-product observations](docs/LEVERAGE.md), [read-only account setup](docs/ACCOUNTS.md), [stream semantics](docs/STREAMS.md), [paper model and limits](docs/PAPER.md), [persistent paper risk](docs/RISK.md), [forward operation](docs/FORWARD.md), [IRT capital and benchmarks](docs/VALUATION.md), [local dashboard](docs/DASHBOARD.md), [history and research](docs/RESEARCH.md) and [validation record](docs/VALIDATION.md).
+
+The [registered cross-venue diagnostic](docs/ARBITRAGE.md) also checks received-base
+buy fees, independent inventory ceilings and observed minimums. It retains
+unknown fields and source-time exclusions. Snapshot estimates cannot be summed
+into realized profit and do not model asynchronous two-leg execution.
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

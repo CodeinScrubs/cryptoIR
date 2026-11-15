@@ -132,6 +132,11 @@ def main() -> int:
     estimate.add_argument("--fee", required=True, type=number, help="assumed fee per leg, e.g. 0.004; NOT account-verified")
     estimate.add_argument("--reserve-bps", required=True, type=number)
     estimate.add_argument("--max-age-ms", type=int, default=5000)
+    spread = commands.add_parser("spread-screen", help="registered fee-aware snapshot capacity diagnostic; no fills")
+    spread.add_argument("--plan", type=Path, required=True)
+    spread.add_argument("--catalog", type=Path, required=True)
+    spread.add_argument("--recording", type=Path, required=True)
+    spread.add_argument("--output", type=Path, required=True)
     paper = commands.add_parser("paper-demo", help="synthetic durable accounting exercise, not a trading strategy")
     paper.add_argument("--output", required=True, type=Path)
     risk_demo = commands.add_parser("risk-demo", help="synthetic loss, risk latch and restart exercise")
@@ -303,6 +308,11 @@ def main() -> int:
                                 reserve_bps=args.reserve_bps, max_age_ns=args.max_age_ms * 1_000_000):
             print(encode(result))
         return 0
+    if args.command == "spread-screen":
+        from .arbitrage import run_spread_screen
+        report = run_spread_screen(args.plan, args.catalog, args.recording, args.output)
+        print(encode({k: report[k] for k in ("experiment", "status", "execution_ready", "scenarios_and_routes")}))
+        return int(report["status"] != "completed_conditional_diagnostic")
     if args.command == "audit":
         report = audit(args.path)
         print(encode(report))
