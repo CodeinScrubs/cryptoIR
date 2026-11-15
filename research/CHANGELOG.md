@@ -6,6 +6,11 @@ unseen, even if a new filename is used.
 
 ## 2026-11-15: single-venue triangular feasibility registration
 
+Outcome after the registered capture: all twenty samples completed. All six
+routes had twenty valid comparisons in each of the three scenarios, with zero
+positive estimates even without fees/reserves. No changed window, parameter,
+cost threshold or retry followed; [results and evidence](RESULTS.md) are retained.
+
 `triangular-v1.json` freezes both USDT -> asset -> IRR -> USDT and reverse
 cycles for BTC, ETH and SOL at Nobitex. One availability-only public setup probe
 established the seven book schemas and source timestamps; no cycle return was

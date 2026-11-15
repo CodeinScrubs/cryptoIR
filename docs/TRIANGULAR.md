@@ -9,6 +9,11 @@ performance calculation. It freezes 20 samples, at least 30 seconds between
 requests, a synthetic 10-USDT budget per cycle, 10% displayed-depth participation,
 observed minimums/increments, and zero/base/stress cost scenarios.
 
+The first prospective capture completed all twenty samples. All six routes were
+nonpositive in all three scenarios, including zero cost; no comparison was
+rejected. [Recorded results and hashes](../research/RESULTS.md) retain the failed
+feasibility observation. It is not a universal rejection across market periods.
+
 ## Source and units
 
 The official [market-data reference](https://github.com/nobitex/docs-api/blob/master/source/includes/_market_data.md)

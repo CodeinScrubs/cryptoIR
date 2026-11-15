@@ -382,3 +382,39 @@ historical fees.
   resolution, balance allocation or trading permission was inferred. The normal
   Tabdeal account check now retains both results and still exits nonzero for an
   incomplete assessment. [Official routes and boundaries](ACCOUNTS.md).
+
+## Version 0.15.0 additions (2026-11-15)
+
+- All 289 local tests passed. Seventeen triangular scenarios cover explicit
+  rial mappings, both cycle directions, multi-level depth, displayed participation,
+  fee/reserve propagation, retained starting cash and intermediate dust,
+  minimums, insufficient exit depth, stale/future/unknown source time, wrong
+  venue/units/ticks, pinned catalog rules, bounded plans, corrupt raw/payload
+  evidence, duplicate JSON, capture spacing, missing books, incomplete footer,
+  absent routes, exclusive outputs and stopping after a source error.
+- Plan `triangular-v1.json` was registered in `68b6b1c`. Implementation commit
+  `d6de259` passed Windows/Linux CI on Python 3.11 and 3.13 before capture ended.
+  A preceding availability-only public probe returned the seven required books
+  with known source timestamps; it was excluded from prospective evaluation.
+- The registered catalog hash is
+  `875757f2572d8bbce15df846cf01110480175a96370c21b79b0f548973ba033e`.
+  Native scale, currency flags, quantity increments, price ticks and both quote
+  minimums were reconstructed from its original public response. This establishes
+  the recorded metadata, not market/account order acceptance.
+- The implementation retains exact decimal units across three conversions,
+  charges each received-asset fee and reserve before sizing the next leg,
+  preserves unspent inputs and gives intermediate dust zero assumed USDT value.
+  Source freshness and shared HTTP reception do not establish atomic execution.
+  It submits no orders, changes no portfolio and does not add estimates into P&L.
+- The new capture ended at twenty samples after 587.858 seconds. Compressed
+  recording SHA-256:
+  `660caff10fa050e15299ff5d89dd2e0fb07904090ac951556678ebc1aba4846a`.
+  Sizes: 5,565,941 compressed and 18,879,255 logical bytes. All 140 books passed
+  raw reconstruction, source/receive freshness and native price-tick checks.
+- Both cycle directions for every registered asset had twenty valid comparisons
+  under zero/base/stress costs: 120 per scenario, all nonpositive. No cycle was
+  rejected for missing or stale data in this observation. Capture and evaluation
+  source hashes both matched `d6de259`; plan, catalog, recording and full report
+  hashes are retained in the [public evidence](../research/evidence/triangular-v1-summary.json).
+- No performance acceptance, real order or paper-ledger mutation occurred.
+  The observation neither establishes profitability nor rules out other periods.

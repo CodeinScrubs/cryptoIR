@@ -1,0 +1,1182 @@
+{
+  "schema": 1,
+  "experiment": "triangular-v1-nobitex",
+  "plan_registration_commit": "68b6b1c9c4044e3fa433170917e4afa88a50498a",
+  "capture_and_evaluation_commit": "d6de2597736f83e83e63c6704c75110a9ceca320",
+  "status": "completed_conditional_diagnostic",
+  "plan_sha256": "f4c0d24d04b699c91c7a80b43fffaf08d2688650822850516da66d9647182164",
+  "catalog_sha256": "875757f2572d8bbce15df846cf01110480175a96370c21b79b0f548973ba033e",
+  "recording_sha256": "660caff10fa050e15299ff5d89dd2e0fb07904090ac951556678ebc1aba4846a",
+  "full_report_sha256": "4ac143c79cd1e44f769606b724d070d7851d85a4d9a140d0b9378ed6044fb95f",
+  "compressed_bytes": 5565941,
+  "logical_bytes": 18879255,
+  "capture_start_ns": 1794758745635071500,
+  "capture_end_ns": 1794759333491579600,
+  "elapsed_seconds": "587.8577605000028",
+  "books_by_pair": {
+    "USDT/IRR": 20,
+    "BTC/USDT": 20,
+    "BTC/IRR": 20,
+    "ETH/USDT": 20,
+    "ETH/IRR": 20,
+    "SOL/USDT": 20,
+    "SOL/IRR": 20
+  },
+  "maximum_source_age_ns": 1783953100,
+  "minimum_receive_to_next_request_ns": 30298355000,
+  "starting_budget_usdt": "10",
+  "depth_participation": "0.10",
+  "source_sha256": {
+    "__init__.py": "db30502830e93f401ae424aae030b2c7b08c3a6d998c46e35df255590064defc",
+    "__main__.py": "995f76f66030227ccab494d8fefb4f1c77845f1024c93e2892f395d910eb49c9",
+    "accounts.py": "12caa1da987b85f8f225a135681783e5f1fe8cbe6211858378477e4d6d042c82",
+    "arbitrage.py": "450eb0c09b2c9ebebe55ee76cf52c954e7ad29c8ec112a2ebb1c39735a3de2cc",
+    "backtest.py": "ed10d2bb02e5591fbbd8a395f2d306dc494baa5d2dd7c12678d99df2d9a83011",
+    "catalog.py": "a38caf67e863ccaf850ba564271ac19b9a674d9eba56e5470a1d16287da000d0",
+    "credentials.py": "529e2d23a895fbee6614e495960af694c1917155f59a8efcaa7ce8bcc3d35123",
+    "dashboard.py": "e135c1dfcebe2c2184cd87c51246036838aa71de04c784a5d1067e6fe7707881",
+    "domain.py": "33e9588594fa0cd481b60a2b799c10d29ddf25364ba84963070b946de59d140a",
+    "feeds.py": "e2ab29ccb324b79e8e8a5470e2131044960011e580ad7af41d642b492e840dae",
+    "forward.py": "560ea2ef1a23085b337b6c051f7db0a1783f1383557c1a95d05d16a8935f780c",
+    "funding.py": "745066d1b9d3f4d166e19a68efac4dc1dd8db1b0beb7c136cc007ff5743e90d8",
+    "history.py": "bf90c528c332f3532d5c58ee3fcee4a3620bde3b3ea1c4dd3ba2120aec60d38e",
+    "monitor.py": "763a9c200ac1bc656fc114a314710c75245fbd35222a6802e527853cc8f8af17",
+    "paper.py": "ffb735d099223ec3cb342478c17418a7f0c3af1592f64d34157f5bd1cb65f89a",
+    "products.py": "7c457a6e368bbeb7c2d19aed4dde152e006cc4baaa1e4020db856001716dbfcd",
+    "research.py": "6bce35f528ed64207e10bd747be6b0d01e00408d22b9a1ebfecc653456c6fdb7",
+    "risk.py": "522c3c1eefa090de8a6040b757358def2b3a25b401eb72a6f00a6ded3ceeda59",
+    "runner.py": "c5fabcf49afdca11efa837ac331dc7f3b39948c31eb10357e0a6c9492e0f9be4",
+    "runtime.py": "fd885046a28944acc863f2d5351bd627c8916fe0f7d7cfbc9e428572f5858446",
+    "stream_audit.py": "9181e13c590910434c3e0ed45c34f243a98dd84f1759faf43213012af570491e",
+    "streams.py": "ab65b81b064458b79683dd6cbfb2471a74f9c68095b9b12fe14fbe3502406e56",
+    "triangular.py": "f4d765787c293f4112835b9ceb89b497d4c87405b18a51685f62847004a045df",
+    "upgrade.py": "08fc12c21c898186a6b46b521a4a3183e4c109f102970a9cb32ea6f8df2f8584",
+    "valuation.py": "29dd8c5569dd33057dbf11b46e6b5e3fc6635c8dd6bf622fb30301efd66105c8"
+  },
+  "counts": {
+    "samples": 20
+  },
+  "scenarios_and_routes": [
+    {
+      "scenario": "zero_cost_diagnostic",
+      "asset": "BTC",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "BTC",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.99222294",
+        "estimated_net_usdt": "-0.00777706",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "20550.000000",
+          "BTC": "0.000000"
+        },
+        "legs": [
+          {
+            "pair": "BTC/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "BTC",
+            "available_input": "10",
+            "spent_input": "9.95777706",
+            "unspent_input": "0.04222294",
+            "gross_received": "0.000154",
+            "fee_received_asset": "0.000000",
+            "reserve_received_asset": "0.000000",
+            "net_received": "0.000154"
+          },
+          {
+            "pair": "BTC/IRR",
+            "side": "sell",
+            "input_asset": "BTC",
+            "output_asset": "IRR",
+            "available_input": "0.000154",
+            "spent_input": "0.000154",
+            "unspent_input": "0.000000",
+            "gross_received": "26796000.000000",
+            "fee_received_asset": "0.000000",
+            "reserve_received_asset": "0.000000",
+            "net_received": "26796000.000000"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26796000.000000",
+            "spent_input": "26775450.00",
+            "unspent_input": "20550.000000",
+            "gross_received": "9.95",
+            "fee_received_asset": "0.00",
+            "reserve_received_asset": "0.00",
+            "net_received": "9.95"
+          }
+        ],
+        "observed_ns": 1794759240455689100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "asset": "BTC",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "BTC",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.9595034",
+        "estimated_net_usdt": "-0.0404966",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "81700.000000",
+          "BTC": "0.000000"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26893100",
+            "fee_received_asset": "0",
+            "reserve_received_asset": "0",
+            "net_received": "26893100"
+          },
+          {
+            "pair": "BTC/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "BTC",
+            "available_input": "26893100",
+            "spent_input": "26811400.000000",
+            "unspent_input": "81700.000000",
+            "gross_received": "0.000154",
+            "fee_received_asset": "0.000000",
+            "reserve_received_asset": "0.000000",
+            "net_received": "0.000154"
+          },
+          {
+            "pair": "BTC/USDT",
+            "side": "sell",
+            "input_asset": "BTC",
+            "output_asset": "USDT",
+            "available_input": "0.000154",
+            "spent_input": "0.000154",
+            "unspent_input": "0.000000",
+            "gross_received": "9.9595034",
+            "fee_received_asset": "0E-7",
+            "reserve_received_asset": "0E-7",
+            "net_received": "9.9595034"
+          }
+        ],
+        "observed_ns": 1794758932426766200,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "asset": "ETH",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "ETH",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.993981430",
+        "estimated_net_usdt": "-0.006018570",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "16624.20850",
+          "ETH": "0.00000"
+        },
+        "legs": [
+          {
+            "pair": "ETH/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "ETH",
+            "available_input": "10",
+            "spent_input": "9.996018570",
+            "unspent_input": "0.003981430",
+            "gross_received": "0.00553",
+            "fee_received_asset": "0.00000",
+            "reserve_received_asset": "0.00000",
+            "net_received": "0.00553"
+          },
+          {
+            "pair": "ETH/IRR",
+            "side": "sell",
+            "input_asset": "ETH",
+            "output_asset": "IRR",
+            "available_input": "0.00553",
+            "spent_input": "0.00553",
+            "unspent_input": "0.00000",
+            "gross_received": "26899714.20850",
+            "fee_received_asset": "0.00000",
+            "reserve_received_asset": "0.00000",
+            "net_received": "26899714.20850"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26899714.20850",
+            "spent_input": "26883090.00",
+            "unspent_input": "16624.20850",
+            "gross_received": "9.99",
+            "fee_received_asset": "0.00",
+            "reserve_received_asset": "0.00",
+            "net_received": "9.99"
+          }
+        ],
+        "observed_ns": 1794759240455689100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "asset": "ETH",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "ETH",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.98016",
+        "estimated_net_usdt": "-0.01984",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "5235.75440",
+          "ETH": "0.00000"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26895800",
+            "fee_received_asset": "0",
+            "reserve_received_asset": "0",
+            "net_received": "26895800"
+          },
+          {
+            "pair": "ETH/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "ETH",
+            "available_input": "26895800",
+            "spent_input": "26890564.24560",
+            "unspent_input": "5235.75440",
+            "gross_received": "0.00552",
+            "fee_received_asset": "0.00000",
+            "reserve_received_asset": "0.00000",
+            "net_received": "0.00552"
+          },
+          {
+            "pair": "ETH/USDT",
+            "side": "sell",
+            "input_asset": "ETH",
+            "output_asset": "USDT",
+            "available_input": "0.00552",
+            "spent_input": "0.00552",
+            "unspent_input": "0.00000",
+            "gross_received": "9.98016",
+            "fee_received_asset": "0.00000",
+            "reserve_received_asset": "0.00000",
+            "net_received": "9.98016"
+          }
+        ],
+        "observed_ns": 1794759117221174300,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "asset": "SOL",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "SOL",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.984684420",
+        "estimated_net_usdt": "-0.015315580",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "5175.1850",
+          "SOL": "0.0000"
+        },
+        "legs": [
+          {
+            "pair": "SOL/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "SOL",
+            "available_input": "10",
+            "spent_input": "9.995315580",
+            "unspent_input": "0.004684420",
+            "gross_received": "0.1395",
+            "fee_received_asset": "0.0000",
+            "reserve_received_asset": "0.0000",
+            "net_received": "0.1395"
+          },
+          {
+            "pair": "SOL/IRR",
+            "side": "sell",
+            "input_asset": "SOL",
+            "output_asset": "IRR",
+            "available_input": "0.1395",
+            "spent_input": "0.1395",
+            "unspent_input": "0.0000",
+            "gross_received": "26859334.1850",
+            "fee_received_asset": "0.0000",
+            "reserve_received_asset": "0.0000",
+            "net_received": "26859334.1850"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26859334.1850",
+            "spent_input": "26854159.0000",
+            "unspent_input": "5175.1850",
+            "gross_received": "9.98",
+            "fee_received_asset": "0.00",
+            "reserve_received_asset": "0.00",
+            "net_received": "9.98"
+          }
+        ],
+        "observed_ns": 1794759333176533400,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "asset": "SOL",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "SOL",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.9645216",
+        "estimated_net_usdt": "-0.0354784",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "9433.3970",
+          "SOL": "0.0000"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26893300",
+            "fee_received_asset": "0",
+            "reserve_received_asset": "0",
+            "net_received": "26893300"
+          },
+          {
+            "pair": "SOL/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "SOL",
+            "available_input": "26893300",
+            "spent_input": "26883866.6030",
+            "unspent_input": "9433.3970",
+            "gross_received": "0.1397",
+            "fee_received_asset": "0.0000",
+            "reserve_received_asset": "0.0000",
+            "net_received": "0.1397"
+          },
+          {
+            "pair": "SOL/USDT",
+            "side": "sell",
+            "input_asset": "SOL",
+            "output_asset": "USDT",
+            "available_input": "0.1397",
+            "spent_input": "0.1397",
+            "unspent_input": "0.0000",
+            "gross_received": "9.9645216",
+            "fee_received_asset": "0E-7",
+            "reserve_received_asset": "0E-7",
+            "net_received": "9.9645216"
+          }
+        ],
+        "observed_ns": 1794758746281161100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "asset": "BTC",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "BTC",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.85282294",
+        "estimated_net_usdt": "-0.14717706",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "9162.00000000000000",
+          "BTC": "5.688E-7"
+        },
+        "legs": [
+          {
+            "pair": "BTC/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "BTC",
+            "available_input": "10",
+            "spent_input": "9.95777706",
+            "unspent_input": "0.04222294",
+            "gross_received": "0.000154",
+            "fee_received_asset": "2.002E-7",
+            "reserve_received_asset": "2.310E-7",
+            "net_received": "0.0001535688"
+          },
+          {
+            "pair": "BTC/IRR",
+            "side": "sell",
+            "input_asset": "BTC",
+            "output_asset": "IRR",
+            "available_input": "0.0001535688",
+            "spent_input": "0.000153",
+            "unspent_input": "5.688E-7",
+            "gross_received": "26622000.0000000000",
+            "fee_received_asset": "66555.0000000000",
+            "reserve_received_asset": "39933.00000000000000",
+            "net_received": "26515512.00000000000000"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26515512.00000000000000",
+            "spent_input": "26506350.00",
+            "unspent_input": "9162.00000000000000",
+            "gross_received": "9.85",
+            "fee_received_asset": "0.024625",
+            "reserve_received_asset": "0.014775",
+            "net_received": "9.810600"
+          }
+        ],
+        "observed_ns": 1794759240455689100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "asset": "BTC",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "BTC",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.802634754240000",
+        "estimated_net_usdt": "-0.197365245760000",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "148227.60000000",
+          "BTC": "3.880E-7"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26893100.0000",
+            "fee_received_asset": "67232.7500",
+            "reserve_received_asset": "40339.65000000",
+            "net_received": "26785527.60000000"
+          },
+          {
+            "pair": "BTC/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "BTC",
+            "available_input": "26785527.60000000",
+            "spent_input": "26637300.000000",
+            "unspent_input": "148227.60000000",
+            "gross_received": "0.000153",
+            "fee_received_asset": "3.825E-7",
+            "reserve_received_asset": "2.295E-7",
+            "net_received": "0.0001523880"
+          },
+          {
+            "pair": "BTC/USDT",
+            "side": "sell",
+            "input_asset": "BTC",
+            "output_asset": "USDT",
+            "available_input": "0.0001523880",
+            "spent_input": "0.000152",
+            "unspent_input": "3.880E-7",
+            "gross_received": "9.83015920000",
+            "fee_received_asset": "0.01277920696",
+            "reserve_received_asset": "0.014745238800000",
+            "net_received": "9.802634754240000"
+          }
+        ],
+        "observed_ns": 1794758932426766200,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "asset": "ETH",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "ETH",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.884301430",
+        "estimated_net_usdt": "-0.115698570",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "498.0086220000000",
+          "ETH": "0.000004516"
+        },
+        "legs": [
+          {
+            "pair": "ETH/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "ETH",
+            "available_input": "10",
+            "spent_input": "9.996018570",
+            "unspent_input": "0.003981430",
+            "gross_received": "0.00553",
+            "fee_received_asset": "0.000007189",
+            "reserve_received_asset": "0.000008295",
+            "net_received": "0.005514516"
+          },
+          {
+            "pair": "ETH/IRR",
+            "side": "sell",
+            "input_asset": "ETH",
+            "output_asset": "IRR",
+            "available_input": "0.005514516",
+            "spent_input": "0.00551",
+            "unspent_input": "0.000004516",
+            "gross_received": "26802427.719500000",
+            "fee_received_asset": "67006.069298750",
+            "reserve_received_asset": "40203.6415792500000",
+            "net_received": "26695218.0086220000000"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26695218.0086220000000",
+            "spent_input": "26694720.00",
+            "unspent_input": "498.0086220000000",
+            "gross_received": "9.92",
+            "fee_received_asset": "0.024800",
+            "reserve_received_asset": "0.014880",
+            "net_received": "9.880320"
+          }
+        ],
+        "observed_ns": 1794759240455689100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "asset": "ETH",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "ETH",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.85985983411200000",
+        "estimated_net_usdt": "-0.14014016588800000",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "19627.110300000000",
+          "ETH": "0.000008000"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26896307.82000000",
+            "fee_received_asset": "67240.76955000",
+            "reserve_received_asset": "40344.461730000000",
+            "net_received": "26788722.588720000000"
+          },
+          {
+            "pair": "ETH/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "ETH",
+            "available_input": "26788722.588720000000",
+            "spent_input": "26769095.4784200",
+            "unspent_input": "19627.110300000000",
+            "gross_received": "0.00550",
+            "fee_received_asset": "0.000013750",
+            "reserve_received_asset": "0.000008250",
+            "net_received": "0.005478000"
+          },
+          {
+            "pair": "ETH/USDT",
+            "side": "sell",
+            "input_asset": "ETH",
+            "output_asset": "USDT",
+            "available_input": "0.005478000",
+            "spent_input": "0.00547",
+            "unspent_input": "0.000008000",
+            "gross_received": "9.8875449600000",
+            "fee_received_asset": "0.0128538084480",
+            "reserve_received_asset": "0.01483131744000000",
+            "net_received": "9.85985983411200000"
+          }
+        ],
+        "observed_ns": 1794759178834953100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "asset": "SOL",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "SOL",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.875044420",
+        "estimated_net_usdt": "-0.124955580",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "9399.900308000000",
+          "SOL": "0.00000940"
+        },
+        "legs": [
+          {
+            "pair": "SOL/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "SOL",
+            "available_input": "10",
+            "spent_input": "9.995315580",
+            "unspent_input": "0.004684420",
+            "gross_received": "0.1395",
+            "fee_received_asset": "0.00018135",
+            "reserve_received_asset": "0.00020925",
+            "net_received": "0.13910940"
+          },
+          {
+            "pair": "SOL/IRR",
+            "side": "sell",
+            "input_asset": "SOL",
+            "output_asset": "IRR",
+            "available_input": "0.13910940",
+            "spent_input": "0.1391",
+            "unspent_input": "0.00000940",
+            "gross_received": "26782318.17300000",
+            "fee_received_asset": "66955.79543250",
+            "reserve_received_asset": "40173.477259500000",
+            "net_received": "26675188.900308000000"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26675188.900308000000",
+            "spent_input": "26665789.0000",
+            "unspent_input": "9399.900308000000",
+            "gross_received": "9.91",
+            "fee_received_asset": "0.024775",
+            "reserve_received_asset": "0.014865",
+            "net_received": "9.870360"
+          }
+        ],
+        "observed_ns": 1794759333176533400,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "asset": "SOL",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "SOL",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.85682110644000000",
+        "estimated_net_usdt": "-0.14317889356000000",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "3648.19200000",
+          "SOL": "0.00004320"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26893300.0000",
+            "fee_received_asset": "67233.2500",
+            "reserve_received_asset": "40339.95000000",
+            "net_received": "26785726.80000000"
+          },
+          {
+            "pair": "SOL/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "SOL",
+            "available_input": "26785726.80000000",
+            "spent_input": "26782078.6080",
+            "unspent_input": "3648.19200000",
+            "gross_received": "0.1392",
+            "fee_received_asset": "0.00034800",
+            "reserve_received_asset": "0.00020880",
+            "net_received": "0.13864320"
+          },
+          {
+            "pair": "SOL/USDT",
+            "side": "sell",
+            "input_asset": "SOL",
+            "output_asset": "USDT",
+            "available_input": "0.13864320",
+            "spent_input": "0.1386",
+            "unspent_input": "0.00004320",
+            "gross_received": "9.8844977000000",
+            "fee_received_asset": "0.0128498470100",
+            "reserve_received_asset": "0.01482674655000000",
+            "net_received": "9.85682110644000000"
+          }
+        ],
+        "observed_ns": 1794758808252112700,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "asset": "BTC",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "BTC",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.77374294",
+        "estimated_net_usdt": "-0.22625706",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "10314.0000000000000",
+          "BTC": "1.376E-7"
+        },
+        "legs": [
+          {
+            "pair": "BTC/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "BTC",
+            "available_input": "10",
+            "spent_input": "9.95777706",
+            "unspent_input": "0.04222294",
+            "gross_received": "0.000154",
+            "fee_received_asset": "4.004E-7",
+            "reserve_received_asset": "4.62E-7",
+            "net_received": "0.0001531376"
+          },
+          {
+            "pair": "BTC/IRR",
+            "side": "sell",
+            "input_asset": "BTC",
+            "output_asset": "IRR",
+            "available_input": "0.0001531376",
+            "spent_input": "0.000153",
+            "unspent_input": "1.376E-7",
+            "gross_received": "26622000.0000000000",
+            "fee_received_asset": "133110.0000000000",
+            "reserve_received_asset": "79866.0000000000000",
+            "net_received": "26409024.0000000000000"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26409024.0000000000000",
+            "spent_input": "26398710.00",
+            "unspent_input": "10314.0000000000000",
+            "gross_received": "9.81",
+            "fee_received_asset": "0.049050",
+            "reserve_received_asset": "0.02943",
+            "net_received": "9.731520"
+          }
+        ],
+        "observed_ns": 1794759240455689100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "asset": "BTC",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "BTC",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.71080037224000",
+        "estimated_net_usdt": "-0.28919962776000",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "40655.2000000",
+          "BTC": "7.760E-7"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26893100.0000",
+            "fee_received_asset": "134465.5000",
+            "reserve_received_asset": "80679.3000000",
+            "net_received": "26677955.2000000"
+          },
+          {
+            "pair": "BTC/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "BTC",
+            "available_input": "26677955.2000000",
+            "spent_input": "26637300.000000",
+            "unspent_input": "40655.2000000",
+            "gross_received": "0.000153",
+            "fee_received_asset": "7.650E-7",
+            "reserve_received_asset": "4.59E-7",
+            "net_received": "0.0001517760"
+          },
+          {
+            "pair": "BTC/USDT",
+            "side": "sell",
+            "input_asset": "BTC",
+            "output_asset": "USDT",
+            "available_input": "0.0001517760",
+            "spent_input": "0.000151",
+            "unspent_input": "7.760E-7",
+            "gross_received": "9.76548710000",
+            "fee_received_asset": "0.02539026646",
+            "reserve_received_asset": "0.02929646130000",
+            "net_received": "9.71080037224000"
+          }
+        ],
+        "observed_ns": 1794758932426766200,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "asset": "ETH",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "ETH",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.765261430",
+        "estimated_net_usdt": "-0.234738570",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "12060.100656000000",
+          "ETH": "0.000009032"
+        },
+        "legs": [
+          {
+            "pair": "ETH/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "ETH",
+            "available_input": "10",
+            "spent_input": "9.996018570",
+            "unspent_input": "0.003981430",
+            "gross_received": "0.00553",
+            "fee_received_asset": "0.000014378",
+            "reserve_received_asset": "0.00001659",
+            "net_received": "0.005499032"
+          },
+          {
+            "pair": "ETH/IRR",
+            "side": "sell",
+            "input_asset": "ETH",
+            "output_asset": "IRR",
+            "available_input": "0.005499032",
+            "spent_input": "0.00549",
+            "unspent_input": "0.000009032",
+            "gross_received": "26705141.230500000",
+            "fee_received_asset": "133525.706152500",
+            "reserve_received_asset": "80115.423691500000",
+            "net_received": "26491500.100656000000"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26491500.100656000000",
+            "spent_input": "26479440.00",
+            "unspent_input": "12060.100656000000",
+            "gross_received": "9.84",
+            "fee_received_asset": "0.049200",
+            "reserve_received_asset": "0.02952",
+            "net_received": "9.761280"
+          }
+        ],
+        "observed_ns": 1794759240455689100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "asset": "ETH",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "ETH",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.7602760083840000",
+        "estimated_net_usdt": "-0.2397239916160000",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "9519.58482000000",
+          "ETH": "0.000006160"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26896307.82000000",
+            "fee_received_asset": "134481.53910000",
+            "reserve_received_asset": "80688.92346000000",
+            "net_received": "26681137.35744000000"
+          },
+          {
+            "pair": "ETH/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "ETH",
+            "available_input": "26681137.35744000000",
+            "spent_input": "26671617.7726200",
+            "unspent_input": "9519.58482000000",
+            "gross_received": "0.00548",
+            "fee_received_asset": "0.000027400",
+            "reserve_received_asset": "0.00001644",
+            "net_received": "0.005436160"
+          },
+          {
+            "pair": "ETH/USDT",
+            "side": "sell",
+            "input_asset": "ETH",
+            "output_asset": "USDT",
+            "available_input": "0.005436160",
+            "spent_input": "0.00543",
+            "unspent_input": "0.000006160",
+            "gross_received": "9.8152413600000",
+            "fee_received_asset": "0.0255196275360",
+            "reserve_received_asset": "0.0294457240800000",
+            "net_received": "9.7602760083840000"
+          }
+        ],
+        "observed_ns": 1794759178834953100,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "asset": "SOL",
+      "route": "USDT->asset->IRR->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "SOL",
+        "route": "USDT->asset->IRR->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.765964420",
+        "estimated_net_usdt": "-0.234035580",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "14240.74371200000",
+          "SOL": "0.00001880"
+        },
+        "legs": [
+          {
+            "pair": "SOL/USDT",
+            "side": "buy",
+            "input_asset": "USDT",
+            "output_asset": "SOL",
+            "available_input": "10",
+            "spent_input": "9.995315580",
+            "unspent_input": "0.004684420",
+            "gross_received": "0.1395",
+            "fee_received_asset": "0.00036270",
+            "reserve_received_asset": "0.0004185",
+            "net_received": "0.13871880"
+          },
+          {
+            "pair": "SOL/IRR",
+            "side": "sell",
+            "input_asset": "SOL",
+            "output_asset": "IRR",
+            "available_input": "0.13871880",
+            "spent_input": "0.1387",
+            "unspent_input": "0.00001880",
+            "gross_received": "26705302.16100000",
+            "fee_received_asset": "133526.51080500",
+            "reserve_received_asset": "80115.90648300000",
+            "net_received": "26491659.74371200000"
+          },
+          {
+            "pair": "USDT/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "USDT",
+            "available_input": "26491659.74371200000",
+            "spent_input": "26477419.0000",
+            "unspent_input": "14240.74371200000",
+            "gross_received": "9.84",
+            "fee_received_asset": "0.049200",
+            "reserve_received_asset": "0.02952",
+            "net_received": "9.761280"
+          }
+        ],
+        "observed_ns": 1794759333176533400,
+        "execution_ready": false
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "asset": "SOL",
+      "route": "USDT->IRR->asset->USDT",
+      "comparisons": 20,
+      "positive_estimates": 0,
+      "rejections": {},
+      "best": {
+        "asset": "SOL",
+        "route": "USDT->IRR->asset->USDT",
+        "start_usdt": "10",
+        "final_usdt": "9.74558458368000",
+        "estimated_net_usdt": "-0.25441541632000",
+        "residuals_zero_usdt_valuation": {
+          "IRR": "5970.9860000",
+          "SOL": "0.00009120"
+        },
+        "legs": [
+          {
+            "pair": "USDT/IRR",
+            "side": "sell",
+            "input_asset": "USDT",
+            "output_asset": "IRR",
+            "available_input": "10",
+            "spent_input": "10",
+            "unspent_input": "0",
+            "gross_received": "26893300.0000",
+            "fee_received_asset": "134466.5000",
+            "reserve_received_asset": "80679.9000000",
+            "net_received": "26678153.6000000"
+          },
+          {
+            "pair": "SOL/IRR",
+            "side": "buy",
+            "input_asset": "IRR",
+            "output_asset": "SOL",
+            "available_input": "26678153.6000000",
+            "spent_input": "26672182.6140",
+            "unspent_input": "5970.9860000",
+            "gross_received": "0.1386",
+            "fee_received_asset": "0.00069300",
+            "reserve_received_asset": "0.0004158",
+            "net_received": "0.13749120"
+          },
+          {
+            "pair": "SOL/USDT",
+            "side": "sell",
+            "input_asset": "SOL",
+            "output_asset": "USDT",
+            "available_input": "0.13749120",
+            "spent_input": "0.1374",
+            "unspent_input": "0.00009120",
+            "gross_received": "9.80046720000",
+            "fee_received_asset": "0.02548121472",
+            "reserve_received_asset": "0.02940140160000",
+            "net_received": "9.74558458368000"
+          }
+        ],
+        "observed_ns": 1794758746281161100,
+        "execution_ready": false
+      }
+    }
+  ],
+  "execution_ready": false,
+  "portfolio_return_available": false,
+  "actual_orders": 0,
+  "account_balances_used": false,
+  "limitations": "Conditional capacity diagnostic, not fill simulation. Each cycle reuses the same synthetic budget and displayed liquidity; estimates cannot be summed into profits or independent trials. No atomic multi-leg guarantee, inventory journal, execution latency, cancel race, calibrated reserve, account entitlement or profitability acceptance. Only positive cost-bearing estimates would justify further asynchronous execution research. One short window cannot rule out opportunities in other periods or sizes. Unspent starting USDT is included; intermediate dust has zero assumed liquidation value."
+}

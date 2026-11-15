@@ -3,6 +3,42 @@
 These are preliminary conditional screens, not realized or deployable returns.
 No personal account balances or capital assumptions are published here.
 
+## triangular-v1: three-leg Nobitex cycles, no positive estimates
+
+Registration: `68b6b1c`; capture and evaluation: `d6de259`. Twenty fresh public
+all-market responses were recorded from 2026-11-15 16:05:45 through 16:15:33 UTC,
+ending at the registered sample limit. All 140 required books reconstructed from
+original bodies, met the five-second source/receive-age bound and obeyed recorded
+price ticks. The setup availability probe was not included. Full route details,
+source hashes and book audit are in [the evidence summary](evidence/triangular-v1-summary.json).
+
+Each independent cycle starts with a synthetic 10 USDT and can consume at most
+10% of displayed depth. Fees and reserves are deducted in the received asset at
+each leg before the next leg is sized. Unspent starting USDT remains cash;
+intermediate crypto/IRR dust is reported with zero assumed liquidation value.
+These are conditional estimates, not modeled asynchronous orders or actual fills.
+
+| Asset | Direction | Comparisons per scenario | Best zero-cost estimate, USDT | Best base estimate, USDT | Best stress estimate, USDT |
+| --- | --- | ---: | ---: | ---: | ---: |
+| BTC | USDT -> BTC -> IRR -> USDT | 20 | -0.00777706 | -0.14717706 | -0.22625706 |
+| BTC | USDT -> IRR -> BTC -> USDT | 20 | -0.0404966 | -0.19736524576 | -0.28919962776 |
+| ETH | USDT -> ETH -> IRR -> USDT | 20 | -0.006018570 | -0.115698570 | -0.234738570 |
+| ETH | USDT -> IRR -> ETH -> USDT | 20 | -0.01984 | -0.140140165888 | -0.239723991616 |
+| SOL | USDT -> SOL -> IRR -> USDT | 20 | -0.015315580 | -0.124955580 | -0.234035580 |
+| SOL | USDT -> IRR -> SOL -> USDT | 20 | -0.0354784 | -0.14317889356 | -0.25441541632 |
+
+There were zero positive estimates in all three scenarios: 120 comparisons per
+scenario, with no rejected comparison. Best values in separate columns can refer
+to different samples. Reused budgets and overlapping liquidity prevent adding
+these estimates into a profit figure or treating them as independent trials.
+
+Base costs use public assumed taker rates of 0.13% for USDT markets and 0.25% for
+IRR markets, plus 15 bp of gross received units on every leg. Stress doubles the
+fee rates and uses 30 bp reserves. Actual account tiers and execution slippage
+remain unverified. No real or paper order, account allocation or transfer occurred.
+This short window does not exclude opportunities at other times, sizes, assets
+or venues; it supplies no evidence for deploying these cycles.
+
 ## baseline-v4: fixed longer discovery, all candidates rejected
 
 Plan and code registration: `86de86d`, published before evaluation. The same
