@@ -44,3 +44,27 @@ estimated liquidation. This is a **current-cost counterfactual**, not a verified
 historical fee schedule or account tier. Earlier 0.4%/0.8% quote-fee results stay
 valid only under their stated hypothetical assumptions; they do not estimate
 this current schedule. No signal parameter is changed to improve those results.
+
+## 2026-11-15: baseline-v3 pre-gap robustness extension
+
+All nine baseline-v2 discovery candidates were rejected. BTC trend and breakout
+had positive stressed returns but only eight and four completed sells; the
+ten-exit threshold is retained. The new `baseline-v3-pre-gap.json` fixes a longer
+calendar window before any return calculation: download 2023-01-01 through
+2025-06-01, discovery 2023-02 through 2023-12, validation 2024-01 through 2024-06,
+and a separately gated historical holdout 2024-07 through 2025-05. Daily session
+boundary alignment remains unchanged.
+
+The same three assets, signals, costs, delay, capital assumptions, allocation
+and advancement gates are retained. No parameter sweep, relaxed gate, automatic
+gap trimming or performance-dependent date search is allowed. At most one full
+bounded download per asset is attempted; failed coverage blocks that asset's
+performance evaluation and is retained as evidence.
+
+The end date precedes the already documented June 2025 source gap. Excluding that
+outage is an explicit limitation, not evidence of outage resilience. Later 2025
+discovery outcomes have already influenced the decision to extend this study,
+so even a pass is retrospective robustness evidence, **not independent temporal
+confirmation**. None of this new plan's strategy returns has been evaluated at
+registration. The original baseline-v2 validation and 2026 holdout are not opened
+by this plan. Fresh independent validation and prospective evidence remain needed.

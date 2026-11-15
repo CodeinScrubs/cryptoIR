@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "experiment": "baseline-v3-pre-gap-robustness",
+  "purpose": "Retrospective longer-window robustness check with unchanged candidates and gates; not independent confirmation after observing later discovery",
+  "venues": [
+    "nobitex"
+  ],
+  "pairs": [
+    "BTC/USDT",
+    "ETH/USDT",
+    "SOL/USDT"
+  ],
+  "data_start": "2023-01-01",
+  "data_end_exclusive": "2025-06-01",
+  "splits": [
+    {
+      "name": "discovery",
+      "start": "2023-02-01",
+      "end": "2024-01-01"
+    },
+    {
+      "name": "validation",
+      "start": "2024-01-01",
+      "end": "2024-07-01"
+    },
+    {
+      "name": "held_out",
+      "start": "2024-07-01",
+      "end": "2025-06-01"
+    }
+  ],
+  "candidates": [
+    "trend_24_168",
+    "breakout_168_72",
+    "reversion_24_2pct"
+  ],
+  "benchmarks": [
+    "cash",
+    "hold"
+  ],
+  "assumptions": {
+    "capital": "100",
+    "allocation": "0.25",
+    "prior_volume_fraction": "0.01",
+    "quantity_step": "0.000001",
+    "minimum_notional": "5",
+    "delay_hours": 1,
+    "buy_fee_mode": "received_base"
+  },
+  "cost_scenarios": [
+    {
+      "name": "base_assumed",
+      "fee": "0.0013",
+      "adverse_bps": "15"
+    },
+    {
+      "name": "stress_assumed",
+      "fee": "0.0026",
+      "adverse_bps": "30"
+    }
+  ],
+  "gate": {
+    "minimum_completed_sells": 10,
+    "maximum_drawdown": "0.10",
+    "positive_return_in_every_cost_scenario": true,
+    "beat_equal_allocation_hold_in_base": true
+  },
+  "selection": "Discovery gate then highest worst-cost return, deterministic strategy-name tie break; validation must pass unchanged; only then inspect held-out period",
+  "capital_note": "100 USDT is a synthetic reference, not a conversion of personal capital. Allocation is a research assumption, not approved live risk.",
+  "fee_note": "Current-cost counterfactual using public base USDT taker rate observed 2026-11-14; not a historical schedule or account-verified tier. Buy fees in received base, sell fees in quote. Stress doubles the fee.",
+  "limitations": "Retrospective universe and window selection after later-period discovery. Excludes the known June 2025 outage. Current-cost and order-rule counterfactuals, no historical fee reconstruction, no leverage, no IRT attribution, no execution calibration or statistical significance claim. Any pass requires independent later validation and prospective evidence.",
+  "fee_source": "https://nobitex.ir/pricing/",
+  "prior_observation": "All baseline-v2 discovery outcomes (2025-08 through 2025-10) were already observed. This earlier-calendar extension is exploratory robustness, not independent temporal confirmation. Its strategy returns have not been evaluated at registration; original 2026 held-out returns remain uninspected.",
+  "window_rationale": "Fixed calendar extension to obtain longer per-stage samples without reducing the ten-exit gate. Ends before the already documented June 2025 source gap. No performance-dependent date search or automatic gap trimming is permitted.",
+  "network_budget": "At most one bounded full download per registered asset in this attempt, sequential at the existing request spacing; source failures retained and no automatic window revision."
+}
