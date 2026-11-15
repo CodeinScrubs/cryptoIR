@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -51,6 +52,24 @@ def validate_plan(plan: dict):
             or gate.get("positive_return_in_every_cost_scenario") is not True
             or gate.get("beat_equal_allocation_hold_in_base") is not True):
         raise DataError("invalid research advancement gate")
+    if "dataset_pins" in plan:
+        pins = plan["dataset_pins"]
+        if not isinstance(pins, list) or not pins:
+            raise DataError("dataset pins must be a nonempty list")
+        required = {"venue", "pair", "manifest_sha256", "normalized_sha256"}
+        identities = set()
+        for pin in pins:
+            if (not isinstance(pin, dict) or set(pin) != required
+                    or any(not isinstance(pin[k], str) for k in required)
+                    or any(not re.fullmatch(r"[a-f0-9]{64}", pin[k])
+                           for k in ("manifest_sha256", "normalized_sha256"))):
+                raise DataError("invalid dataset pin")
+            identity = (pin["venue"], pin["pair"])
+            if identity in identities:
+                raise DataError("duplicate dataset pin")
+            identities.add(identity)
+        if identities != {(venue, pair) for venue in plan["venues"] for pair in plan["pairs"]}:
+            raise DataError("dataset pins must cover exactly the registered universe")
 
 
 def passes_gate(candidate: str, results: dict, plan: dict) -> bool:
@@ -73,6 +92,7 @@ def run_experiment(plan_path: Path, dataset: Path, output: Path) -> dict:
               "source_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                                 for p in sorted(Path(__file__).parent.glob("*.py"))},
               "stages": [], "selected": None, "held_out_inspected": False,
+              "dataset_pin_verified": False if "dataset_pins" in plan else None,
               "execution_ready": False, "irt_performance_available": False,
               "personal_capital_conversion_verified": False}
     (output / "plan.json").write_bytes(plan_bytes)
@@ -94,6 +114,12 @@ def run_experiment(plan_path: Path, dataset: Path, output: Path) -> dict:
             raise DataError("research blocked: reported volume is insufficient or inconsistent")
         if audit["venue"] not in plan["venues"] or audit["pair"] not in plan["pairs"]:
             raise DataError("dataset is outside preregistered universe")
+        if "dataset_pins" in plan:
+            pin = next(p for p in plan["dataset_pins"]
+                       if (p["venue"], p["pair"]) == (audit["venue"], audit["pair"]))
+            if any(audit[k] != pin[k] for k in ("manifest_sha256", "normalized_sha256")):
+                raise DataError("research blocked: dataset differs from preregistered hashes")
+            report["dataset_pin_verified"] = True
         source_manifest = json.loads((dataset / "manifest.json").read_bytes())
         if (source_manifest["start"] != epoch(plan["data_start"])
                 or source_manifest["end_exclusive"] != epoch(plan["data_end_exclusive"])):

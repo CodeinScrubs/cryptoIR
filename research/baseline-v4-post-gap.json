@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "experiment": "baseline-v4-post-gap-extension",
+  "purpose": "Fixed longer discovery on already accepted post-gap data; exploratory extension with sequential unchanged gates",
+  "venues": [
+    "nobitex"
+  ],
+  "pairs": [
+    "BTC/USDT",
+    "ETH/USDT",
+    "SOL/USDT"
+  ],
+  "data_start": "2025-07-06",
+  "data_end_exclusive": "2026-11-01",
+  "splits": [
+    {
+      "name": "discovery",
+      "start": "2025-08-01",
+      "end": "2026-01-01"
+    },
+    {
+      "name": "validation",
+      "start": "2026-01-01",
+      "end": "2026-05-01"
+    },
+    {
+      "name": "held_out",
+      "start": "2026-05-01",
+      "end": "2026-11-01"
+    }
+  ],
+  "candidates": [
+    "trend_24_168",
+    "breakout_168_72",
+    "reversion_24_2pct"
+  ],
+  "benchmarks": [
+    "cash",
+    "hold"
+  ],
+  "assumptions": {
+    "capital": "100",
+    "allocation": "0.25",
+    "prior_volume_fraction": "0.01",
+    "quantity_step": "0.000001",
+    "minimum_notional": "5",
+    "delay_hours": 1,
+    "buy_fee_mode": "received_base"
+  },
+  "cost_scenarios": [
+    {
+      "name": "base_assumed",
+      "fee": "0.0013",
+      "adverse_bps": "15"
+    },
+    {
+      "name": "stress_assumed",
+      "fee": "0.0026",
+      "adverse_bps": "30"
+    }
+  ],
+  "gate": {
+    "minimum_completed_sells": 10,
+    "maximum_drawdown": "0.10",
+    "positive_return_in_every_cost_scenario": true,
+    "beat_equal_allocation_hold_in_base": true
+  },
+  "selection": "Discovery gate then highest worst-cost return, deterministic strategy-name tie break; validation must pass unchanged; only then inspect held-out period",
+  "capital_note": "100 USDT is a synthetic reference, not a conversion of personal capital. Allocation is a research assumption, not approved live risk.",
+  "fee_note": "Current-cost counterfactual using public base USDT taker rate observed 2026-11-14; not a historical schedule or account-verified tier. Buy fees in received base, sell fees in quote. Stress doubles the fee.",
+  "limitations": "Exploratory window extension informed by prior discovery rejection. Current asset choices and post-gap window selection create bias. Excludes June 2025 outage. Hypothetical current-cost and order-rule assumptions; no historical fee reconstruction, IRT attribution, execution calibration, leverage or statistical significance claim. Reusing data cannot create independent evidence. Any pass only justifies further validation and prospective paper research.",
+  "fee_source": "https://nobitex.ir/pricing/",
+  "prior_observation": "All three assets and candidates on 2025-08 through 2025-10 have been observed in v2. No strategy returns outside that discovery interval were evaluated before this registration. This extension is exploratory, not independent replication. It repurposes v2 validation for discovery and v2 held-out January-April for validation; those intervals lose their old roles when opened. May-October remains gated and must not be inspected after discovery or validation rejection.",
+  "dataset_pins": [
+    {
+      "venue": "nobitex",
+      "pair": "BTC/USDT",
+      "manifest_sha256": "f84749adb30da70e9b8ea667806c95d2b712ebbd1bd0d406aabdba454ead51c7",
+      "normalized_sha256": "cafdb285307878a12193e8135be7f1fa3620edcab019cf0d351bedbad98f3c0a"
+    },
+    {
+      "venue": "nobitex",
+      "pair": "ETH/USDT",
+      "manifest_sha256": "30e52b233c1bee7368c2a1a8b25036db77dc5b8482e46fa185b060166352c091",
+      "normalized_sha256": "0271ab4809c3a30214991f146acbcf579889dc47da8fe19ae564911dd03d8c82"
+    },
+    {
+      "venue": "nobitex",
+      "pair": "SOL/USDT",
+      "manifest_sha256": "ca2c645d109699119b5a7838dc26f6575309cfb5496088dd6a96771dfa534933",
+      "normalized_sha256": "735fa75b85abf03c5dfc6ef3bc20ee753af0c09b7c71ce7e5deaaf90c90a5080"
+    }
+  ],
+  "window_rationale": "One fixed five-month discovery, four-month validation and six-month gated holdout. Existing post-gap data passed exact daily and volume acceptance; the attempted older data failed. Keep candidate parameters, capital, costs and the ten-exit gate unchanged. No automatic window or threshold revision after observing these results.",
+  "network_budget": "No downloads or exchange requests: reuse only the preregistered, hash-pinned v2 datasets."
+}

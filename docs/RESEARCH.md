@@ -93,6 +93,12 @@ versions. A previously inspected holdout is never made unseen by renaming a
 plan. Data-driven plan amendments and the reason for them belong in
 [the research changelog](../research/CHANGELOG.md).
 
+Plans may additionally freeze `dataset_pins` for every venue/pair in their
+universe. Both manifest and normalized SHA-256 hashes must match the raw-derived
+audit before any trial starts. Internally consistent replacement data is still
+rejected if it differs from the registered pins. Older unpinned plans report
+`dataset_pin_verified: null`; they do not acquire retrospective registration.
+
 Initial plans compare USDT cash and equal-allocation holding of the traded asset within each
 split. Full BTC allocation, IRT performance and actual conversion of personal
 capital remain outstanding. Unknown historical fees, fee denomination,

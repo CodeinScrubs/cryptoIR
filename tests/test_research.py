@@ -31,6 +31,44 @@ class ResearchTests(unittest.TestCase):
         with self.assertRaises(DataError):
             validate_plan(self.plan)
 
+    def pinned_plan(self):
+        plan = copy.deepcopy(self.plan)
+        plan["dataset_pins"] = [{"venue":venue, "pair":pair, "manifest_sha256":"a"*64,
+                                 "normalized_sha256":"b"*64}
+                                for venue in plan["venues"] for pair in plan["pairs"]]
+        return plan
+
+    def test_pins_require_exact_universe_and_valid_unique_hash_entries(self):
+        plan = self.pinned_plan()
+        validate_plan(plan)
+        cases = [None, [], plan["dataset_pins"][:-1], plan["dataset_pins"]*2,
+                 [{**p, "manifest_sha256":"bad"} for p in plan["dataset_pins"]],
+                 [{**p, "pair":"OTHER/USDT"} for p in plan["dataset_pins"]],
+                 [{**p, "unexpected":"value"} for p in plan["dataset_pins"]]]
+        for pins in cases:
+            with self.subTest(pins=pins), self.assertRaises(DataError):
+                validate_plan({**plan, "dataset_pins":pins})
+
+    def test_reaudited_but_replaced_data_never_starts_a_trial(self):
+        plan = self.pinned_plan()
+        audit = {**plan["dataset_pins"][0], "reconciled":True, "day_phase_utc_seconds":0}
+        bars = [Candle(HOUR*i, 100, 100, 100, 100, 100) for i in range(1, 25)]
+        for changed in ("manifest_sha256", "normalized_sha256"):
+            with self.subTest(changed=changed), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                (root/"plan.json").write_text(json.dumps(plan), encoding="utf-8")
+                with patch("cryptoir.research.audit_history", return_value=({**audit, changed:"c"*64}, bars)),\
+                        patch("cryptoir.research.screen") as runner:
+                    with self.assertRaisesRegex(DataError, "preregistered hashes"):
+                        run_experiment(root/"plan.json", root, root/"output")
+                runner.assert_not_called()
+                result = json.loads((root/"output"/"report.json").read_bytes())
+                self.assertFalse(result["dataset_pin_verified"])
+                self.assertFalse(result["held_out_inspected"])
+                self.assertEqual(result["stages"], [])
+                events = [json.loads(s)["kind"] for s in (root/"output"/"trials.jsonl").read_text().splitlines()]
+                self.assertEqual(events, ["begin", "failed"])
+
     def test_gate_requires_profit_stress_drawdown_and_round_trips(self):
         results = {("hold", "base_assumed"): {"net_return": D("0.01")}}
         for scenario in self.plan["cost_scenarios"]:
@@ -69,13 +107,13 @@ class ResearchTests(unittest.TestCase):
                 self.assertEqual(events, ["begin", "failed"])
 
     def test_discovery_failure_never_reads_validation_or_holdout_in_screen(self):
-        plan = copy.deepcopy(self.plan)
+        plan = self.pinned_plan()
         plan["data_start"], plan["data_end_exclusive"] = "2025-01-01", "2025-02-01"
         plan["splits"] = [dict(name=name, start=start, end=end) for name,start,end in (
             ("discovery","2025-01-02","2025-01-10"), ("validation","2025-01-10","2025-01-20"), ("held_out","2025-01-20","2025-02-01"))]
         start, end = epoch(plan["data_start"]), epoch(plan["data_end_exclusive"])
         bars = [Candle(t, 100, 100, 100, 100, 100) for t in range(start, end, HOUR)]
-        audit = {"venue":"nobitex", "pair":"BTC/USDT", "manifest_sha256":"test", "normalized_sha256":"test",
+        audit = {"venue":"nobitex", "pair":"BTC/USDT", "manifest_sha256":"a"*64, "normalized_sha256":"b"*64,
                  "reconciled":True, "day_phase_utc_seconds":0}
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -85,6 +123,7 @@ class ResearchTests(unittest.TestCase):
             with patch("cryptoir.research.audit_history", return_value=(audit,bars)), patch("cryptoir.research.screen", wraps=screen) as runner:
                 result = run_experiment(root/"plan.json", root, root/"output")
             self.assertEqual(result["status"], "rejected_at_discovery")
+            self.assertTrue(result["dataset_pin_verified"])
             self.assertFalse(result["held_out_inspected"])
             self.assertEqual(len(result["stages"]), 1)
             self.assertEqual(runner.call_count, 10)

@@ -4,6 +4,30 @@ Plans are immutable after performance evaluation. Data failures and rejected
 trials remain in the record. New plans cannot make previously viewed outcomes
 unseen, even if a new filename is used.
 
+## 2026-11-15: v4 fixed post-gap discovery extension
+
+`baseline-v4-post-gap.json` reuses the three v2 datasets after a fresh raw-response
+replay: each has 482 complete daily matches, 11,568 hourly bars, no interior gap
+and usable reported volume under the existing guard. Both manifest and normalized
+hashes are frozen in the plan; replacement data must fail before any trial.
+No new download or performance calculation precedes this registration.
+
+The prior discovery interval was too short for the BTC trend and breakout
+hypotheses to meet the unchanged ten-exit gate. The earlier-calendar v3 attempt
+failed source acceptance. This plan fixes discovery at August-December 2025,
+validation at January-April 2026 and a gated holdout at May-October 2026.
+All three candidates and assets, signal parameters, allocation, fees, delay,
+quantity assumptions and gates remain unchanged. This is one calendar extension,
+not a search across windows. Rejection must stop advancement, without another
+date revision or a reduced exit threshold under this plan.
+
+The v2 August-October results already informed this decision; discovery is
+exploratory. Its former November-December validation is now discovery, and its
+January-April holdout becomes validation if opened. Those old roles cannot be
+claimed afterward. May-October remains unopened for any asset rejected at an
+earlier gate. Reusing observations is not independent replication, and even a
+screen pass would need execution calibration and prospective evidence.
+
 ## 2026-11-15: prospective BTC cross-venue feasibility diagnostic
 
 `arbitrage-v1.json` freezes a single 900-second public observation, three cost
