@@ -1,0 +1,653 @@
+{
+  "schema": 1,
+  "experiment": "baseline-v3-pre-gap-robustness",
+  "plan_registration": "72a70b9c43b98b09f9d2a452b7cc9b5ea55939c6",
+  "plan_sha256": "1cf14f9a6b2d6774860489d1be68f2f91f0af5dfc802bc2dd8fafbf17a8c7f08",
+  "status": "blocked_before_performance",
+  "strategy_returns_evaluated": false,
+  "held_out_inspected": false,
+  "assets": [
+    {
+      "venue": "nobitex",
+      "pair": "BTC/USDT",
+      "manifest_sha256": "594e41862c99cd3ee3c0d6e57f8ee1621200687d7ed2629f0659d19de0184c35",
+      "normalized_sha256": "1b855bfe1f861602da371bd3c465bd32d868b28de57315e45cfdf54d7eb9cd61",
+      "bars": 21144,
+      "reconciled": false,
+      "covered_start": 1672605000,
+      "covered_end": 1748723400,
+      "volume_quality": {
+        "bars": 21144,
+        "positive_volume_bars": 0,
+        "zero_volume_bars": 21144,
+        "zero_volume_with_price_range_bars": 21106,
+        "first_inconsistent_epoch": 1672605000,
+        "last_inconsistent_epoch": 1748719800,
+        "usable_for_volume_screen": false,
+        "blocking_reasons": [
+          "no_positive_reported_volume",
+          "zero_volume_with_price_range"
+        ],
+        "volume_units_verified": false
+      },
+      "days": 881,
+      "gap_count": 0,
+      "missing_daily": 0,
+      "failed_days": [
+        {
+          "utc": "2024-06-11T20:30:00+00:00",
+          "tehran": "2024-06-12T00:00:00+03:30",
+          "day_open_epoch": 1718137800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.0",
+            "high": "1970.62",
+            "low": "0.0",
+            "close": "682.48",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-24T20:30:00+00:00",
+          "tehran": "2024-08-25T00:00:00+03:30",
+          "day_open_epoch": 1724531400,
+          "hour_count": 24,
+          "deltas": {
+            "open": "65.76",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.0",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-25T20:30:00+00:00",
+          "tehran": "2024-08-26T00:00:00+03:30",
+          "day_open_epoch": 1724617800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.00",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "-100.0",
+            "volume": "0"
+          },
+          "matched": false
+        }
+      ],
+      "daily_audit_table_sha256": "a73b79ac0f873f6ff5be3d093a980402aa4ee308e44b0be711b8bc935cf0eb81"
+    },
+    {
+      "venue": "nobitex",
+      "pair": "ETH/USDT",
+      "manifest_sha256": "c75d3019dec572d780e2984c90e26d20fb4c4d8e0d312618f74ffdf8a0c8a6eb",
+      "normalized_sha256": "58a6de4d90fb47128235216af74bf96c0da2a3e5f484af3a41104fff29452c49",
+      "bars": 21144,
+      "reconciled": false,
+      "covered_start": 1672605000,
+      "covered_end": 1748723400,
+      "volume_quality": {
+        "bars": 21144,
+        "positive_volume_bars": 0,
+        "zero_volume_bars": 21144,
+        "zero_volume_with_price_range_bars": 20889,
+        "first_inconsistent_epoch": 1672605000,
+        "last_inconsistent_epoch": 1748719800,
+        "usable_for_volume_screen": false,
+        "blocking_reasons": [
+          "no_positive_reported_volume",
+          "zero_volume_with_price_range"
+        ],
+        "volume_units_verified": false
+      },
+      "days": 881,
+      "gap_count": 0,
+      "missing_daily": 0,
+      "failed_days": [
+        {
+          "utc": "2024-06-11T20:30:00+00:00",
+          "tehran": "2024-06-12T00:00:00+03:30",
+          "day_open_epoch": 1718137800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.00",
+            "high": "133.66",
+            "low": "0.0",
+            "close": "32.87",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-07-23T20:30:00+00:00",
+          "tehran": "2024-07-24T00:00:00+03:30",
+          "day_open_epoch": 1721766600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "11.12",
+            "high": "0.00",
+            "low": "0.00",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-05T20:30:00+00:00",
+          "tehran": "2024-08-06T00:00:00+03:30",
+          "day_open_epoch": 1722889800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-5.99",
+            "high": "0.00",
+            "low": "0.00",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-08T20:30:00+00:00",
+          "tehran": "2024-08-09T00:00:00+03:30",
+          "day_open_epoch": 1723149000,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.51",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-09T20:30:00+00:00",
+          "tehran": "2024-08-10T00:00:00+03:30",
+          "day_open_epoch": 1723235400,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-2.07",
+            "high": "0.0",
+            "low": "0.00",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-10T20:30:00+00:00",
+          "tehran": "2024-08-11T00:00:00+03:30",
+          "day_open_epoch": 1723321800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "11.11",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.0",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-12T20:30:00+00:00",
+          "tehran": "2024-08-13T00:00:00+03:30",
+          "day_open_epoch": 1723494600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "8.27",
+            "high": "0.00",
+            "low": "0.0",
+            "close": "0.0",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-17T20:30:00+00:00",
+          "tehran": "2024-08-18T00:00:00+03:30",
+          "day_open_epoch": 1723926600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.94",
+            "high": "0.00",
+            "low": "0.0",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-25T20:30:00+00:00",
+          "tehran": "2024-08-26T00:00:00+03:30",
+          "day_open_epoch": 1724617800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.00",
+            "high": "0.00",
+            "low": "0.00",
+            "close": "11.78",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-27T20:30:00+00:00",
+          "tehran": "2024-08-28T00:00:00+03:30",
+          "day_open_epoch": 1724790600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-5.0",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-12T20:30:00+00:00",
+          "tehran": "2024-09-13T00:00:00+03:30",
+          "day_open_epoch": 1726173000,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-3.8",
+            "high": "0.00",
+            "low": "0.00",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-24T20:30:00+00:00",
+          "tehran": "2024-09-25T00:00:00+03:30",
+          "day_open_epoch": 1727209800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "4.00",
+            "high": "0.0",
+            "low": "0.00",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        }
+      ],
+      "daily_audit_table_sha256": "1786a9018a8d0af1bc1a9e747247e96b1782e1e0def6881be77057c73cc9e2ad"
+    },
+    {
+      "venue": "nobitex",
+      "pair": "SOL/USDT",
+      "manifest_sha256": "c1d669aeeef63f8d622b3c4a5d086fdf90d5aa2e4436f548cc011928aff68165",
+      "normalized_sha256": "d5aa0e2b584f63351994c9b153478e61b8f6654193f45d3d9aba72e4043c4783",
+      "bars": 21144,
+      "reconciled": false,
+      "covered_start": 1672605000,
+      "covered_end": 1748723400,
+      "volume_quality": {
+        "bars": 21144,
+        "positive_volume_bars": 0,
+        "zero_volume_bars": 21144,
+        "zero_volume_with_price_range_bars": 20496,
+        "first_inconsistent_epoch": 1672605000,
+        "last_inconsistent_epoch": 1748719800,
+        "usable_for_volume_screen": false,
+        "blocking_reasons": [
+          "no_positive_reported_volume",
+          "zero_volume_with_price_range"
+        ],
+        "volume_units_verified": false
+      },
+      "days": 881,
+      "gap_count": 0,
+      "missing_daily": 0,
+      "failed_days": [
+        {
+          "utc": "2023-03-05T20:30:00+00:00",
+          "tehran": "2023-03-06T00:00:00+03:30",
+          "day_open_epoch": 1678048200,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.245",
+            "high": "0.118",
+            "low": "0.000",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2023-09-27T20:30:00+00:00",
+          "tehran": "2023-09-28T00:00:00+03:30",
+          "day_open_epoch": 1695846600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.083",
+            "high": "0.0",
+            "low": "-0.083",
+            "close": "0.0",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-06-11T20:30:00+00:00",
+          "tehran": "2024-06-12T00:00:00+03:30",
+          "day_open_epoch": 1718137800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.00",
+            "high": "9.998",
+            "low": "0.00",
+            "close": "2.703",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-06-28T20:30:00+00:00",
+          "tehran": "2024-06-29T00:00:00+03:30",
+          "day_open_epoch": 1719606600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.001",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-07-22T20:30:00+00:00",
+          "tehran": "2024-07-23T00:00:00+03:30",
+          "day_open_epoch": 1721680200,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.385",
+            "high": "0.000",
+            "low": "0.00",
+            "close": "0.0",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-07-25T20:30:00+00:00",
+          "tehran": "2024-07-26T00:00:00+03:30",
+          "day_open_epoch": 1721939400,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.353",
+            "high": "0.00",
+            "low": "-0.145",
+            "close": "0.0",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-07-29T20:30:00+00:00",
+          "tehran": "2024-07-30T00:00:00+03:30",
+          "day_open_epoch": 1722285000,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.134",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-10T20:30:00+00:00",
+          "tehran": "2024-08-11T00:00:00+03:30",
+          "day_open_epoch": 1723321800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.563",
+            "high": "0.000",
+            "low": "0.00",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-19T20:30:00+00:00",
+          "tehran": "2024-08-20T00:00:00+03:30",
+          "day_open_epoch": 1724099400,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.443",
+            "high": "0.000",
+            "low": "0.00",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-20T20:30:00+00:00",
+          "tehran": "2024-08-21T00:00:00+03:30",
+          "day_open_epoch": 1724185800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.005",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.0",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-25T20:30:00+00:00",
+          "tehran": "2024-08-26T00:00:00+03:30",
+          "day_open_epoch": 1724617800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.000",
+            "high": "0.0",
+            "low": "0.000",
+            "close": "0.792",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-08-27T20:30:00+00:00",
+          "tehran": "2024-08-28T00:00:00+03:30",
+          "day_open_epoch": 1724790600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.215",
+            "high": "0.000",
+            "low": "0.0",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-05T20:30:00+00:00",
+          "tehran": "2024-09-06T00:00:00+03:30",
+          "day_open_epoch": 1725568200,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.265",
+            "high": "0.00",
+            "low": "0.0",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-12T20:30:00+00:00",
+          "tehran": "2024-09-13T00:00:00+03:30",
+          "day_open_epoch": 1726173000,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.501",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-16T20:30:00+00:00",
+          "tehran": "2024-09-17T00:00:00+03:30",
+          "day_open_epoch": 1726518600,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.233",
+            "high": "0.0",
+            "low": "0.0",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-20T20:30:00+00:00",
+          "tehran": "2024-09-21T00:00:00+03:30",
+          "day_open_epoch": 1726864200,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.279",
+            "high": "0.0",
+            "low": "0.00",
+            "close": "0.000",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-22T20:30:00+00:00",
+          "tehran": "2024-09-23T00:00:00+03:30",
+          "day_open_epoch": 1727037000,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.1",
+            "high": "0.00",
+            "low": "0.0",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        },
+        {
+          "utc": "2024-09-28T20:30:00+00:00",
+          "tehran": "2024-09-29T00:00:00+03:30",
+          "day_open_epoch": 1727555400,
+          "hour_count": 24,
+          "deltas": {
+            "open": "-0.322",
+            "high": "0.000",
+            "low": "0.000",
+            "close": "0.00",
+            "volume": "0"
+          },
+          "matched": false
+        }
+      ],
+      "daily_audit_table_sha256": "3ebb9800ffcda6cc23d614901e2895f0054583cca07d2683aa6c424fd23e2edc"
+    }
+  ],
+  "prior_v2_volume_recheck": [
+    {
+      "pair": "BTC/USDT",
+      "manifest_sha256": "f84749adb30da70e9b8ea667806c95d2b712ebbd1bd0d406aabdba454ead51c7",
+      "reconciled": true,
+      "volume_quality": {
+        "bars": 11568,
+        "positive_volume_bars": 11561,
+        "zero_volume_bars": 7,
+        "zero_volume_with_price_range_bars": 0,
+        "first_inconsistent_epoch": null,
+        "last_inconsistent_epoch": null,
+        "usable_for_volume_screen": true,
+        "blocking_reasons": [],
+        "volume_units_verified": false
+      }
+    },
+    {
+      "pair": "ETH/USDT",
+      "manifest_sha256": "30e52b233c1bee7368c2a1a8b25036db77dc5b8482e46fa185b060166352c091",
+      "reconciled": true,
+      "volume_quality": {
+        "bars": 11568,
+        "positive_volume_bars": 11560,
+        "zero_volume_bars": 8,
+        "zero_volume_with_price_range_bars": 0,
+        "first_inconsistent_epoch": null,
+        "last_inconsistent_epoch": null,
+        "usable_for_volume_screen": true,
+        "blocking_reasons": [],
+        "volume_units_verified": false
+      }
+    },
+    {
+      "pair": "SOL/USDT",
+      "manifest_sha256": "ca2c645d109699119b5a7838dc26f6575309cfb5496088dd6a96771dfa534933",
+      "reconciled": true,
+      "volume_quality": {
+        "bars": 11568,
+        "positive_volume_bars": 11547,
+        "zero_volume_bars": 21,
+        "zero_volume_with_price_range_bars": 0,
+        "first_inconsistent_epoch": null,
+        "last_inconsistent_epoch": null,
+        "usable_for_volume_screen": true,
+        "blocking_reasons": [],
+        "volume_units_verified": false
+      }
+    }
+  ],
+  "bounded_reprobe": {
+    "pair": "BTC/USDT",
+    "source": "https://apiv2.nobitex.ir/market/udf/history",
+    "manifest_sha256": "16f8770199a5ce03e85adcd471f57251424784fea7e7706f6a0e2491860bb84f",
+    "observations": [
+      {
+        "name": "hourly",
+        "sha256": "0952be9d890adc46c87c3971d8b069d8e72e049d0ef6417e88164bbeb79ba518",
+        "kind": "snapshot"
+      },
+      {
+        "name": "daily",
+        "sha256": "856b9b8a2eed36bf2d7fe5d4e99d0bb4f6e14ba934c4c8838daf136337278d23",
+        "kind": "snapshot"
+      }
+    ],
+    "exact_same_hourly_candles": true,
+    "exact_same_daily_candles": true,
+    "reconciliation": {
+      "table": [
+        {
+          "day_open_epoch": 1718137800,
+          "hour_count": 24,
+          "deltas": {
+            "open": "0.0",
+            "high": "1970.62",
+            "low": "0.0",
+            "close": "682.48",
+            "volume": "0"
+          },
+          "matched": false
+        }
+      ],
+      "gaps": [],
+      "missing_daily_epochs": [],
+      "day_phase_utc_seconds": 73800,
+      "excluded_edge_or_unaligned_bars": 0,
+      "reconciled": false
+    }
+  }
+}

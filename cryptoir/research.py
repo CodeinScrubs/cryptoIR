@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .backtest import Assumptions, STRATEGIES, screen
 from .domain import DataError, number
-from .history import DAY, audit_history
+from .history import DAY, audit_history, volume_quality
 from .streams import dumps
 
 
@@ -87,8 +87,11 @@ def run_experiment(plan_path: Path, dataset: Path, output: Path) -> dict:
     try:
         audit, bars = audit_history(dataset)
         report["dataset"] = {key: audit[key] for key in ("venue", "pair", "manifest_sha256", "normalized_sha256", "reconciled")}
+        report["dataset"]["volume_quality"] = volume_quality(bars)
         if not audit["reconciled"]:
             raise DataError("research blocked: daily reconciliation failed")
+        if not report["dataset"]["volume_quality"]["usable_for_volume_screen"]:
+            raise DataError("research blocked: reported volume is insufficient or inconsistent")
         if audit["venue"] not in plan["venues"] or audit["pair"] not in plan["pairs"]:
             raise DataError("dataset is outside preregistered universe")
         source_manifest = json.loads((dataset / "manifest.json").read_bytes())

@@ -3,6 +3,7 @@ import json
 import tempfile
 import unittest
 from decimal import Decimal as D
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -45,6 +46,27 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(boundary % DAY, 73800)
         self.assertLessEqual(boundary, epoch("2026-01-01"))
         self.assertGreater(boundary+DAY, epoch("2026-01-01"))
+
+    def test_unusable_volume_blocks_before_any_trial_or_holdout(self):
+        audit = {"venue":"nobitex", "pair":"BTC/USDT", "manifest_sha256":"test",
+                 "normalized_sha256":"test", "reconciled":True, "day_phase_utc_seconds":0}
+        flat = [Candle(HOUR*i, 100, 100, 100, 100, 100) for i in range(1, 25)]
+        cases = ([replace(bar, volume=0) for bar in flat],
+                 [replace(flat[0], high=101, volume=0)]+flat[1:])
+        for bars in cases:
+            with self.subTest(bars=bars[:1]), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                with patch("cryptoir.research.audit_history", return_value=(audit,bars)), patch("cryptoir.research.screen") as runner:
+                    with self.assertRaisesRegex(DataError, "reported volume"):
+                        run_experiment(PLAN, root, root/"output")
+                runner.assert_not_called()
+                result = json.loads((root/"output"/"report.json").read_bytes())
+                self.assertFalse(result["held_out_inspected"])
+                self.assertEqual(result["stages"], [])
+                self.assertTrue(result["dataset"]["reconciled"])
+                self.assertFalse(result["dataset"]["volume_quality"]["usable_for_volume_screen"])
+                events = [json.loads(s)["kind"] for s in (root/"output"/"trials.jsonl").read_text().splitlines()]
+                self.assertEqual(events, ["begin", "failed"])
 
     def test_discovery_failure_never_reads_validation_or_holdout_in_screen(self):
         plan = copy.deepcopy(self.plan)

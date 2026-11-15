@@ -9,7 +9,7 @@ from unittest.mock import patch
 from urllib.parse import parse_qs, urlparse
 
 from cryptoir.domain import DataError
-from cryptoir.history import Candle, DAY, HOUR, audit_history, download_history, parse_udf, reconcile
+from cryptoir.history import Candle, DAY, HOUR, audit_history, download_history, parse_udf, reconcile, volume_quality
 from cryptoir.streams import dumps
 
 
@@ -82,6 +82,40 @@ class HistoryTests(unittest.TestCase):
         self.assertEqual(parse_udf({"s":"no_data"}), [])
         self.assertFalse(reconcile([], [], DAY, DAY*2)["reconciled"])
 
+    def test_matching_zero_volumes_do_not_establish_volume_availability(self):
+        hourly, daily, start, end = self.fixture()
+        hourly = [replace(bar, volume=0) for bar in hourly]
+        daily = [replace(bar, volume=0) for bar in daily]
+        self.assertTrue(reconcile(hourly, daily, start, end)["reconciled"])
+        quality = volume_quality(hourly)
+        self.assertFalse(quality["usable_for_volume_screen"])
+        self.assertEqual(quality["positive_volume_bars"], 0)
+        self.assertEqual(quality["zero_volume_with_price_range_bars"], 48)
+        self.assertEqual(quality["first_inconsistent_epoch"], start)
+        self.assertEqual(quality["last_inconsistent_epoch"], end-HOUR)
+
+    def test_flat_zero_volume_bar_does_not_invent_liquidity_or_poison_mixed_history(self):
+        hourly, _, _, _ = self.fixture()
+        hourly[0] = Candle(hourly[0].time, 100, 100, 100, 100, 0)
+        quality = volume_quality(hourly)
+        self.assertTrue(quality["usable_for_volume_screen"])
+        self.assertEqual(quality["positive_volume_bars"], 47)
+        self.assertEqual(quality["zero_volume_bars"], 1)
+        self.assertFalse(quality["volume_units_verified"])
+
+    def test_one_price_range_with_zero_volume_blocks_otherwise_positive_history(self):
+        hourly, _, _, _ = self.fixture()
+        hourly[5] = replace(hourly[5], volume=0)
+        quality = volume_quality(hourly)
+        self.assertFalse(quality["usable_for_volume_screen"])
+        self.assertEqual(quality["blocking_reasons"], ["zero_volume_with_price_range"])
+
+    def test_empty_and_flat_all_zero_history_have_no_positive_volume_evidence(self):
+        self.assertEqual(volume_quality([])["blocking_reasons"], ["empty_history"])
+        quality = volume_quality([Candle(HOUR, 100, 100, 100, 100, 0)])
+        self.assertEqual(quality["blocking_reasons"], ["no_positive_reported_volume"])
+        self.assertFalse(quality["usable_for_volume_screen"])
+
     def make_dataset(self, directory):
         hourly, daily, start, end = self.fixture()
 
@@ -102,6 +136,7 @@ class HistoryTests(unittest.TestCase):
             self.make_dataset(directory)
             report, bars = audit_history(directory)
             self.assertTrue(report["reconciled"])
+            self.assertTrue(report["volume_quality"]["usable_for_volume_screen"])
             self.assertEqual(len(bars), 48)
             # Even if someone repairs a normalized hash, it must match raw bodies.
             path = directory / "hourly.jsonl"

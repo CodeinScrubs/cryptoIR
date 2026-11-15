@@ -263,3 +263,26 @@ historical fees.
   authenticated action was performed. Lack of verification is not proof of absence.
 - Leveraged simulation, account entitlements and profitability remain unproven.
   No paper capital, existing strategy configuration or live permission was changed.
+
+## Version 0.11.1 additions (2026-11-15)
+
+- All 225 local tests passed. Five additional scenarios distinguish exact daily
+  agreement from volume availability, reject empty/all-zero evidence and
+  zero-volume price ranges, preserve isolated flat zero-volume bars, and prove
+  registered research cannot start a trial or inspect the holdout on such data.
+- The volume assessment is computed from reconstructed source candles. Existing
+  raw files, manifests and normalized-history hashes remain unchanged. Synthetic
+  low-level screens retain conservative zero-volume behavior.
+- The registered v3 historical attempt completed all three bounded downloads.
+  Each contains 21,144 hours across 881 complete exchange days. BTC / ETH / SOL
+  had 3 / 12 / 18 days with nonzero OHLC deltas and zero positive-volume hours.
+  All three were rejected before strategy performance calculation.
+- Two fresh, single-day BTC requests reproduced the original hourly and daily
+  candles exactly, including the disagreement. No full retry or automatic
+  replacement was performed. The source of the discrepancy remains unresolved.
+- All three earlier v2 datasets pass the additional volume assessment and their
+  full daily replay checks. No earlier return was recalculated and the original
+  validation/2026 holdout remains uninspected. This adds no profitability evidence.
+- [Public audit evidence](../research/evidence/baseline-v3-data-audit.json) records
+  every failed day, manifest/data hashes, the fresh-request hashes and v2 checks.
+  Complete daily tables and original public responses are preserved locally.

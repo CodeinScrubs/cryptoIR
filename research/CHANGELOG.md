@@ -4,6 +4,20 @@ Plans are immutable after performance evaluation. Data failures and rejected
 trials remain in the record. New plans cannot make previously viewed outcomes
 unseen, even if a new filename is used.
 
+## 2026-11-15: v3 source rejection and volume acceptance guard
+
+The registered v3 download completed for all three assets but failed daily
+OHLC reconciliation. Every retained hourly candle also reported zero volume.
+A two-request diagnostic reproduced one BTC conflict exactly; no full retry,
+replacement, date trimming or gate relaxation followed. No strategy return was
+computed. See [the results ledger](RESULTS.md) and its linked raw-derived audit.
+
+Version 0.11.1 rejects registered research before any trial when reported volume
+is entirely zero or a zero-volume candle has a price range. Daily reconciliation
+still reports exact equality separately. This is a source acceptance correction,
+not strategy tuning. The prior v2 datasets pass the additional guard; their
+returns were not recalculated. No new strategy or window is registered here.
+
 ## 2026-11-14: baseline-v1 blocked before performance evaluation
 
 `baseline-v1.json` was published in commit `6509250` before strategy evaluation.

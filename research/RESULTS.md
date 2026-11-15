@@ -3,6 +3,44 @@
 These are preliminary conditional screens, not realized or deployable returns.
 No personal account balances or capital assumptions are published here.
 
+## baseline-v3: longer history rejected before strategy evaluation
+
+Plan `baseline-v3-pre-gap.json` was registered in `72a70b9` before return
+calculation. Requested interval: 2023-01-01 through 2025-06-01 exclusive. All
+three bounded downloads completed, preserving 21,144 hourly bars across 881
+complete exchange days per asset, with no interior gaps or missing daily rows.
+Complete coverage did **not** establish data acceptance:
+
+| Asset | Exact daily matches | Days with OHLC disagreement | Positive-volume hours | Zero-volume hours with a price range | Decision |
+| --- | ---: | ---: | ---: | ---: | --- |
+| BTC | 878 / 881 | 3 | 0 | 21,106 | blocked before performance |
+| ETH | 869 / 881 | 12 | 0 | 20,889 | blocked before performance |
+| SOL | 863 / 881 | 18 | 0 | 20,496 | blocked before performance |
+
+Every hourly candle reported zero volume. Matching zero daily volume cannot
+validate the prior-volume capacity proxy used by the screen. Zero is preserved
+as the source value; its cause and the actual historical volume are unknown.
+
+A bounded two-request recheck of BTC on 2024-06-12 Tehran time reproduced the
+same 24 hourly candles and daily candle exactly, despite the narrower request
+window. Hourly aggregate minus daily value remained:
+
+| Exchange day (Tehran) | Hours | Open delta | High delta | Low delta | Close delta | Volume delta | Match |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 2024-06-12 | 24 | 0 | +1970.62 | 0 | +682.48 | 0 | false |
+
+Price deltas are USDT per BTC. This reproduces a source disagreement; it does
+not establish which resolution is correct. Raw records were not overwritten,
+and no discrepancy was tolerated away. All failed dates, hashes and the bounded
+recheck are in [the audit evidence](evidence/baseline-v3-data-audit.json).
+
+No discovery, validation or held-out strategy return was computed for v3. The
+original v2 validation and 2026 holdout remain uninspected. Rechecking the v2
+datasets with the new volume guard found 11,561 / 11,560 / 11,547 positive-volume
+hours for BTC / ETH / SOL, respectively, and no zero-volume candle with a price
+range. Their earlier conditional rejection results remain unchanged; no return
+was recalculated. This does not remove their documented model limitations.
+
 ## baseline-v1b: BTC/USDT discovery, Nobitex
 
 Code: `8aa9c8557974a65b83af35d0c01159c0e544404a` (v0.4.0).

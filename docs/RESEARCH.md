@@ -25,6 +25,16 @@ bars, reconciliation report and manifest against that reconstruction. Hashes
 detect mismatched artifacts; they are not cryptographic proof of exchange
 authenticity or a substitute for the source's own data quality.
 
+Version 0.11.1 adds a separate `volume_quality` assessment to the replay audit.
+Exact daily agreement can coexist with missing volume: two resolutions may
+both report zero. Research rejects a dataset before any trial when it has no
+positive reported volume, or any zero-volume candle with a nonzero price range.
+Flat zero-volume candles within otherwise usable data retain zero capacity.
+Positive reported volume is not proof of units, completeness or executable
+liquidity. This additional assessment leaves original manifests, normalized
+files and daily reconciliation semantics unchanged. The low-level synthetic
+`screen` remains a conditional model; registered research enforces acceptance.
+
 ```powershell
 uv run python -m cryptoir history --venue nobitex --start 2025-07-02 --end 2026-11-01 --output data/history-nobitex-btc
 uv run python -m cryptoir history-audit data/history-nobitex-btc
@@ -93,3 +103,10 @@ included. Passing this screen would justify further research only. The v2 plan
 uses the currently documented Nobitex taker fee as a counterfactual across past
 prices; it does not reconstruct historical fee tiers. See [results](../research/RESULTS.md)
 for unsuccessful trials and [amendments](../research/CHANGELOG.md) for all changes.
+
+The longer 2023-01 through 2025-05 attempt failed data acceptance for all three
+assets. It supplies no strategy-performance evidence. The public
+[data audit summary](../research/evidence/baseline-v3-data-audit.json) retains all
+failed daily deltas and source hashes. Original recordings and full day-by-day
+tables remain local; no replacement candles, volume imputation or date trimming
+was used to make this experiment pass.

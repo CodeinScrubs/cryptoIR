@@ -53,6 +53,31 @@ def parse_udf(payload) -> list[Candle]:
     return rows
 
 
+def volume_quality(bars: list[Candle]) -> dict:
+    """Separate OHLCV agreement from evidence usable by a volume-capped screen.
+
+    Matching zero volumes in two resolutions does not establish available
+    volume. Flat zero-volume bars remain conservative zero capacity; a price
+    range with zero reported volume is unresolved source evidence.
+    """
+    positive = sum(bar.volume > 0 for bar in bars)
+    inconsistent = [bar.time for bar in bars if bar.volume == 0 and bar.high != bar.low]
+    reasons = []
+    if not bars:
+        reasons.append("empty_history")
+    elif not positive:
+        reasons.append("no_positive_reported_volume")
+    if inconsistent:
+        reasons.append("zero_volume_with_price_range")
+    return {"bars": len(bars), "positive_volume_bars": positive,
+            "zero_volume_bars": len(bars)-positive,
+            "zero_volume_with_price_range_bars": len(inconsistent),
+            "first_inconsistent_epoch": inconsistent[0] if inconsistent else None,
+            "last_inconsistent_epoch": inconsistent[-1] if inconsistent else None,
+            "usable_for_volume_screen": not reasons, "blocking_reasons": reasons,
+            "volume_units_verified": False}
+
+
 def reconcile(hourly: list[Candle], daily: list[Candle], start: int, end: int) -> dict:
     """Daily timestamps define boundaries; never assume all venues use UTC days."""
     if any(a.time >= b.time for rows in (hourly, daily) for a, b in zip(rows, rows[1:])):
@@ -223,4 +248,5 @@ def audit_history(directory: Path) -> tuple[dict, list[Candle]]:
         raise DataError("historical manifest disagrees with source replay")
     return {"kind": "historical_reconciliation", "venue": venue, "pair": pair,
             "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
-            "normalized_sha256": manifest["normalized_sha256"], **expected_fields, **result}, bars
+            "normalized_sha256": manifest["normalized_sha256"],
+            "volume_quality": volume_quality(bars), **expected_fields, **result}, bars
