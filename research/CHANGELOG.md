@@ -4,6 +4,27 @@ Plans are immutable after performance evaluation. Data failures and rejected
 trials remain in the record. New plans cannot make previously viewed outcomes
 unseen, even if a new filename is used.
 
+## 2026-11-15: single-venue triangular feasibility registration
+
+`triangular-v1.json` freezes both USDT -> asset -> IRR -> USDT and reverse
+cycles for BTC, ETH and SOL at Nobitex. One availability-only public setup probe
+established the seven book schemas and source timestamps; no cycle return was
+computed. Current public metadata is pinned by hash, including distinct rial
+and USDT minimum notionals. Native IRT suffixes retain rial book prices.
+
+The plan fixes twenty all-market samples separated by at least thirty seconds,
+a synthetic 10-USDT starting budget per comparison, ten-percent displayed-depth
+participation, and a five-second source/receive freshness budget. It includes a
+zero-cost diagnostic, public base taker fees and doubled fees with additional
+received-asset reserves. Intermediate dust is preserved but valued at zero.
+Starting-USDT residue remains cash. No personal balance is used.
+
+This is a different economic hypothesis from rejected long-only hourly signals
+and cross-venue spreads. It avoids external transfer assumptions but still needs
+three asynchronous executions. No paper/live order or profitability acceptance
+is inferred from a snapshot cycle. Failed/incomplete capture remains evidence;
+there is no automatic retry, window search or threshold revision.
+
 ## 2026-11-15: v4 fixed post-gap discovery extension
 
 Outcome after registration: all nine candidates had negative base and stress

@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "experiment": "triangular-v1-nobitex",
+  "venue": "nobitex",
+  "assets": [
+    "BTC",
+    "ETH",
+    "SOL"
+  ],
+  "start_asset": "USDT",
+  "start_budget": "10",
+  "depth_participation": "0.10",
+  "samples": 20,
+  "interval_seconds": 30,
+  "max_logical_mb": 64,
+  "max_age_ms": 5000,
+  "catalog_sha256": "875757f2572d8bbce15df846cf01110480175a96370c21b79b0f548973ba033e",
+  "market_rules": {
+    "USDT/IRR": {
+      "quantity_step": "0.01",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "BTC/USDT": {
+      "quantity_step": "0.000001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "BTC/IRR": {
+      "quantity_step": "0.000001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "ETH/USDT": {
+      "quantity_step": "0.00001",
+      "price_tick": "0.01",
+      "minimum_notional": "0.5"
+    },
+    "ETH/IRR": {
+      "quantity_step": "0.00001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    },
+    "SOL/USDT": {
+      "quantity_step": "0.0001",
+      "price_tick": "0.001",
+      "minimum_notional": "0.5"
+    },
+    "SOL/IRR": {
+      "quantity_step": "0.0001",
+      "price_tick": "10",
+      "minimum_notional": "500000"
+    }
+  },
+  "scenarios": [
+    {
+      "name": "zero_cost_diagnostic",
+      "usdt_fee": "0",
+      "irr_fee": "0",
+      "reserve_bps": "0"
+    },
+    {
+      "name": "assumed_base",
+      "usdt_fee": "0.0013",
+      "irr_fee": "0.0025",
+      "reserve_bps": "15"
+    },
+    {
+      "name": "assumed_stress",
+      "usdt_fee": "0.0026",
+      "irr_fee": "0.0050",
+      "reserve_bps": "30"
+    }
+  ],
+  "routes": [
+    "USDT->asset->IRR->USDT",
+    "USDT->IRR->asset->USDT"
+  ],
+  "capital_note": "10 USDT per independent cycle is a synthetic reference, not personal capital or a reserved account balance.",
+  "fee_source": "https://nobitex.ir/pricing/",
+  "fee_note": "Public base taker rates observed 2026-11-15: 0.13 percent USDT markets, 0.25 percent rial markets. Fees deducted from received asset; not account tier verification. Stress doubles fees. Reserve is an additional percentage of gross received units at every leg, not an actual charged fee.",
+  "units_note": "Native IRT-suffixed order-book prices remain IRR, without dividing by ten. USDT closes both fixed cycles. Only BTC, ETH, SOL and USDT with observed native scale one.",
+  "residual_policy": "Starting-USDT residue is retained in final cash. Intermediate IRR/base residues remain reported but have zero USDT liquidation value. Displayed participation may leave unspent budget; no depth, fee or rounding remainder is reused within another leg.",
+  "observation_policy": "One new bounded all-market REST capture after registration and implementation. A setup probe established only endpoint, schema and source-time availability; no cyclic return was computed. Do not reuse that probe as prospective evidence. Stop on network error or byte limit; preserve incomplete evidence, no automatic retry or favorable window search.",
+  "interpretation": "Conditional capacity diagnostic, not fill simulation. Each cycle reuses the same synthetic budget and displayed liquidity; estimates cannot be summed into profits or independent trials. No atomic multi-leg guarantee, inventory journal, execution latency, cancel race, calibrated reserve, account entitlement or profitability acceptance. Only positive cost-bearing estimates would justify further asynchronous execution research."
+}
