@@ -115,3 +115,9 @@ under both base and stress qualifies for separately registered fresh observation
 The frozen plan limits follow-up priority to five routes by stress positive count,
 then base positive count, then ascending asset/route. This is a research resource
 rule, not a statistical confidence threshold or profitability acceptance.
+
+The completed replay had valid comparisons for 220 of 248 assets, with 28
+remaining unavailable because of book or exit-depth limits. Each scenario had
+8,800 valid comparisons; none were positive under base or stress. Four zero-cost
+positives did not survive costs. No route qualified for fresh follow-up.
+The [research ledger](../research/RESULTS.md) preserves all routes and limitations.

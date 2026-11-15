@@ -3,6 +3,43 @@
 These are preliminary conditional screens, not realized or deployable returns.
 No personal account balances or capital assumptions are published here.
 
+## triangular-v2: catalog-wide exploration, no cost-bearing positives
+
+Plan registration and evaluation code: `b3dd298`, published before calculation.
+The deterministic catalog rule selected 248 active scale-one assets with both
+quote markets, excluding nine scaled and ten inactive assets. This reuses the
+same twenty v1 all-market samples; BTC/ETH/SOL outcomes were already seen.
+It is retrospective exploration, not another prospective observation.
+
+Twenty samples were available, but universe coverage remained incomplete.
+Both directions for 220 assets had twenty valid comparisons each. Another
+27 assets had no usable pair books, and RDNT failed displayed exit-depth checks
+in both directions. These 28 assets remain unevaluated, not negative returns.
+
+| Scenario | Valid comparisons | Positive estimates | Unavailable-book rejections | Exit-depth rejections |
+| --- | ---: | ---: | ---: | ---: |
+| Zero-cost diagnostic | 8,800 | 4 | 1,080 | 40 |
+| Assumed base costs | 8,800 | 0 | 1,080 | 40 |
+| Assumed stress costs | 8,800 | 0 | 1,080 | 40 |
+
+The four zero-cost positives were BICO forward (one sample, best 0.0000356 USDT)
+and S reverse (three samples, best 0.0151990 USDT), each against the unchanged
+synthetic 10-USDT budget. Neither survived costs. The best base-cost estimate
+across valid routes was -0.092793668320000 USDT. Separate maxima need not occur
+in the same sample. No estimates are added into P&L or treated as independent.
+
+No route met the preregistered condition of at least ten valid comparisons and
+three positive estimates in both cost-bearing scenarios. Therefore no route
+advances to fresh follow-up under this plan. There was no threshold, cost,
+budget, freshness or market-minimum relaxation after inspecting outcomes.
+This short observed window cannot exclude other periods or unknown markets.
+
+The [evidence summary](evidence/triangular-v2-universe-summary.json) retains every
+route, rejection reason, source hash and input pin, including the hash of the
+full local report. Source hashes match `b3dd298`; capture source hashes remain
+those of `d6de259`. No new market download, account access, paper order or real
+order was needed. Profitability and autonomous execution remain unestablished.
+
 ## triangular-v1: three-leg Nobitex cycles, no positive estimates
 
 Registration: `68b6b1c`; capture and evaluation: `d6de259`. Twenty fresh public

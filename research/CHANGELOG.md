@@ -6,6 +6,12 @@ unseen, even if a new filename is used.
 
 ## 2026-11-15: deterministic broader triangular universe, exploratory reuse
 
+Outcome after registration in `b3dd298`: 220 assets had valid comparisons in both
+directions; 28 had missing book/depth coverage. Each scenario had 8,800 valid
+comparisons. Four were positive without costs; none were positive in base or
+stress. No route met the frozen follow-up rule. [All results](RESULTS.md) retain
+the incomplete coverage and no parameters changed after this observation.
+
 `triangular-v2-universe.json` expands membership using the same pinned catalog:
 every active, scale-one native asset with both USDT and IRT markets, excluding
 fiat/USDT cycle identities. This selects 248 assets and 497 books, with nine

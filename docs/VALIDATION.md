@@ -418,3 +418,33 @@ historical fees.
   hashes are retained in the [public evidence](../research/evidence/triangular-v1-summary.json).
 - No performance acceptance, real order or paper-ledger mutation occurred.
   The observation neither establishes profitability nor rules out other periods.
+
+## Version 0.16.0 additions (2026-11-15)
+
+- All 295 local tests passed. Six additional scenarios cover deterministic
+  metadata membership and exclusions, complete-catalog enforcement, single-letter
+  and digit-prefixed native symbols without global aliases, pinned exploratory
+  reuse of both recording and capture plan, rejection of fresh capture from a
+  replay-only plan, and invalid completion flags after corrupt trailing evidence.
+- Registration and evaluation code `b3dd298` passed all four Windows/Linux,
+  Python 3.11/3.13 CI jobs in run `43742029110`. The broader plan was published
+  before its first performance calculation. No new account or venue call was made.
+- Replay verified the unchanged v1 recording, raw bodies, original capture-plan
+  hash and pinned catalog. All evaluation source hashes matched `b3dd298`.
+  Capture source hashes remain the original `d6de259`; reuse is explicitly labeled
+  `exploratory_existing_recording`, not fresh independent evidence.
+- All eighteen shared BTC/ETH/SOL route/scenario summaries exactly match v1,
+  including detailed leg amounts and residuals. All 1,488 broader summaries
+  reconcile to the registered sample counts, including rejected comparisons.
+- Of 248 eligible assets, 220 had both routes evaluated at all twenty samples.
+  Twenty-seven lacked usable books; RDNT lacked sufficient displayed exit depth.
+  The report retains `capture_complete: true`, `universe_coverage_complete: false`
+  and `incomplete_observation` rather than presenting partial coverage as complete.
+- Each scenario had 8,800 valid comparisons, 1,080 missing-market rejections and
+  forty exit-depth rejections. Four zero-cost estimates were positive; none in
+  base or stress were positive. No route met the preregistered follow-up rule.
+  Counts are dependent snapshots, not transactions or independent statistical trials.
+- [Public evidence](../research/evidence/triangular-v2-universe-summary.json)
+  includes every route and rejection, immutable input pins, source hashes and the
+  full-report hash. No new recording, order, account allocation, paper mutation,
+  tuning after outcomes, live activation or profitability acceptance occurred.

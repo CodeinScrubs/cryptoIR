@@ -69,4 +69,12 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
+Catalog-wide triangular exploration is implemented and locally tested. The
+registered v2 reuse examined all 248 metadata-eligible assets in the existing
+twenty-sample observation, with valid comparisons for 220 and incomplete coverage
+for 28. No cost-bearing estimate was positive and no route met the fresh-follow-up
+rule. This closes that registered screen without selecting an execution candidate;
+it does not rule out other periods. Further execution work needs a justified
+hypothesis or independent evidence rather than relaxed screening thresholds.
+
 Extend prospective paper observation and calibrate execution, IRT valuation and matched holding benchmarks. No candidate has passed the registered screening gates; observation remains experimental. A local read-only Persian dashboard and bounded read-only account adapters are implemented and locally tested. Nobitex profile/balance and Wallex fee/balance reads have account acceptance; Tabdeal's signed account read remains partial because duplicate asset balances are ambiguous; its separate funding-wallet list has an accepted read without resolving those duplicates. Opt-in Windows Credential Manager storage and automatic reuse are account-verified for all three venues. Ambiguous fee assets/units and balance semantics remain unresolved. A registered cross-venue snapshot diagnostic now covers fee assets, quantity rounding and independent capacity ceilings; the first bounded BTC observation found no positive base/stress estimate among valid comparisons. A separate registered Nobitex three-leg diagnostic completed twenty fresh all-market samples; none of its six USDT/crypto/IRR cycles had positive zero/base/stress estimates. Asynchronous legs and persistent cross-venue inventory remain to be simulated when a hypothesis justifies that work. Public leveraged catalogs, a separate Tabdeal FAPI book observation and Wallex public pre-position calculations are implemented and publicly probed. Complete side-specific cost, liquidation and expiry rules plus historical inputs are still needed before leveraged simulation. Versland's documented API remains unestablished after bounded discovery; do not guess routes or place browser orders.
