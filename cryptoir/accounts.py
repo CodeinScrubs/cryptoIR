@@ -29,7 +29,8 @@ READS = {
                 "balances":("POST","/users/wallets/list",b'{"type":"spot"}')},
     "wallex": {"fees":("GET","/v1/account/fee",None),
                "balances":("GET","/v1/account/balances",None)},
-    "tabdeal": {"account":("GET","/r/api/v1/account",None)},
+    "tabdeal": {"account":("GET","/r/api/v1/account",None),
+                "wallet":("GET","/r/api/v1/asset/get-funding-asset",None)},
 }
 MAX_RESPONSE = 2*1024*1024
 
@@ -136,7 +137,7 @@ def _unique_object(pairs):
     return result
 
 
-def read_operation(venue: str, operation: str, credentials: Credentials) -> tuple[dict,dict]:
+def read_operation(venue: str, operation: str, credentials: Credentials) -> tuple[dict | list,dict]:
     request=build_read_request(venue,operation,credentials,now_ns=time.time_ns())
     start=time.monotonic_ns()
     # Default verified HTTPS and proxy handling; redirects cannot carry a secret elsewhere.
@@ -159,7 +160,8 @@ def read_operation(venue: str, operation: str, credentials: Credentials) -> tupl
         value=json.loads(raw,parse_float=Decimal,parse_constant=_no_constant,object_pairs_hook=_unique_object)
     except (ValueError,UnicodeError,RecursionError):
         raise AccountReadError("invalid_json_response") from None
-    if not isinstance(value,dict):
+    expected=list if (venue,operation)==("tabdeal","wallet") else dict
+    if not isinstance(value,expected):
         raise AccountReadError("unexpected_response_shape")
     evidence={"operation":operation,"received_ns":time.time_ns(),"duration_ns":time.monotonic_ns()-start,
               "body_sha256":hashlib.sha256(raw).hexdigest(),"raw_response_retained":False}
@@ -228,10 +230,16 @@ def tabdeal_balance_observations(rows):
             "ambiguous_balance_groups":ambiguous}
 
 
-def parse_account(venue: str, operation: str, value: dict) -> dict:
+def parse_account(venue: str, operation: str, value: dict | list) -> dict:
     """Whitelist fields. Preserve unknown units/roles; do not invent usable funds."""
     if venue not in READS or operation not in READS[venue]:
         raise AccountReadError("operation_not_in_read_allowlist")
+    if (venue,operation)==("tabdeal","wallet"):
+        if not isinstance(value,list):
+            raise AccountReadError("unexpected_funding_wallet_list")
+        return {"wallet_type":"funding_endpoint",**tabdeal_balance_observations(value),
+                "account_endpoint_equivalence_verified":False,
+                "ambiguous_account_balances_resolved":False}
     if not isinstance(value,dict):
         raise AccountReadError("unexpected_response_shape")
     if venue == "nobitex":

@@ -53,13 +53,14 @@ class SigningTests(unittest.TestCase):
                           b'1800000000'+method.encode()+path.encode()+(body or b''))
 
     def test_tabdeal_hmac_uses_milliseconds_and_exact_query(self):
-        req=a.build_read_request('tabdeal','account',TAB,now_ns=NOW)
         query='timestamp=1800000000123'
         signature=hmac.new(b'synthetic-secret',query.encode(),hashlib.sha256).hexdigest()
-        self.assertEqual(req.full_url,'https://api1.tabdeal.org/r/api/v1/account?'+query+'&signature='+signature)
-        self.assertEqual(headers(req)['x-mbx-apikey'],TAB.key)
-        self.assertIsNone(req.data)
-        self.assertEqual(req.method,'GET')
+        for operation,path in (('account','/r/api/v1/account'),('wallet','/r/api/v1/asset/get-funding-asset')):
+            req=a.build_read_request('tabdeal',operation,TAB,now_ns=NOW)
+            self.assertEqual(req.full_url,'https://api1.tabdeal.org'+path+'?'+query+'&signature='+signature)
+            self.assertEqual(headers(req)['x-mbx-apikey'],TAB.key)
+            self.assertIsNone(req.data)
+            self.assertEqual(req.method,'GET')
 
     def test_wallex_and_legacy_token_are_distinct(self):
         req=a.build_read_request('wallex','fees',WAL,now_ns=NOW)
@@ -129,6 +130,18 @@ class AccountTransportTests(unittest.TestCase):
                 with self.assertRaises(a.AccountReadError) as caught:
                     a.read_operation('wallex','fees',WAL)
                 self.assertNotIn('SECRET',str(caught.exception))
+
+    def test_list_response_is_only_allowed_for_documented_wallet_operation(self):
+        for operation in ('account','wallet'):
+            with self.subTest(operation=operation),patch.object(a,'build_opener') as factory:
+                factory.return_value.open.return_value=Response(b'[]')
+                if operation=='wallet':
+                    value,evidence=a.read_operation('tabdeal',operation,TAB)
+                    self.assertEqual(value,[])
+                    self.assertFalse(evidence['raw_response_retained'])
+                else:
+                    with self.assertRaisesRegex(a.AccountReadError,'unexpected_response_shape'):
+                        a.read_operation('tabdeal',operation,TAB)
 
     def test_redirect_is_refused_without_following_or_forwarding_credentials(self):
         hits=[]
@@ -266,7 +279,7 @@ class AccountNormalizationTests(NoStoredAccountKeys):
         # Synthetic numeric observations only; arbitrary response fields disappear.
         value={'accountType':'SPOT','makerCommission':40,'privateProfile':'PRIVATE',
                'balances':[{'asset':'BTC','free':'1','freeze':'0','privateField':'PRIVATE'}]*2}
-        with patch.object(a,'read_operation',return_value=(value,{'body_sha256':'test'})):
+        with patch.object(a,'read_operation',side_effect=[(value,{'body_sha256':'test'}),([],{'body_sha256':'wallet-test'})]):
             report=a.inspect_account('tabdeal',TAB)
         op=report['results'][0]
         self.assertEqual(op['status'],'partial')
@@ -279,7 +292,8 @@ class AccountNormalizationTests(NoStoredAccountKeys):
                 patch.object(a,'save_assessment',return_value=Path('tabdeal-synthetic.json')),redirect_stdout(out):
             self.assertEqual(a.account_check('tabdeal'),1)
         console=json.loads(out.getvalue())
-        self.assertEqual(console['operations'],[{'operation':'account','status':'partial','reason':'ambiguous_duplicate_balances'}])
+        self.assertEqual(console['operations'],[{'operation':'account','status':'partial','reason':'ambiguous_duplicate_balances'},
+                                                {'operation':'wallet','status':'accepted'}])
         self.assertNotIn('balances',console)
 
     def test_tabdeal_unique_rows_keep_exact_reported_amounts(self):
@@ -288,6 +302,33 @@ class AccountNormalizationTests(NoStoredAccountKeys):
         self.assertTrue(data['balance_data_complete'])
         self.assertEqual(data['ambiguous_balance_groups'],0)
         self.assertEqual(data['balances'][0]['total'],Decimal('0.00000003'))
+
+    def test_funding_wallet_preserves_its_scope_and_cannot_resolve_account_duplicates(self):
+        rows=[{'asset':'BTC','free':'0.00000001','freeze':'0.00000002','privateField':'PRIVATE'}]
+        data=a.parse_account('tabdeal','wallet',rows)
+        self.assertEqual(data['wallet_type'],'funding_endpoint')
+        self.assertFalse(data['account_endpoint_equivalence_verified'])
+        self.assertFalse(data['ambiguous_account_balances_resolved'])
+        self.assertEqual(data['balances'][0]['total'],Decimal('0.00000003'))
+        self.assertNotIn('PRIVATE',json.dumps(data,default=str))
+        duplicate=a.parse_account('tabdeal','wallet',rows*2)
+        self.assertFalse(duplicate['balance_data_complete'])
+        self.assertIsNone(duplicate['balances'][0]['free'])
+
+    def test_funding_wallet_rejects_wrong_root_invalid_and_negative_amounts(self):
+        cases=({'asset':'BTC','free':'1','freeze':'0'},None,
+               [{'asset':'BTC','free':'-1','freeze':'0'}],
+               [{'asset':'BTC','free':'NaN','freeze':'0'}],
+               [{'asset':'BTC','freeze':'0'}])
+        for value in cases:
+            with self.subTest(value=value),self.assertRaises((ValueError,KeyError)):
+                a.parse_account('tabdeal','wallet',value)
+
+    def test_unavailable_wallet_read_does_not_discard_accepted_account(self):
+        with patch.object(a,'read_operation',side_effect=[({'accountType':'SPOT','balances':[]},{}),a.AccountReadError('http_503')]):
+            report=a.inspect_account('tabdeal',TAB)
+        self.assertEqual([r['status'] for r in report['results']],['accepted','unavailable'])
+        self.assertFalse(report['all_requested_reads_accepted'])
 
     def test_malformed_balances_fail_and_exact_totals_do_not_round(self):
         for value in ('-1','NaN','1e9999',True,0.1):
@@ -335,7 +376,7 @@ class AccountPrivateOutputTests(NoStoredAccountKeys):
         self.assertLess(len(json.dumps(a.fee_schema_shape(value))),2000)
 
     def report(self):
-        with patch.object(a,'read_operation',return_value=({'accountType':'SPOT','balances':[]},{})):
+        with patch.object(a,'read_operation',side_effect=[({'accountType':'SPOT','balances':[]},{}),([],{})]):
             return a.inspect_account('tabdeal',TAB)
 
     def test_exclusive_private_file_and_no_raw_profile_or_credentials(self):

@@ -1,9 +1,11 @@
 # Read-only account assessment
 
-Introduced in 0.10.0, updated in 0.13.0: **implemented and locally tested;
+Introduced in 0.10.0, updated in 0.14.1: **implemented and locally tested;
 Nobitex profile/balance and Wallex fee/balance reads account-verified**. Tabdeal's
 signed account read returns a partial assessment because duplicate asset balances
-remain ambiguous. All three were verified again using saved Windows credentials,
+remain ambiguous. Its separate funding-wallet list was account-verified without
+duplicate rows in the observed response; it does not replace or resolve the
+account endpoint. All three venues were verified using saved Windows credentials,
 without another prompt. Successful reads do not establish trading entitlement,
 key permissions or order acceptance.
 
@@ -56,6 +58,7 @@ is exposed by this client.
 | Wallex | `GET https://api.wallex.ir/v1/account/fee` | `X-API-Key` |
 | Wallex | `GET https://api.wallex.ir/v1/account/balances` | `X-API-Key` |
 | Tabdeal | `GET https://api1.tabdeal.org/r/api/v1/account` | `X-MBX-APIKEY`, HMAC-SHA256 of the exact timestamp query in milliseconds |
+| Tabdeal | `GET https://api1.tabdeal.org/r/api/v1/asset/get-funding-asset`, no asset filter | Same signed GET; documented list of all assets |
 
 Nobitex signing follows its [API-key guide](https://apidocs.nobitex.ir/api_key/api-key-guide):
 `timestamp + uppercase method + full path including query + exact raw body`.
@@ -96,6 +99,15 @@ describes signed authentication for this GET; the client does not submit a trade
   `balance_data_complete: false` and a nonzero exit status. Official documentation
   has not established how to resolve these duplicates. Negative or invalid
   amounts still reject normalization.
+- Tabdeal's separately documented funding-wallet list is retained under
+  `wallet_type: funding_endpoint`. Its array response is accepted only for that
+  exact operation, with the same amount and duplicate safeguards. The observed
+  read was accepted without duplicate assets. This is a separate timed snapshot;
+  equivalence to the account endpoint, completeness of trading funds and the
+  cause of account duplicates remain unverified. No values are merged or used
+  to override an ambiguous account entry. Either read may fail independently;
+  `account-check` preserves the other result and returns nonzero if either is
+  partial or unavailable.
 - Native asset/market identifiers stay venue-specific. No cross-venue asset
   identity, fiat conversion, portfolio allocation or balance transfer is inferred.
 - Account capability flags are observations, not verified API-key permissions.

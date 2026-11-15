@@ -8,7 +8,9 @@ assessment. Authentication and normalization are locally tested. Version 0.13
 has **account acceptance for Nobitex profile/balance and Wallex fee/balance reads**;
 Tabdeal's signed read remains partial because duplicate asset balances are
 ambiguous. Automatic reuse of saved Windows credentials was verified for all
-three. See [ACCOUNTS.md](ACCOUNTS.md) for official sources, hidden
+three. Version 0.14.1 additionally has accepted Tabdeal funding-wallet reads;
+that independent endpoint does not resolve the partial account response.
+See [ACCOUNTS.md](ACCOUNTS.md) for official sources, hidden
 local key entry, exact endpoints and unresolved fee/balance semantics. The table
 below describes public-market integration, not authenticated account evidence.
 

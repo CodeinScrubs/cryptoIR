@@ -366,3 +366,19 @@ historical fees.
   was consumed as discovery; no 2026 strategy or benchmark return was inspected.
   No parameters, gates, account capital, live permission or existing paper
   configuration changed after observing these outcomes.
+
+## Version 0.14.1 additions (2026-11-15)
+
+- All 272 local tests passed. Four additional scenarios cover the funding-wallet
+  array response only on its documented route, distinct wallet scope, exact
+  amounts, duplicate quarantine, malformed/negative values and an independent
+  read failure preserving an accepted account response. Signing tests verify
+  the exact fixed GET path and timestamp query for both Tabdeal reads.
+- One bounded account assessment reused saved Windows credentials and requested
+  the documented account and funding-wallet endpoints. The former remained
+  `partial / ambiguous_duplicate_balances`; the latter was accepted without
+  duplicate rows. Neither raw response, secret nor actual balance is published.
+- These are separate observations. No implicit wallet equivalence, duplicate
+  resolution, balance allocation or trading permission was inferred. The normal
+  Tabdeal account check now retains both results and still exits nonzero for an
+  incomplete assessment. [Official routes and boundaries](ACCOUNTS.md).
