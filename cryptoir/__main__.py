@@ -197,7 +197,16 @@ def main() -> int:
     research.add_argument("--plan", type=Path, required=True)
     research.add_argument("--dataset", type=Path, required=True)
     research.add_argument("--output", type=Path, required=True)
+    rotation = commands.add_parser("rotation-research", help="registered shared-cash relative-momentum screen; no real orders")
+    rotation.add_argument("--plan", type=Path, required=True)
+    rotation.add_argument("--dataset", type=Path, action="append", required=True)
+    rotation.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "rotation-research":
+        from .rotation import run_experiment
+        report = run_experiment(args.plan, args.dataset, args.output)
+        print(encode({k: report[k] for k in ("experiment", "status", "dataset_pins_verified", "held_out_inspected", "execution_ready")}))
+        return int(report["status"] == "incomplete")
     if args.command=="products":
         from .products import collect_products
         report=collect_products(args.output,args.tabdeal_book)
