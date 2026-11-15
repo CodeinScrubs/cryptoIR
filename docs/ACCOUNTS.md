@@ -1,8 +1,9 @@
 # Read-only account assessment
 
-Version 0.10.0: **implemented and locally tested; not account-verified**.
-No account credentials have been used for release validation. Successful synthetic
-signature tests do not establish exchange acceptance or account entitlement.
+Introduced in 0.10.0, compatibility correction in 0.12.0: **implemented and
+locally tested; Wallex fee and balance reads accepted in an interactive account
+check**. Nobitex and Tabdeal account acceptance remains unverified. Successful
+reads do not establish trading entitlement, key permissions or order acceptance.
 
 ## راه‌اندازی روی لپ‌تاپ
 
@@ -71,7 +72,12 @@ describes signed authentication for this GET; the client does not submit a trade
   maker/taker interpretation are not established here, so normalized rates stay
   null. No zero-fee fallback, percentage guess or copied Binance convention.
 - Wallex maker/taker fields are documented ratios; the charged asset remains
-  unverified. A reported ratio is not a complete fee model or historical tier.
+  unverified. The fee result may contain additional entries without either fee
+  field. Explicit market rows are parsed and those other entries are counted as
+  unparsed; their values and labels are discarded. A row with only one fee field,
+  an invalid rate or a duplicate native market still fails. No market coverage,
+  missing-market rate or default fee is inferred. A reported ratio is not a
+  complete fee model or historical tier.
 - Nobitex reported total/free/blocked balances are checked for internal equality
   when all three exist. Missing or inconsistent components remain flagged.
 - Wallex `value` and `locked` are retained, but whether `value` includes locked
@@ -101,6 +107,12 @@ the checkout's ignored `.local/accounts/`; no arbitrary CLI output path. Files
 are exclusively created, directory links/junctions are refused, and POSIX
 permissions are owner-only for newly created directories/files. On Windows the
 directory inherits the user's existing ACL; this is not an encrypted vault.
+
+If fee normalization fails after a response was received, the private report
+also retains a bounded structural diagnostic: value types, container lengths,
+counts and allowlisted field labels only. Scalar values and arbitrary keys are
+never copied; even a private value used as a JSON key is redacted. This permits
+schema debugging without storing the raw response or printing account details.
 
 Verified HTTPS, a ten-second socket timeout, a two-MiB response cap and no
 redirect following apply. There are no retries. Duplicate JSON keys, non-finite

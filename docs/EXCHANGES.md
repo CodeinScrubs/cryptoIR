@@ -4,8 +4,9 @@ Reviewed 2026-11-14. Documentation is evidence of advertised interfaces, not acc
 
 Account addendum reviewed 2026-11-15: version 0.10 implements bounded read-only
 Nobitex profile/spot wallets, Wallex fee/main-wallet and Tabdeal spot-account
-assessment. Authentication and normalization are locally tested, **not
-account-verified**. See [ACCOUNTS.md](ACCOUNTS.md) for official sources, hidden
+assessment. Authentication and normalization are locally tested. Version 0.12
+also has **interactive acceptance for Wallex fee and balance reads**; Nobitex
+and Tabdeal account reads remain unverified. See [ACCOUNTS.md](ACCOUNTS.md) for official sources, hidden
 local key entry, exact endpoints and unresolved fee/balance semantics. The table
 below describes public-market integration, not authenticated account evidence.
 

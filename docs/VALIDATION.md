@@ -289,7 +289,7 @@ historical fees.
 
 ## Version 0.12.0 additions (2026-11-15)
 
-- All 243 local tests passed. Eighteen added scenarios cover received-base and
+- All 248 local tests passed. Eighteen added arbitrage scenarios cover received-base and
   quote buy fees, residual inventory and rounding, depth-weighted costs, both-leg
   reserves, independent cash/base ceilings, known minimums, unknown/stale/future
   timestamps, invalid costs, causal replay, invalidation, corrupt source frames,
@@ -301,3 +301,21 @@ historical fees.
 - The new command is a conditional capacity diagnostic. It does not simulate
   orders, sum overlapping estimates, mutate balances or establish profitability.
   See [its assumptions and boundaries](ARBITRAGE.md).
+- Five additional account scenarios cover bounded value-free schema diagnostics,
+  redaction of arbitrary JSON keys, mixed Wallex fee-result entries, incomplete
+  fee rows, invalid ratios and duplicate native markets. Fixtures are synthetic;
+  CI contains no private responses, credentials, account rates or balances.
+- A local interactive account check initially accepted Wallex balances but
+  rejected the fee schema. Redacted structural evidence identified additional
+  result entries without fee fields. After the compatibility correction, both
+  reads were accepted with the current parser hash. Charged fee assets, spendable
+  balance semantics, key permissions and order acceptance remain unverified.
+- The registered 900-second public recording completed and reconstructed 6,008
+  books across all three venues. SHA-256:
+  `1dd3cc737fce1105c5f43a45017879702c9dec809871e78b952c5c16a32cf040`.
+  Compressed size: 7,088,063 bytes. All 3,426 strict directional comparisons were
+  nonpositive under the registered base/stress costs; 139 were positive only in
+  the zero-cost diagnostic. Wallex routes were excluded for unknown source time.
+  Full counts, stale-book exclusions and estimates are in the
+  [public result](../research/evidence/arbitrage-v1-summary.json). No real or paper
+  order, account allocation or transfer was performed.

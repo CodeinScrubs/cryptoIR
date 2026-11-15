@@ -245,14 +245,31 @@ def parse_account(venue: str, operation: str, value: dict) -> dict:
         if not isinstance(result,dict):
             raise AccountReadError("unexpected_wallex_result")
         if operation == "fees":
-            fees=[]
+            fees,unparsed,seen=[],0,set()
             for symbol,row in result.items():
+                fields={"makerFeeRate","takerFeeRate"}
+                present=fields.intersection(row) if isinstance(row,dict) else set()
+                if not present:
+                    # The observed response also contains non-fee-shaped entries.
+                    # Do not infer their purpose, rate or market applicability.
+                    unparsed+=1
+                    continue
+                if present != fields:
+                    raise AccountReadError("incomplete_market_fee_fields")
+                native=native_name(symbol)
+                if native.upper() in seen:
+                    raise AccountReadError("duplicate_native_fee_market")
+                seen.add(native.upper())
                 maker,taker=nonnegative(row["makerFeeRate"]),nonnegative(row["takerFeeRate"])
                 if max(maker,taker)>=1:
                     raise AccountReadError("fee_ratio_out_of_range")
-                fees.append({"native_market":native_name(symbol),"maker_rate":maker,"taker_rate":taker,
+                fees.append({"native_market":native,"maker_rate":maker,"taker_rate":taker,
                              "unit":"ratio","charged_asset":"unverified"})
+            if unparsed and not fees:
+                raise AccountReadError("unrecognized_fee_mapping")
             return {"fee_observations":fees,"fee_rates_usable":bool(fees),
+                    "unparsed_entry_count":unparsed,"all_result_entries_parsed":not unparsed,
+                    "market_coverage_verified":False,
                     "fee_status":"current_reported_ratios_fee_asset_unverified" if fees else "missing"}
         rows=result["balances"]
         if not isinstance(rows,dict):
@@ -279,11 +296,51 @@ def parse_account(venue: str, operation: str, value: dict) -> dict:
     raise AccountReadError("unsupported_venue")
 
 
+def fee_schema_shape(value, depth=0):
+    """Bounded types/allowlisted labels only; no account values or arbitrary keys.
+
+    A failed fee parser needs structural evidence without retaining the response.
+    Unknown keys may themselves contain private data, so never copy them.
+    """
+    labels={"success","result","data","fees","fee","markets","symbol","market",
+            "makerFeeRate","takerFeeRate","maker_fee_rate","taker_fee_rate",
+            "makerFee","takerFee","maker_fee","taker_fee","maker","taker",
+            "makerCommission","takerCommission","recent_days_sum","level","tier",
+            "spot","margin","type","status"}
+    kind=("null" if value is None else "boolean" if type(value) is bool else
+          "object" if isinstance(value,dict) else "array" if isinstance(value,list) else
+          "string" if isinstance(value,str) else "number" if isinstance(value,(int,Decimal)) else "other")
+    result={"type":kind}
+    if kind not in ("object","array"):
+        return result
+    result["length"]=len(value)
+    if depth>=4:
+        result["truncated"]=bool(value)
+        return result
+    groups={}
+    items=value.items() if kind=="object" else enumerate(value)
+    visited=0
+    for key,child in items:
+        if visited>=512:
+            break
+        visited+=1
+        item={"label":key if kind=="object" and key in labels else "<other>",
+              "shape":fee_schema_shape(child,depth+1)}
+        fingerprint=json.dumps(item,sort_keys=True,separators=(",",":"))
+        if fingerprint not in groups and len(groups)>=32:
+            continue
+        groups.setdefault(fingerprint,{**item,"count":0})["count"]+=1
+    result["groups"]=list(groups.values())
+    result["truncated"]=visited<len(value) or sum(g["count"] for g in groups.values())<visited
+    return result
+
+
 def inspect_account(venue: str, credentials: Credentials) -> dict:
     if venue not in READS:
         raise AccountReadError("unsupported_venue")
     results=[]
     for operation in READS[venue]:
+        raw,evidence=None,None
         try:
             raw,evidence=read_operation(venue,operation,credentials)
             normalized=parse_account(venue,operation,raw)
@@ -292,6 +349,9 @@ def inspect_account(venue: str, credentials: Credentials) -> dict:
             results.append({"operation":operation,"status":"unavailable","reason":str(exc)})
         except (ValueError,TypeError,KeyError,ArithmeticError,AttributeError):
             results.append({"operation":operation,"status":"unavailable","reason":"unrecognized_response_schema"})
+        if operation=="fees" and raw is not None and results[-1]["status"]=="unavailable":
+            results[-1]["diagnostic"]={"kind":"redacted_fee_schema","shape":fee_schema_shape(raw)}
+            results[-1]["evidence"]=evidence
     return {"schema":1,"kind":"private_account_read_assessment","venue":venue,"observed_ns":time.time_ns(),
             "client_version":__version__,"parser_sha256":hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "results":results,"all_requested_reads_accepted":all(r["status"]=="accepted" for r in results),

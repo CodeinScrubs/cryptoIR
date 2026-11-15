@@ -3,6 +3,38 @@
 These are preliminary conditional screens, not realized or deployable returns.
 No personal account balances or capital assumptions are published here.
 
+## arbitrage-v1: prospective BTC capacity diagnostic
+
+Plan registration: `77d5f4b`; evaluation code: `5e9ea7a`. One 900-second public
+observation began at 2026-11-15 10:13:11 UTC. It ended by its duration limit and
+replayed 1,272 Nobitex, 4,286 Wallex and 450 Tabdeal books. The registered gross
+buy size was 0.0001 BTC; capacity ceilings and fees are synthetic assumptions.
+See [the full audit and route summary](evidence/arbitrage-v1-summary.json).
+
+| Buy -> sell | Valid comparisons per scenario | Positive zero-cost estimates | Best zero-cost quote surplus | Positive base / stress estimates | Best base estimate | Best stress estimate |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Nobitex -> Tabdeal | 1,713 | 64 | +0.003367 USDT | 0 / 0 | -0.094591622990 USDT | -0.12708838598 USDT |
+| Tabdeal -> Nobitex | 1,713 | 75 | +0.00472368 USDT | 0 / 0 | -0.088761441500 USDT | -0.116739133000 USDT |
+
+Wallex routes had zero strict comparisons because source timestamps were
+unknown. Its spot minimum also remains unknown. These exclusions do not prove
+there was no Wallex opportunity. Each accepted pair used known source ages no
+greater than five seconds; stale receive/source observations were rejected.
+Nobitex had four replayed books older than five seconds at reception. Tabdeal
+had no future or over-five-second source time in this recording.
+
+All 3,426 valid directional comparisons were nonpositive under both registered
+cost-bearing scenarios. Zero-cost positives are not trades or deployable edge.
+Base/stress results round sale quantity after the buy fee and give residual
+base zero quote value. This is a conservative cash comparison, not total
+portfolio P&L or proof that inventory pooling could never improve results.
+
+The same capacity is reused across comparisons; counts are correlated and
+cannot be summed into profit or independent samples. This one short window
+does not reject arbitrage across other periods, sizes, markets or inventory
+policies. No asynchronous two-leg fill, order, transfer, account allocation or
+performance acceptance occurred.
+
 ## baseline-v3: longer history rejected before strategy evaluation
 
 Plan `baseline-v3-pre-gap.json` was registered in `72a70b9` before return

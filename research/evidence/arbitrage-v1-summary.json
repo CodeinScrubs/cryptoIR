@@ -1,0 +1,425 @@
+{
+  "schema": 1,
+  "experiment": "arbitrage-v1-btc-feasibility",
+  "status": "completed_conditional_diagnostic",
+  "plan_sha256": "fd27afc4f083f50245a2bd3ebda12339088193cc4d8e286d5fc32d54bf757905",
+  "catalog_sha256": "7af65da7fd08e350b3cb8b8fc6a3541433248b109fcce8229a42198392252ef4",
+  "recording_audit": {
+    "kind": "stream_audit",
+    "sha256": "1dd3cc737fce1105c5f43a45017879702c9dec809871e78b952c5c16a32cf040",
+    "bytes": 7088063,
+    "counts": {
+      "recording_start": 1,
+      "session_start": 3,
+      "frame": 6149,
+      "subscription_ack": 4,
+      "book_side": 4366,
+      "book": 6008,
+      "heartbeat": 71,
+      "book_unavailable": 79,
+      "recording_end": 1,
+      "nobitex:gap": 1,
+      "wallex:gap": 1,
+      "tabdeal:gap": 1,
+      "wallex:replayed_book": 4286,
+      "wallex:unknown_source_time": 4286,
+      "nobitex:replayed_book": 1272,
+      "tabdeal:replayed_book": 450,
+      "wallex:book_unavailable": 79,
+      "nobitex:source_time_invalid": 4
+    },
+    "ended_cleanly": true,
+    "end_reason": "duration_completed",
+    "max_book_interval_ns": {
+      "wallex": 7947870700,
+      "nobitex": 9300928100,
+      "tabdeal": 6643788000
+    },
+    "source_age_ns": {
+      "nobitex": {
+        "minimum": 37224600,
+        "maximum": 8378886900,
+        "future_count": 0,
+        "over_5s_count": 4
+      },
+      "tabdeal": {
+        "minimum": 126111500,
+        "maximum": 4786842500,
+        "future_count": 0,
+        "over_5s_count": 0
+      }
+    },
+    "venues_without_books": [],
+    "market_history_complete": false,
+    "execution_ready": false
+  },
+  "recording_start_ns": 1794737591452868100,
+  "recording_run_id": "2f07f08e-2b97-42ce-932d-df858032be82",
+  "capture_version": "0.11.1",
+  "scenarios_and_routes": [
+    {
+      "scenario": "zero_cost_diagnostic",
+      "buy_venue": "nobitex",
+      "sell_venue": "wallex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 5533
+      },
+      "best": null
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "buy_venue": "nobitex",
+      "sell_venue": "tabdeal",
+      "comparisons": 1713,
+      "positive_estimates": 64,
+      "rejections": {
+        "stale or future receive timestamp": 4,
+        "stale exchange data or clock skew": 4
+      },
+      "best": {
+        "kind": "conditional_spread_capacity",
+        "executable": false,
+        "observed_ns": 1794737989249865800,
+        "pair": "BTC/USDT",
+        "buy_venue": "nobitex",
+        "sell_venue": "tabdeal",
+        "gross_buy_quantity": "0.0001",
+        "sell_quantity": "0.0001",
+        "buy_base_fee": "0.0000",
+        "buy_quote_fee": "0",
+        "sell_quote_fee": "0.000000",
+        "residual_base": "0.0000",
+        "residual_base_valuation": "zero; retained, not realized",
+        "buy_cost_quote": "6.542819",
+        "sell_proceeds_quote": "6.546186",
+        "reserve_quote": "0.000000",
+        "estimated_net_quote": "0.003367",
+        "buy_receive_ns": 1794737989098697400,
+        "sell_receive_ns": 1794737989249865800,
+        "buy_source_ns": 1794737989048000000,
+        "sell_source_ns": 1794737989097000000,
+        "unknown_minimum_quantity_venues": [
+          "nobitex"
+        ]
+      }
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "buy_venue": "wallex",
+      "sell_venue": "nobitex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 5533
+      },
+      "best": null
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "buy_venue": "wallex",
+      "sell_venue": "tabdeal",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 4724
+      },
+      "best": null
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "buy_venue": "tabdeal",
+      "sell_venue": "nobitex",
+      "comparisons": 1713,
+      "positive_estimates": 75,
+      "rejections": {
+        "stale or future receive timestamp": 4,
+        "stale exchange data or clock skew": 4
+      },
+      "best": {
+        "kind": "conditional_spread_capacity",
+        "executable": false,
+        "observed_ns": 1794737871265772700,
+        "pair": "BTC/USDT",
+        "buy_venue": "tabdeal",
+        "sell_venue": "nobitex",
+        "gross_buy_quantity": "0.0001",
+        "sell_quantity": "0.0001",
+        "buy_base_fee": "0.0000",
+        "buy_quote_fee": "0",
+        "sell_quote_fee": "0E-8",
+        "residual_base": "0.0000",
+        "residual_base_valuation": "zero; retained, not realized",
+        "buy_cost_quote": "6.546020",
+        "sell_proceeds_quote": "6.55074368",
+        "reserve_quote": "0E-8",
+        "estimated_net_quote": "0.00472368",
+        "buy_receive_ns": 1794737871265772700,
+        "sell_receive_ns": 1794737871092251300,
+        "buy_source_ns": 1794737871079000000,
+        "sell_source_ns": 1794737871048000000,
+        "unknown_minimum_quantity_venues": [
+          "nobitex"
+        ]
+      }
+    },
+    {
+      "scenario": "zero_cost_diagnostic",
+      "buy_venue": "tabdeal",
+      "sell_venue": "wallex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 4724
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_base",
+      "buy_venue": "nobitex",
+      "sell_venue": "wallex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 5533
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_base",
+      "buy_venue": "nobitex",
+      "sell_venue": "tabdeal",
+      "comparisons": 1713,
+      "positive_estimates": 0,
+      "rejections": {
+        "stale or future receive timestamp": 4,
+        "stale exchange data or clock skew": 4
+      },
+      "best": {
+        "kind": "conditional_spread_capacity",
+        "executable": false,
+        "observed_ns": 1794737989249865800,
+        "pair": "BTC/USDT",
+        "buy_venue": "nobitex",
+        "sell_venue": "tabdeal",
+        "gross_buy_quantity": "0.0001",
+        "sell_quantity": "0.000099",
+        "buy_base_fee": "1.3E-7",
+        "buy_quote_fee": "0",
+        "sell_quote_fee": "0.01296144828",
+        "residual_base": "8.7E-7",
+        "residual_base_valuation": "zero; retained, not realized",
+        "buy_cost_quote": "6.542819",
+        "sell_proceeds_quote": "6.46776269172",
+        "reserve_quote": "0.019535314710",
+        "estimated_net_quote": "-0.094591622990",
+        "buy_receive_ns": 1794737989098697400,
+        "sell_receive_ns": 1794737989249865800,
+        "buy_source_ns": 1794737989048000000,
+        "sell_source_ns": 1794737989097000000,
+        "unknown_minimum_quantity_venues": [
+          "nobitex"
+        ]
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "buy_venue": "wallex",
+      "sell_venue": "nobitex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 5533
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_base",
+      "buy_venue": "wallex",
+      "sell_venue": "tabdeal",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 4724
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_base",
+      "buy_venue": "tabdeal",
+      "sell_venue": "nobitex",
+      "comparisons": 1713,
+      "positive_estimates": 0,
+      "rejections": {
+        "stale or future receive timestamp": 4,
+        "stale exchange data or clock skew": 4
+      },
+      "best": {
+        "kind": "conditional_spread_capacity",
+        "executable": false,
+        "observed_ns": 1794737871265772700,
+        "pair": "BTC/USDT",
+        "buy_venue": "tabdeal",
+        "sell_venue": "nobitex",
+        "gross_buy_quantity": "0.0001",
+        "sell_quantity": "0.000099",
+        "buy_base_fee": "2E-7",
+        "buy_quote_fee": "0",
+        "sell_quote_fee": "0.008430807125",
+        "residual_base": "8E-7",
+        "residual_base_valuation": "zero; retained, not realized",
+        "buy_cost_quote": "6.546020",
+        "sell_proceeds_quote": "6.476805442875",
+        "reserve_quote": "0.019546884375",
+        "estimated_net_quote": "-0.088761441500",
+        "buy_receive_ns": 1794737871265772700,
+        "sell_receive_ns": 1794737871092251300,
+        "buy_source_ns": 1794737871079000000,
+        "sell_source_ns": 1794737871048000000,
+        "unknown_minimum_quantity_venues": [
+          "nobitex"
+        ]
+      }
+    },
+    {
+      "scenario": "assumed_base",
+      "buy_venue": "tabdeal",
+      "sell_venue": "wallex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 4724
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_stress",
+      "buy_venue": "nobitex",
+      "sell_venue": "wallex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 5533
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_stress",
+      "buy_venue": "nobitex",
+      "sell_venue": "tabdeal",
+      "comparisons": 1713,
+      "positive_estimates": 0,
+      "rejections": {
+        "stale or future receive timestamp": 4,
+        "stale exchange data or clock skew": 4
+      },
+      "best": {
+        "kind": "conditional_spread_capacity",
+        "executable": false,
+        "observed_ns": 1794737989249865800,
+        "pair": "BTC/USDT",
+        "buy_venue": "nobitex",
+        "sell_venue": "tabdeal",
+        "gross_buy_quantity": "0.0001",
+        "sell_quantity": "0.000099",
+        "buy_base_fee": "2.6E-7",
+        "buy_quote_fee": "0",
+        "sell_quote_fee": "0.02592289656",
+        "residual_base": "7.4E-7",
+        "residual_base_valuation": "zero; retained, not realized",
+        "buy_cost_quote": "6.542819",
+        "sell_proceeds_quote": "6.45480124344",
+        "reserve_quote": "0.03907062942",
+        "estimated_net_quote": "-0.12708838598",
+        "buy_receive_ns": 1794737989098697400,
+        "sell_receive_ns": 1794737989249865800,
+        "buy_source_ns": 1794737989048000000,
+        "sell_source_ns": 1794737989097000000,
+        "unknown_minimum_quantity_venues": [
+          "nobitex"
+        ]
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "buy_venue": "wallex",
+      "sell_venue": "nobitex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 5533
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_stress",
+      "buy_venue": "wallex",
+      "sell_venue": "tabdeal",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 4724
+      },
+      "best": null
+    },
+    {
+      "scenario": "assumed_stress",
+      "buy_venue": "tabdeal",
+      "sell_venue": "nobitex",
+      "comparisons": 1713,
+      "positive_estimates": 0,
+      "rejections": {
+        "stale or future receive timestamp": 4,
+        "stale exchange data or clock skew": 4
+      },
+      "best": {
+        "kind": "conditional_spread_capacity",
+        "executable": false,
+        "observed_ns": 1794737871265772700,
+        "pair": "BTC/USDT",
+        "buy_venue": "tabdeal",
+        "sell_venue": "nobitex",
+        "gross_buy_quantity": "0.0001",
+        "sell_quantity": "0.000099",
+        "buy_base_fee": "4E-7",
+        "buy_quote_fee": "0",
+        "sell_quote_fee": "0.016861614250",
+        "residual_base": "6E-7",
+        "residual_base_valuation": "zero; retained, not realized",
+        "buy_cost_quote": "6.546020",
+        "sell_proceeds_quote": "6.468374635750",
+        "reserve_quote": "0.03909376875",
+        "estimated_net_quote": "-0.116739133000",
+        "buy_receive_ns": 1794737871265772700,
+        "sell_receive_ns": 1794737871092251300,
+        "buy_source_ns": 1794737871079000000,
+        "sell_source_ns": 1794737871048000000,
+        "unknown_minimum_quantity_venues": [
+          "nobitex"
+        ]
+      }
+    },
+    {
+      "scenario": "assumed_stress",
+      "buy_venue": "tabdeal",
+      "sell_venue": "wallex",
+      "comparisons": 0,
+      "positive_estimates": 0,
+      "rejections": {
+        "unknown_source_time": 4724
+      },
+      "best": null
+    }
+  ],
+  "account_fees_verified": false,
+  "inventory_verified": false,
+  "portfolio_return_available": false,
+  "estimates_are_independent_trials": false,
+  "capacity_is_reused_per_comparison": true,
+  "execution_ready": false,
+  "plan_registration_commit": "77d5f4b36c303abf8f5d364472c35a304ed9d97d",
+  "evaluation_code_commit": "5e9ea7a21011d1e770767724b4556c82a2f95787",
+  "full_local_report_sha256": "a87973e081d1a3c769e2f8e6244c5eb71dd6f9f09f1f8605106a54dc4c3df77a",
+  "limitations": "Repeated independent snapshot capacity estimates, not trades or realized return. Hypothetical fees and fee assets; residual base receives zero quote value. Wallex excluded for unknown source timestamps; spot minimum also unknown. One 900-second observation is not representative of other periods, markets, sizes or inventory policies."
+}

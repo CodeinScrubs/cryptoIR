@@ -193,6 +193,35 @@ class AccountNormalizationTests(unittest.TestCase):
         self.assertIsNone(data['reported_capabilities']['canWithdraw'])
         self.assertEqual(data['capability_scope'],'account_response_not_proof_of_key_permissions')
 
+    def test_wallex_mixed_fee_mapping_preserves_explicit_rates_and_unknown_entries(self):
+        value={'success':True,'result':{
+            'BTCUSDT':{'makerFeeRate':'0.001','takerFeeRate':'0.002'},
+            'ETHTMN':{'makerFeeRate':'0.003','takerFeeRate':'0.004'},
+            'PRIVATE-ENTRY':[], 'PRIVATE-OPTIONS':{'PRIVATE':[1,2],'another':3}}}
+        data=a.parse_account('wallex','fees',value)
+        self.assertEqual(len(data['fee_observations']),2)
+        self.assertEqual(data['fee_observations'][0]['taker_rate'],Decimal('.002'))
+        self.assertTrue(data['fee_rates_usable'])
+        self.assertEqual(data['unparsed_entry_count'],2)
+        self.assertFalse(data['all_result_entries_parsed'])
+        self.assertFalse(data['market_coverage_verified'])
+        self.assertNotIn('PRIVATE',json.dumps(data,default=str))
+        self.assertTrue(all(f['charged_asset']=='unverified' for f in data['fee_observations']))
+
+    def test_wallex_incomplete_or_bad_rate_cannot_hide_as_unparsed_metadata(self):
+        for bad in ({'makerFeeRate':'0.001'}, {'makerFeeRate':'1','takerFeeRate':'0'},
+                    {'makerFeeRate':'NaN','takerFeeRate':'0'}):
+            with self.subTest(bad=bad),self.assertRaises(ValueError):
+                a.parse_account('wallex','fees',{'success':True,'result':{
+                    'BTCUSDT':{'makerFeeRate':'0.001','takerFeeRate':'0.002'},'ETHUSDT':bad}})
+        with self.assertRaisesRegex(a.AccountReadError,'unrecognized_fee_mapping'):
+            a.parse_account('wallex','fees',{'success':True,'result':{'unknown':[]}})
+
+    def test_wallex_duplicate_fee_market_is_not_merged(self):
+        row={'makerFeeRate':'0.001','takerFeeRate':'0.002'}
+        with self.assertRaisesRegex(a.AccountReadError,'duplicate_native_fee_market'):
+            a.parse_account('wallex','fees',{'success':True,'result':{'BTCUSDT':row,'btcusdt':row}})
+
     def test_duplicate_assets_are_not_merged_or_double_counted(self):
         samples=[('nobitex','balances',{'status':'ok','wallets':[{'currency':s,'balance':'1'} for s in ('BTC','btc')]}),
                  ('wallex','balances',{'success':True,'result':{'balances':{s:{'value':'1','locked':'0'} for s in ('BTC','btc')}}}),
@@ -222,6 +251,30 @@ class AccountNormalizationTests(unittest.TestCase):
 
 
 class AccountPrivateOutputTests(unittest.TestCase):
+    def test_fee_failure_retains_only_allowlisted_shape_and_response_hash(self):
+        raw={'success':True,'result':{'PRIVATE-EMAIL':{'makerFeeRate':'PRIVATE-AMOUNT',
+             'PRIVATE-KEY':'PRIVATE-SECRET','nested-private':{'takerFeeRate':'PRIVATE'}}}}
+        evidence={'body_sha256':'synthetic-hash','raw_response_retained':False}
+        with patch.object(a,'read_operation',return_value=(raw,evidence)):
+            report=a.inspect_account('wallex',WAL)
+        text=json.dumps(report)
+        self.assertNotIn('PRIVATE',text)
+        fee=report['results'][0]
+        self.assertEqual(fee['status'],'unavailable')
+        self.assertEqual(fee['evidence'],evidence)
+        self.assertIn('makerFeeRate',json.dumps(fee['diagnostic']))
+        self.assertNotIn('diagnostic',report['results'][1])
+
+    def test_fee_shape_bounds_and_values_do_not_escape_via_dictionary_keys(self):
+        value={'SECRET-'+str(i):{'makerFeeRate':str(i),'unlisted':'SECRET'} for i in range(600)}
+        shape=a.fee_schema_shape(value)
+        self.assertTrue(shape['truncated'])
+        self.assertEqual(len(shape['groups']),1)
+        self.assertEqual(shape['groups'][0]['count'],512)
+        self.assertNotIn('SECRET',json.dumps(shape))
+        for _ in range(20): value={'result':value}
+        self.assertLess(len(json.dumps(a.fee_schema_shape(value))),2000)
+
     def report(self):
         with patch.object(a,'read_operation',return_value=({'accountType':'SPOT','balances':[]},{})):
             return a.inspect_account('tabdeal',TAB)
