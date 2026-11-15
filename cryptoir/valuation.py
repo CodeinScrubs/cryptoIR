@@ -39,7 +39,7 @@ def snapshot_pair(record: dict, pair: str) -> Book:
         raise DataError("all-market payload differs from raw body")
     symbol=native_symbol("nobitex",pair)
     payload=record["payload"][symbol]
-    # Keep raw prices as IRR for the native IRT-suffixed USDT market.
+    # Keep raw prices as IRR for the explicitly supported native IRT markets.
     return normalize({**record,"venue":"nobitex","pair":pair,"url":endpoint("nobitex",pair),
                       "payload":{"status":"ok",**payload}})
 

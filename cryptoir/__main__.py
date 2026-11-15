@@ -124,6 +124,14 @@ def main() -> int:
     credential_status.add_argument("--venue",choices=VENUES,required=True)
     credential_forget=commands.add_parser("credentials-forget",help="remove this checkout's saved key; does not revoke it at the exchange")
     credential_forget.add_argument("--venue",choices=VENUES,required=True)
+    for name, help_text in (("triangle-record", "bounded public all-market sampling; no orders"),
+                            ("triangle-screen", "replay registered three-leg snapshot estimates")):
+        triangle = commands.add_parser(name, help=help_text)
+        triangle.add_argument("--plan", type=Path, required=True)
+        triangle.add_argument("--catalog", type=Path, required=True)
+        triangle.add_argument("--output", type=Path, required=True)
+        if name == "triangle-screen":
+            triangle.add_argument("--recording", type=Path, required=True)
     capture = commands.add_parser("record", help="bounded public REST sampling")
     capture.add_argument("--pair", default="BTC/USDT")
     capture.add_argument("--samples", type=int, default=1)
@@ -212,6 +220,16 @@ def main() -> int:
     if args.command=="account-check":
         from .accounts import account_check
         return account_check(args.venue,legacy_token=args.legacy_token,save=args.save_credentials)
+    if args.command == "triangle-record":
+        from .triangular import capture
+        report = capture(args.plan, args.catalog, args.output)
+        print(encode(report))
+        return int(report["stop_reason"] != "sample_limit")
+    if args.command == "triangle-screen":
+        from .triangular import run_screen
+        report = run_screen(args.plan, args.catalog, args.recording, args.output)
+        print(encode({k:report[k] for k in ("experiment", "status", "counts", "execution_ready")}))
+        return int(report["status"] != "completed_conditional_diagnostic")
     if args.command=="credentials-status":
         from .credentials import credential_status
         print(encode(credential_status(args.venue)))

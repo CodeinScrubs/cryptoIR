@@ -33,7 +33,7 @@ The fee and reserve in this example are **illustrative assumptions**, not verifi
 
 Use a new output filename for each recording. Existing files are never overwritten. Sampling is bounded to 120 batches, uses at least 30 seconds between batches and stops on a source error. This is a diagnostic REST collector, not a continuous live-market service. Do not run overlapping collectors against the same venue.
 
-The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/USDT has been smoke-tested against all three venues. Nobitex `USDT/IRR` has a separate explicit rial mapping for paper conversion and valuation through the all-market endpoint. Catalog collection preserves broader native market lists. Unified asset identity, other fiat adapters, contract multipliers and other instruments remain planned. This is an implementation boundary, not a restriction on the eventual research universe.
+The bootstrap book collector accepts explicit `BASE/USDT` spot pairs; only BTC/USDT has been smoke-tested against all three venues. Nobitex BTC/ETH/SOL/USDT fiat books have explicit IRR mappings through the all-market endpoint; paper funding and valuation remain scoped to BTC/USDT plus USDT/IRR. Catalog collection preserves broader native market lists. Unified asset identity, other fiat adapters, contract multipliers and other instruments remain planned. This is an implementation boundary, not a restriction on the eventual research universe.
 
 ## Current checks
 
@@ -52,6 +52,10 @@ The [registered cross-venue diagnostic](docs/ARBITRAGE.md) also checks received-
 buy fees, independent inventory ceilings and observed minimums. It retains
 unknown fields and source-time exclusions. Snapshot estimates cannot be summed
 into realized profit and do not model asynchronous two-leg execution.
+
+The [single-venue triangular diagnostic](docs/TRIANGULAR.md) separately replays
+both USDT/crypto/IRR directions with three received-asset costs, bounded depth,
+native increments and retained residuals. It also remains a snapshot estimate.
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 

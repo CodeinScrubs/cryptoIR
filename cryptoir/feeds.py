@@ -24,8 +24,9 @@ class NoRedirect(HTTPRedirectHandler):
 
 def native_symbol(venue: str, pair: str) -> str:
     # Nobitex's native IRT suffix has RIAl book prices. Never label them toman.
-    if not re.fullmatch(r"[A-Z0-9]{2,20}/USDT", pair) and not (venue == "nobitex" and pair == "USDT/IRR"):
-        raise DataError("supported: BASE/USDT, plus Nobitex USDT/IRR with explicit rial prices")
+    if not re.fullmatch(r"[A-Z0-9]{2,20}/USDT", pair) and not (
+            venue == "nobitex" and pair in ("USDT/IRR", "BTC/IRR", "ETH/IRR", "SOL/IRR")):
+        raise DataError("supported: BASE/USDT, plus explicit Nobitex BTC/ETH/SOL/USDT rial pairs")
     base, quote = pair.split("/")
     if base == quote:
         raise DataError("identical assets")
