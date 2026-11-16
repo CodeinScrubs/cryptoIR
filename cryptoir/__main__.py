@@ -216,7 +216,24 @@ def main() -> int:
     maker.add_argument("--catalog", type=Path, required=True)
     maker.add_argument("--recording", type=Path, required=True)
     maker.add_argument("--output", type=Path, required=True)
+    observe = commands.add_parser("maker-observe", help="registered public book/trade capture; no orders")
+    observe.add_argument("--plan", type=Path, required=True)
+    observe.add_argument("--catalog", type=Path, required=True)
+    observe.add_argument("--directory", type=Path, required=True)
+    observe_audit = commands.add_parser("maker-observation-audit", help="replay raw public book/trade activity")
+    observe_audit.add_argument("directory", type=Path)
+    observe_audit.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "maker-observe":
+        from .maker_observation import capture
+        report = capture(args.plan, args.catalog, args.directory)
+        print(encode(report))
+        return int(report["status"] != "duration_completed")
+    if args.command == "maker-observation-audit":
+        from .maker_observation import audit
+        report = audit(args.directory, args.output)
+        print(encode({k: report[k] for k in ("status", "capture_complete", "selected_for_further_measurement", "execution_ready")}))
+        return int(not report["capture_complete"])
     if args.command == "maker-screen":
         from .maker_spread import run_screen
         report = run_screen(args.plan,args.universe_plan,args.catalog,args.recording,args.output)

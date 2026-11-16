@@ -80,6 +80,40 @@ budget or owner capital. The corresponding hypothetical stressed width values
 were 0.1156357800, 0.0747024994 and 0.349913771 USDT. No such profit was earned.
 [Complete per-market results and evidence hashes](../research/evidence/maker-spread-v1-summary.json).
 
+## Bounded fresh observation
+
+The separately registered [activity plan](../research/maker-observation-v1.json)
+selects RDNT, G and SKL before requesting fresh books or trades. Registration
+commit: `4a2ab36`. The implementation first validates one fresh public options
+response against the pinned native rules. Active currency metadata is not proof
+that order placement is available. It then opens one public WebSocket for 900
+seconds, subscribes to all six book/trade channels, records original frames and
+public commands, and stops without retry on protocol, sequence, clock or
+connection failure. The logical limit is 64 MiB with a 512-MiB disk reserve.
+
+```powershell
+uv run python -m cryptoir maker-observe --plan research/maker-observation-v1.json --catalog data/triangular-v1-setup/catalog.json --directory data/maker-observation-v1
+uv run python -m cryptoir maker-observation-audit data/maker-observation-v1 --output data/maker-observation-v1/report.json
+```
+
+Use a new directory; do not overlap venue collectors. The offline audit verifies
+raw hashes, command/acknowledgement order, sequence, metadata and clocks. It
+reconstructs public activity and conditional widths using time of availability,
+retaining stale or invalid observations as exclusions. Only an already received,
+source-timed book fresh at trade availability may enter descriptive trade-price
+comparisons. Trade types remain raw labels; no aggressor, unique-trade identity,
+queue position, cancellation or passive fill is inferred. A fall in displayed
+quantity can be a cancellation, trade or replacement. Unknown completeness of
+the matching engine is retained even when observed publication offsets agree.
+
+The fixed further-measurement rule requires normal full duration, all six
+acknowledgements, no detected continuity/clock break, at least ten fresh book
+publications and five positive-volume fresh trade publications per asset, plus
+a positive median stressed conditional width. This permits only separately
+registered queue/adverse-selection measurement. Quiet assets are not replaced,
+and a quiet window is not proof that the venue had no trades. No public
+observation qualifies as strategy acceptance or prospective portfolio P&L.
+
 ## Still needed
 
 Fresh book/trade reception, continuity, trade activity, queue evolution,
