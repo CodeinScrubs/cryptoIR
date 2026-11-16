@@ -1,0 +1,1788 @@
+{
+  "schema": 1,
+  "experiment": "maker-activity-v1",
+  "status": "completed",
+  "capture_complete": true,
+  "plan_sha256": "16c6b5dc87ec5d30e76e3af9f5bff2544b379d40aa0cf174a848df239a3e1695",
+  "quote_plan_sha256": "459cd641cd410ae88f9c3193d5477a6b19a861b70420f747866338f7138b9d4d",
+  "audit_source_sha256": {
+    "__init__.py": "4fb9add0f90fec762bd233c3921fb0715f101238a013d970169ade5ce08948a9",
+    "__main__.py": "701c7d43fa6cf378dfed26951f2ea5703e437bf622bcc2324a343da1ad85b2fc",
+    "accounts.py": "12caa1da987b85f8f225a135681783e5f1fe8cbe6211858378477e4d6d042c82",
+    "arbitrage.py": "450eb0c09b2c9ebebe55ee76cf52c954e7ad29c8ec112a2ebb1c39735a3de2cc",
+    "backtest.py": "ed10d2bb02e5591fbbd8a395f2d306dc494baa5d2dd7c12678d99df2d9a83011",
+    "catalog.py": "a38caf67e863ccaf850ba564271ac19b9a674d9eba56e5470a1d16287da000d0",
+    "credentials.py": "529e2d23a895fbee6614e495960af694c1917155f59a8efcaa7ce8bcc3d35123",
+    "dashboard.py": "e135c1dfcebe2c2184cd87c51246036838aa71de04c784a5d1067e6fe7707881",
+    "domain.py": "33e9588594fa0cd481b60a2b799c10d29ddf25364ba84963070b946de59d140a",
+    "feeds.py": "e2ab29ccb324b79e8e8a5470e2131044960011e580ad7af41d642b492e840dae",
+    "forward.py": "560ea2ef1a23085b337b6c051f7db0a1783f1383557c1a95d05d16a8935f780c",
+    "funding.py": "745066d1b9d3f4d166e19a68efac4dc1dd8db1b0beb7c136cc007ff5743e90d8",
+    "history.py": "1cd4bf0d419fc8f20085af69bfc8853e1674217a7f0993dbfcceeaafa0ede01e",
+    "maker_activity.py": "e85d431b119232b2866f9ee0110b3b7e646a5875c1b8aa49b8fda75a4109d908",
+    "maker_observation.py": "8aa3ae1047dfa48d010983755106c4c67d91cf246d6d8625a59bdcc912f434fb",
+    "maker_spread.py": "86874eb20a144dbb27d103a1fca36c81c9c21466da943f27a61a6e1b376e558c",
+    "margin_costs.py": "19b48fc2149b4c40846a4609f1f1903ea075dbc8566e371f9c9b9ccd42c3dd22",
+    "monitor.py": "763a9c200ac1bc656fc114a314710c75245fbd35222a6802e527853cc8f8af17",
+    "paper.py": "ffb735d099223ec3cb342478c17418a7f0c3af1592f64d34157f5bd1cb65f89a",
+    "products.py": "4242bc5821514646836837fab616bd41c54f73eda14452d1539d653d9a7e20c4",
+    "research.py": "15a74e231f7bc67fcb05c7410215a35bd64b23bd32dac46833e8e02a5b32a1d6",
+    "risk.py": "522c3c1eefa090de8a6040b757358def2b3a25b401eb72a6f00a6ded3ceeda59",
+    "rotation.py": "11e14150487f6a4370c48d5479ac41bdf67f3041038036d01622dbf154f9059a",
+    "runner.py": "c5fabcf49afdca11efa837ac331dc7f3b39948c31eb10357e0a6c9492e0f9be4",
+    "runtime.py": "fd885046a28944acc863f2d5351bd627c8916fe0f7d7cfbc9e428572f5858446",
+    "stream_audit.py": "9181e13c590910434c3e0ed45c34f243a98dd84f1759faf43213012af570491e",
+    "streams.py": "ab65b81b064458b79683dd6cbfb2471a74f9c68095b9b12fe14fbe3502406e56",
+    "trade_control.py": "c56ee0614b39926775d66856cf8da548a7f5d88c85e777147dd0c305c34f849c",
+    "triangular.py": "3c447a7c451babe17a60f99439e5ee8e2c3aa5f1ba90b575275179195b7df335",
+    "upgrade.py": "08fc12c21c898186a6b46b521a4a3183e4c109f102970a9cb32ea6f8df2f8584",
+    "valuation.py": "29dd8c5569dd33057dbf11b46e6b5e3fc6635c8dd6bf622fb30301efd66105c8"
+  },
+  "execution_ready": false,
+  "strategy_accepted": false,
+  "portfolio_return_available": false,
+  "passive_fills_verified": false,
+  "selected_for_observation": [],
+  "source_sha256": {
+    "__init__.py": "4fb9add0f90fec762bd233c3921fb0715f101238a013d970169ade5ce08948a9",
+    "__main__.py": "701c7d43fa6cf378dfed26951f2ea5703e437bf622bcc2324a343da1ad85b2fc",
+    "accounts.py": "12caa1da987b85f8f225a135681783e5f1fe8cbe6211858378477e4d6d042c82",
+    "arbitrage.py": "450eb0c09b2c9ebebe55ee76cf52c954e7ad29c8ec112a2ebb1c39735a3de2cc",
+    "backtest.py": "ed10d2bb02e5591fbbd8a395f2d306dc494baa5d2dd7c12678d99df2d9a83011",
+    "catalog.py": "a38caf67e863ccaf850ba564271ac19b9a674d9eba56e5470a1d16287da000d0",
+    "credentials.py": "529e2d23a895fbee6614e495960af694c1917155f59a8efcaa7ce8bcc3d35123",
+    "dashboard.py": "e135c1dfcebe2c2184cd87c51246036838aa71de04c784a5d1067e6fe7707881",
+    "domain.py": "33e9588594fa0cd481b60a2b799c10d29ddf25364ba84963070b946de59d140a",
+    "feeds.py": "e2ab29ccb324b79e8e8a5470e2131044960011e580ad7af41d642b492e840dae",
+    "forward.py": "560ea2ef1a23085b337b6c051f7db0a1783f1383557c1a95d05d16a8935f780c",
+    "funding.py": "745066d1b9d3f4d166e19a68efac4dc1dd8db1b0beb7c136cc007ff5743e90d8",
+    "history.py": "1cd4bf0d419fc8f20085af69bfc8853e1674217a7f0993dbfcceeaafa0ede01e",
+    "maker_activity.py": "e85d431b119232b2866f9ee0110b3b7e646a5875c1b8aa49b8fda75a4109d908",
+    "maker_observation.py": "8aa3ae1047dfa48d010983755106c4c67d91cf246d6d8625a59bdcc912f434fb",
+    "maker_spread.py": "86874eb20a144dbb27d103a1fca36c81c9c21466da943f27a61a6e1b376e558c",
+    "margin_costs.py": "19b48fc2149b4c40846a4609f1f1903ea075dbc8566e371f9c9b9ccd42c3dd22",
+    "monitor.py": "763a9c200ac1bc656fc114a314710c75245fbd35222a6802e527853cc8f8af17",
+    "paper.py": "ffb735d099223ec3cb342478c17418a7f0c3af1592f64d34157f5bd1cb65f89a",
+    "products.py": "4242bc5821514646836837fab616bd41c54f73eda14452d1539d653d9a7e20c4",
+    "research.py": "15a74e231f7bc67fcb05c7410215a35bd64b23bd32dac46833e8e02a5b32a1d6",
+    "risk.py": "522c3c1eefa090de8a6040b757358def2b3a25b401eb72a6f00a6ded3ceeda59",
+    "rotation.py": "11e14150487f6a4370c48d5479ac41bdf67f3041038036d01622dbf154f9059a",
+    "runner.py": "c5fabcf49afdca11efa837ac331dc7f3b39948c31eb10357e0a6c9492e0f9be4",
+    "runtime.py": "fd885046a28944acc863f2d5351bd627c8916fe0f7d7cfbc9e428572f5858446",
+    "stream_audit.py": "9181e13c590910434c3e0ed45c34f243a98dd84f1759faf43213012af570491e",
+    "streams.py": "ab65b81b064458b79683dd6cbfb2471a74f9c68095b9b12fe14fbe3502406e56",
+    "trade_control.py": "c56ee0614b39926775d66856cf8da548a7f5d88c85e777147dd0c305c34f849c",
+    "triangular.py": "3c447a7c451babe17a60f99439e5ee8e2c3aa5f1ba90b575275179195b7df335",
+    "upgrade.py": "08fc12c21c898186a6b46b521a4a3183e4c109f102970a9cb32ea6f8df2f8584",
+    "valuation.py": "29dd8c5569dd33057dbf11b46e6b5e3fc6635c8dd6bf622fb30301efd66105c8"
+  },
+  "capture_start_ns": 1794862606937960600,
+  "recording_sha256": "22ca8b03e5d71042d0972849740aad068ae4df5fbc7c465e72c0b7c313381a2f",
+  "requests": 32,
+  "capture_end": {
+    "schema": 2,
+    "run_id": "8b455c7f-9a00-4f79-8385-9808ed5f01e7",
+    "seq": 35,
+    "venue": "nobitex",
+    "observed_ns": 1794862925896126000,
+    "monotonic_ns": 20773159427100,
+    "clock_error_ns": -767100,
+    "kind": "screen_end",
+    "reason": "completed",
+    "requests": 32
+  },
+  "failure": null,
+  "selection": {
+    "selected": [
+      {
+        "native_symbol": "BTCUSDT",
+        "base": "BTC",
+        "quote": "USDT",
+        "quantity_step": "0.000001",
+        "price_tick": "0.01",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "951651.1367203341",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "ZECUSDT",
+        "base": "ZEC",
+        "quote": "USDT",
+        "quantity_step": "0.00001",
+        "price_tick": "0.01",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "941312.2377919706",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "ETHUSDT",
+        "base": "ETH",
+        "quote": "USDT",
+        "quantity_step": "0.00001",
+        "price_tick": "0.01",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "611197.3487135033",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "XRPUSDT",
+        "base": "XRP",
+        "quote": "USDT",
+        "quantity_step": "0.01",
+        "price_tick": "0.00001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "216775.2447165189",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "ZILUSDT",
+        "base": "ZIL",
+        "quote": "USDT",
+        "quantity_step": "0.1",
+        "price_tick": "0.000001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "207185.132130182",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "XAUTUSDT",
+        "base": "XAUT",
+        "quote": "USDT",
+        "quantity_step": "0.00001",
+        "price_tick": "0.1",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "172120.771663301",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "SOLUSDT",
+        "base": "SOL",
+        "quote": "USDT",
+        "quantity_step": "0.0001",
+        "price_tick": "0.001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "137788.1240568872",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "NEARUSDT",
+        "base": "NEAR",
+        "quote": "USDT",
+        "quantity_step": "0.001",
+        "price_tick": "0.001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "107064.8375606666",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "GRAMUSDT",
+        "base": "GRAM",
+        "quote": "USDT",
+        "quantity_step": "0.001",
+        "price_tick": "0.001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "105206.9858811694",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "DOGEUSDT",
+        "base": "DOGE",
+        "quote": "USDT",
+        "quantity_step": "0.1",
+        "price_tick": "1E-7",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "92625.9260999729",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "HUMAUSDT",
+        "base": "HUMA",
+        "quote": "USDT",
+        "quantity_step": "0.1",
+        "price_tick": "0.000001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "63372.2535145299",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "ASTERUSDT",
+        "base": "ASTER",
+        "quote": "USDT",
+        "quantity_step": "0.001",
+        "price_tick": "0.0001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "57609.8496300456",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "AAVEUSDT",
+        "base": "AAVE",
+        "quote": "USDT",
+        "quantity_step": "0.0001",
+        "price_tick": "0.01",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "56806.4525407583",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "BICOUSDT",
+        "base": "BICO",
+        "quote": "USDT",
+        "quantity_step": "0.01",
+        "price_tick": "0.00001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "52987.6121275706",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "ADAUSDT",
+        "base": "ADA",
+        "quote": "USDT",
+        "quantity_step": "0.1",
+        "price_tick": "0.0001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "52317.4659223154",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "TRXUSDT",
+        "base": "TRX",
+        "quote": "USDT",
+        "quantity_step": "0.01",
+        "price_tick": "0.00001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "47960.8374495875",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "BNBUSDT",
+        "base": "BNB",
+        "quote": "USDT",
+        "quantity_step": "0.00001",
+        "price_tick": "0.0001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "47683.0661936729",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "ONEUSDT",
+        "base": "ONE",
+        "quote": "USDT",
+        "quantity_step": "0.1",
+        "price_tick": "0.000001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "46230.1446522628",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "DEXEUSDT",
+        "base": "DEXE",
+        "quote": "USDT",
+        "quantity_step": "0.0001",
+        "price_tick": "0.001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "42958.5305863297",
+        "stats_source_time_known": false
+      },
+      {
+        "native_symbol": "UNIUSDT",
+        "base": "UNI",
+        "quote": "USDT",
+        "quantity_step": "0.001",
+        "price_tick": "0.001",
+        "minimum_notional": "0.5",
+        "native_scale": "1",
+        "base_currency_active": true,
+        "spot_allowed": null,
+        "status": "currency_metadata_only_not_market_status",
+        "venue": "nobitex",
+        "execution_ready": false,
+        "account_fee_rate": null,
+        "asset_identity_cross_venue_verified": false,
+        "reported_24h_quote_volume_usdt": "38235.8449245035",
+        "stats_source_time_known": false
+      }
+    ],
+    "eligible_below_rank_cutoff": [
+      "DAIUSDT",
+      "PAXGUSDT",
+      "DOGSUSDT",
+      "PUMPUSDT",
+      "SUSDT",
+      "USOONUSDT",
+      "SLPUSDT",
+      "BARDUSDT",
+      "SUIUSDT",
+      "CELRUSDT",
+      "INJUSDT",
+      "LTCUSDT",
+      "HYPEUSDT",
+      "LINKUSDT",
+      "FILUSDT",
+      "ZRXUSDT",
+      "HMSTRUSDT",
+      "DOTUSDT",
+      "WLDUSDT",
+      "XLMUSDT",
+      "POLUSDT",
+      "AVAXUSDT",
+      "ARBUSDT",
+      "LITUSDT",
+      "MAGICUSDT",
+      "ENAUSDT",
+      "QNTUSDT",
+      "PROMUSDT",
+      "ZROUSDT",
+      "BASEDUSDT",
+      "SLVONUSDT",
+      "USDCUSDT",
+      "COOKIEUSDT",
+      "KITEUSDT",
+      "BLURUSDT",
+      "XMRUSDT",
+      "NOTUSDT",
+      "ATOMUSDT",
+      "SKYUSDT",
+      "BCHUSDT",
+      "COPXONUSDT",
+      "ATUSDT",
+      "BANKUSDT",
+      "APTUSDT",
+      "HOTUSDT",
+      "GRTUSDT",
+      "DASHUSDT",
+      "JASMYUSDT",
+      "DOODUSDT",
+      "CAKEUSDT",
+      "FETUSDT",
+      "EGALAUSDT",
+      "HOMEUSDT",
+      "DYDXUSDT",
+      "RENDERUSDT",
+      "CHZUSDT",
+      "FLOWUSDT",
+      "ONDOUSDT",
+      "CRVUSDT",
+      "ETCUSDT",
+      "JSTUSDT",
+      "AUSDT",
+      "HBARUSDT",
+      "ALGOUSDT",
+      "TUSDT",
+      "AEVOUSDT",
+      "EGLDUSDT",
+      "XUSDT",
+      "COTIUSDT",
+      "SYNUSDT",
+      "APEUSDT",
+      "MANAUSDT",
+      "ETHFIUSDT",
+      "XTZUSDT",
+      "MOVEUSDT",
+      "WOOUSDT",
+      "BEAMXUSDT",
+      "OPENUSDT",
+      "IMXUSDT",
+      "PENGUUSDT",
+      "CFGUSDT",
+      "STRKUSDT",
+      "GRASSUSDT",
+      "WUSDT",
+      "API3USDT",
+      "LDOUSDT",
+      "RAYUSDT",
+      "MMTUSDT",
+      "SEIUSDT",
+      "GMTUSDT",
+      "ENJUSDT",
+      "BATUSDT",
+      "WETUSDT",
+      "ROBOUSDT",
+      "CGPTUSDT",
+      "OPGUSDT",
+      "CVXUSDT",
+      "SKLUSDT",
+      "SYRUPUSDT",
+      "TAOUSDT",
+      "RSRUSDT",
+      "ZKUSDT",
+      "GIGGLEUSDT",
+      "ZENUSDT",
+      "PYTHUSDT",
+      "FORMUSDT",
+      "TURBOUSDT",
+      "LINEAUSDT",
+      "JTOUSDT",
+      "JUPUSDT",
+      "AXSUSDT",
+      "MEWUSDT",
+      "GENIUSUSDT",
+      "EDGEUSDT",
+      "TNSRUSDT",
+      "SLXUSDT",
+      "USDEUSDT",
+      "SANDUSDT",
+      "METUSDT",
+      "BOMEUSDT",
+      "LPTUSDT",
+      "COMPUSDT",
+      "CETUSUSDT",
+      "SUSHIUSDT",
+      "2ZUSDT",
+      "MEMEUSDT",
+      "ANKRUSDT",
+      "PNUTUSDT",
+      "REUSDT",
+      "TOSHIUSDT",
+      "ZAMAUSDT",
+      "CHIPUSDT",
+      "DOSUSDT",
+      "PENDLEUSDT",
+      "BANANAUSDT",
+      "PLUMEUSDT",
+      "ZBTUSDT",
+      "CATIUSDT",
+      "BABAUSDT",
+      "SKHYUSDT",
+      "GMXUSDT",
+      "GPSUSDT",
+      "COWUSDT",
+      "ENSUSDT",
+      "DUSKUSDT",
+      "PONSUSDT",
+      "AIXBTUSDT",
+      "SNXUSDT",
+      "CVCUSDT",
+      "1INCHUSDT",
+      "SUPERUSDT",
+      "LAUSDT",
+      "WIFUSDT",
+      "KAITOUSDT",
+      "SUNUSDT",
+      "IDUSDT",
+      "FLUIDUSDT",
+      "SENTUSDT",
+      "AWEUSDT",
+      "SAHARAUSDT",
+      "TSMUSDT",
+      "UMAUSDT",
+      "ATHUSDT",
+      "SAFEUSDT",
+      "VVVUSDT",
+      "HOLOUSDT",
+      "SPKUSDT",
+      "EULUSDT",
+      "AEROUSDT",
+      "AGLDUSDT",
+      "TRBUSDT",
+      "SSVUSDT",
+      "NEIROUSDT",
+      "ZORAUSDT",
+      "IOUSDT",
+      "BIOUSDT",
+      "EIGENUSDT",
+      "NMRUSDT",
+      "AVNTUSDT",
+      "KMNOUSDT",
+      "EDUUSDT",
+      "XVSUSDT",
+      "WALUSDT",
+      "ORCAUSDT",
+      "MEUSDT",
+      "METISUSDT",
+      "MASKUSDT",
+      "GLMUSDT"
+    ],
+    "excluded": [
+      {
+        "native_symbol": "BALUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "BANDUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "1B_BABYDOGEUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "1M_BTTUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "BUSDUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "DAOUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "100K_FLOKIUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "FLRUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "GUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "GALAUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "LRCUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "MAJORUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "MDTUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "1M_NFTUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "OMGUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "1M_PEPEUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "PGALAUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "PMNUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "RDNTUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "1K_SHIBUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "1K_CHEEMSUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "SNTUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "STORJUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "WBTCUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "YFIUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "1K_BONKUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "MORPHOUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "1K_CATUSDT",
+        "reason": "scaled_currency"
+      },
+      {
+        "native_symbol": "ALTUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "VIRTUALUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "LAYERUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "OPUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "ZKCUSDT",
+        "reason": "inactive_or_unknown_currency"
+      },
+      {
+        "native_symbol": "MOODENGUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "PROVEUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "REDUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "BREVUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "SPCXUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "ESPUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "NVDAUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "AAPLUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "GOOGLUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "AMZNUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "TSLAUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "MSFTUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "GRVTUSDT",
+        "reason": "inactive_or_unknown_currency"
+      },
+      {
+        "native_symbol": "NXEQUALUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "NXFIXUSDT",
+        "reason": "inactive_or_unknown_currency"
+      },
+      {
+        "native_symbol": "NXMETALUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "NXTECHUSDT",
+        "reason": "inactive_or_unknown_currency"
+      },
+      {
+        "native_symbol": "NXSTOREUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "NXTOTALUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "SFPUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "TWTUSDT",
+        "reason": "nonpositive_reported_quote_volume"
+      },
+      {
+        "native_symbol": "NXT70USDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "NXBALANCEUSDT",
+        "reason": "closed_or_unknown_market"
+      },
+      {
+        "native_symbol": "REZUSDT",
+        "reason": "inactive_or_unknown_currency"
+      },
+      {
+        "native_symbol": "MARSCOINUSDT",
+        "reason": "inactive_or_unknown_currency"
+      },
+      {
+        "native_symbol": "ACHUSDT",
+        "reason": "closed_or_unknown_market"
+      }
+    ],
+    "eligible_count": 208
+  },
+  "markets": [
+    {
+      "native_symbol": "BTCUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.00279794",
+          "median_width_per_spent_usdt": "0.00176295594614418179860587629512464688346970592643435926295428",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.068823748640",
+          "median_width_per_spent_usdt": "-0.054357171459397563582464167233434823608142395803419111961168",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.07359981728",
+          "median_width_per_spent_usdt": "-0.058230963009624637357946713180218194977545547693636106668032",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862884092611500,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 13,
+        "distinct_positive_recent_fingerprints": 13,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794862256257000000,
+        "newest_source_ns": 1794862807683000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "ZECUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0107506",
+          "median_width_per_spent_usdt": "0.00295756784590097766492349749520114531737775426687286172603186",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.014026889375",
+          "median_width_per_spent_usdt": "-0.00339096675861986933191102045846598408298172804088757597755635",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0287777743",
+          "median_width_per_spent_usdt": "-0.00787091452362121228730209322653143993655508380785182668949855",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862886255102100,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 13,
+        "distinct_positive_recent_fingerprints": 13,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794861812843000000,
+        "newest_source_ns": 1794862882505000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "ETHUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0037132",
+          "median_width_per_spent_usdt": "0.00132043029440176718410415207876779221917613242641691587123800",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.038960402425",
+          "median_width_per_spent_usdt": "-0.00654503302699462820054283673482477553066455083077327528133915",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.07754795685",
+          "median_width_per_spent_usdt": "-0.0114452062122721104593608210722835410716886961658568483951070",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862888453657000,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 11,
+        "distinct_positive_recent_fingerprints": 11,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794862356609000000,
+        "newest_source_ns": 1794862882624000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "XRPUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 5,
+          "positive": 5,
+          "median_conditional_width_usdt": "0.0098000",
+          "median_width_per_spent_usdt": "0.00205057384681376395384116422376363997782032369772867560130986",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 5
+          }
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 5,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.01919400650",
+          "median_width_per_spent_usdt": "-0.00395364348262766391513135180942217758387997865729261479551803",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 5
+          }
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 5,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0383106130",
+          "median_width_per_spent_usdt": "-0.00796607552731149528607563183309990174969166126638376152350691",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 5
+          }
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862890614221400,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 6,
+        "distinct_positive_recent_fingerprints": 6,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794861096406000000,
+        "newest_source_ns": 1794862858059000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "ZILUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0042280",
+          "median_width_per_spent_usdt": "0.00413650465356773526370217166494312306101344364012409513960703",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 2,
+          "median_conditional_width_usdt": "-0.00093647575",
+          "median_width_per_spent_usdt": "-0.000916210098824109521494072607984001862796797633152304183759425",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0060956110",
+          "median_width_per_spent_usdt": "-0.00596369992143771909141694851577947381860624839182130456434135",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862892793410800,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 4,
+        "distinct_positive_recent_fingerprints": 4,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794862139121000000,
+        "newest_source_ns": 1794862712726000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "XAUTUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.001008",
+          "median_width_per_spent_usdt": "0.000941028858218318695106649937264742785445420326223337515683815",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0414754620",
+          "median_width_per_spent_usdt": "-0.0387198478670012547051442910915934755332496863237139272271016",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.045666924",
+          "median_width_per_spent_usdt": "-0.0426328307044273167234271374798350958953217422477146442014698",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862894968787900,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 20,
+        "distinct_positive_recent_fingerprints": 20,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794862745328000000,
+        "newest_source_ns": 1794862890074000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "SOLUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0169202",
+          "median_width_per_spent_usdt": "0.00195349428316178551244149402021627190054892699795159271693090",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.03252968335",
+          "median_width_per_spent_usdt": "-0.00361691109249857851641724707198632819242918722344928610583680",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0756202907",
+          "median_width_per_spent_usdt": "-0.0084091134700459241496290755000325365121254120170334172786167",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862897168077000,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794859732640000000,
+        "newest_source_ns": 1794862342387000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "NEARUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.002520",
+          "median_width_per_spent_usdt": "0.00253004427577482605945604048070841239721695129664769133459836",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0046324950",
+          "median_width_per_spent_usdt": "-0.00465095930845456462154754374868226860636727809403331224963104",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.008614990",
+          "median_width_per_spent_usdt": "-0.0086493278314910193468068230876580022690079616075821009407347",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862899335510800,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 1,
+        "distinct_positive_recent_fingerprints": 1,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794861475143000000,
+        "newest_source_ns": 1794862641337000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "GRAMUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.028788",
+          "median_width_per_spent_usdt": "0.00287907869481765834932821497120921305182341650671785028790787",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0217039730",
+          "median_width_per_spent_usdt": "-0.00217060741479775242243449165879257112088450161975679245750989",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.072143696",
+          "median_width_per_spent_usdt": "-0.00721506801858419895045840437354335899715092420946347606448305",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862901722375400,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794861729669000000,
+        "newest_source_ns": 1794862560267000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "DOGEUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 9,
+          "positive": 9,
+          "median_conditional_width_usdt": "0.00919640",
+          "median_width_per_spent_usdt": "0.00225218385918030629700484852165639265939894526940167825655664",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 1
+          }
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 9,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.012655533600",
+          "median_width_per_spent_usdt": "-0.00301235191508789082244416428996290895191006011553067607938955",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 1
+          }
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 9,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.03327935400",
+          "median_width_per_spent_usdt": "-0.00805325965443296603549477229052466058271624934411100256956641",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 1
+          }
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862903962883300,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 4,
+        "distinct_positive_recent_fingerprints": 4,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794860596991000000,
+        "newest_source_ns": 1794862810412000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "HUMAUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 9,
+          "positive": 9,
+          "median_conditional_width_usdt": "0.0178675",
+          "median_width_per_spent_usdt": "0.0179046449764681808880703908328217720482913853079598935952527",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 1
+          }
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 9,
+          "positive": 9,
+          "median_conditional_width_usdt": "0.01215161340",
+          "median_width_per_spent_usdt": "0.0119174633601277518974372687683726130609822523174177114492500",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 1
+          }
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 9,
+          "positive": 9,
+          "median_conditional_width_usdt": "0.0075458208",
+          "median_width_per_spent_usdt": "0.00688651352710239155493747505095762371182388376420600985498237",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 1
+          }
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862906183425200,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 9,
+        "distinct_positive_recent_fingerprints": 9,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794861982333000000,
+        "newest_source_ns": 1794862883203000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "ASTERUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.02915335",
+          "median_width_per_spent_usdt": "0.00432290150892780311772934441109923501946852974774160198223219",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.003512591975",
+          "median_width_per_spent_usdt": "-0.000718875747257513474601760299277765428121602666356440613469985",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.04154609175",
+          "median_width_per_spent_usdt": "-0.0057625190446807868503318000373997269721640226310568880070395",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862908364628400,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 2,
+        "distinct_positive_recent_fingerprints": 2,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794857885150000000,
+        "newest_source_ns": 1794862699315000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "AAVEUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0122395",
+          "median_width_per_spent_usdt": "0.0051032418468260162464190149244398054573803088174436793665835",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 2,
+          "median_conditional_width_usdt": "-0.00822781425",
+          "median_width_per_spent_usdt": "-0.0082983668170556625713030796387823028730470504963284960227242",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.017346568",
+          "median_width_per_spent_usdt": "-0.0122875939678901095322772573840485126402825215477161439023665",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862910547765400,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794852337347000000,
+        "newest_source_ns": 1794860273586000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "BICOUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0434780",
+          "median_width_per_spent_usdt": "0.00434782608695652173913043478260869565217391304347826086956522",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 1,
+          "median_conditional_width_usdt": "-0.00665383375",
+          "median_width_per_spent_usdt": "-0.000665387367324203945223671342028052168313009878059268355610135",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0567354250",
+          "median_width_per_spent_usdt": "-0.00567357654145924875549253295519773118638711832270993625961755",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862912725487000,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794846680516000000,
+        "newest_source_ns": 1794861335733000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "ADAUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.01128",
+          "median_width_per_spent_usdt": "0.00391134289439374185136897001303780964797913950456323337679270",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.015645380",
+          "median_width_per_spent_usdt": "-0.0054250395295292518516463702183139615523315487253460567560820",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.02717076",
+          "median_width_per_spent_usdt": "-0.0094214680018863213958778329495963827013231989791672445837610",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862914887438000,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794856792053000000,
+        "newest_source_ns": 1794862560337000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "TRXUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0148330",
+          "median_width_per_spent_usdt": "0.00296803652968036529680365296803652968036529680365296803652968",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.01149162000",
+          "median_width_per_spent_usdt": "-0.00226694260021850575678628456172787629212538868812505252542230",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0376224900",
+          "median_width_per_spent_usdt": "-0.00749576855197915791242961593411211026136650138667114883603665",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862917145084000,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 5,
+        "distinct_positive_recent_fingerprints": 5,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794861518557000000,
+        "newest_source_ns": 1794862877029000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "BNBUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0228171385",
+          "median_width_per_spent_usdt": "0.00296618117817555091519710303890903969883073948688672993200125",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0198522036495",
+          "median_width_per_spent_usdt": "-0.00213739214680253860309920134992732697003206171569627067527704",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0606953766815",
+          "median_width_per_spent_usdt": "-0.00724172919180252155586528395286460475538991601217023496617985",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862919334862100,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794854083089000000,
+        "newest_source_ns": 1794862600065000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "ONEUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 4,
+          "positive": 4,
+          "median_conditional_width_usdt": "0.0287415",
+          "median_width_per_spent_usdt": "0.0205949656750572082379862700228832951945080091533180778032037",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 6
+          }
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 4,
+          "positive": 4,
+          "median_conditional_width_usdt": "0.02161928775",
+          "median_width_per_spent_usdt": "0.0154914840606939367329017501582698552086098801233483774787102",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 6
+          }
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 4,
+          "positive": 4,
+          "median_conditional_width_usdt": "0.0145044345",
+          "median_width_per_spent_usdt": "0.0103932756002162573505465012419749928254581764518101879568732",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 6
+          }
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862921539939500,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794858146878000000,
+        "newest_source_ns": 1794862050088000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "DEXEUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0455785",
+          "median_width_per_spent_usdt": "0.00455788514129443938012762078395624430264357338195077484047402",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.00464819185",
+          "median_width_per_spent_usdt": "-0.000464822768783547321149846065313163564491082226243964340965069",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0547145427",
+          "median_width_per_spent_usdt": "-0.0054714964552376698824347935722584421125886880587849332318352",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862923713562000,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794848839629000000,
+        "newest_source_ns": 1794861773351000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    },
+    {
+      "native_symbol": "UNIUSDT",
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 10,
+          "positive": 10,
+          "median_conditional_width_usdt": "0.0334325",
+          "median_width_per_spent_usdt": "0.00419672224841756326174861045622758512295140526097703859288154",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.00629006375",
+          "median_width_per_spent_usdt": "-0.00114944554704420891032733935418766929683341361996202395770404",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 10,
+          "positive": 0,
+          "median_conditional_width_usdt": "-0.0494212775",
+          "median_width_per_spent_usdt": "-0.0063964732056696386347548942555376452844058683607412092226714",
+          "exclusions": {}
+        }
+      ],
+      "recent_activity": {
+        "status": "observed",
+        "available_ns": 1794862925895775500,
+        "returned_rows": 20,
+        "positive_recent_occurrences": 0,
+        "distinct_positive_recent_fingerprints": 0,
+        "identical_recent_occurrences": 0,
+        "zero_volume_rows": 0,
+        "oldest_source_ns": 1794844602868000000,
+        "newest_source_ns": 1794861475239000000,
+        "unique_trade_count": null,
+        "complete_trade_flow": false
+      }
+    }
+  ],
+  "registration_commit": "56bf5f6c871023767946f579d2d5ca6b2dcb215a",
+  "implementation_commit": "3848c93b8a99b56ce9eb4f33ee07bce565975b13",
+  "report_sha256": "d85d8398e24685af98ca1122affb757a6e3415ab8b75bd1772931e3b3f234367",
+  "comparisons_sha256": "cc506fc46dac5b0722f2b0d74b350e66cd23509f9cecaf82a3c2c8b9c68ad458",
+  "source_commits_verified": true,
+  "registered_plan_bytes_verified": true,
+  "all_valid_quote_accounting_identities_verified": true,
+  "comparison_rows": 600,
+  "valid_comparisons": 561,
+  "excluded_comparisons": 39,
+  "comparison_exclusions": {
+    "buy_below_minimum_or_quote_footprint": 39
+  },
+  "scenario_counts": {
+    "zero_cost_diagnostic_valid": 187,
+    "zero_cost_diagnostic_positive": 187,
+    "assumed_base_valid": 187,
+    "assumed_base_positive": 18,
+    "assumed_stress_valid": 187,
+    "assumed_stress_positive": 13
+  },
+  "journal_records": 35,
+  "logical_bytes": 10620827,
+  "max_clock_error_ns": 767200,
+  "public_get_invocations": 32,
+  "private_account_calls": 0,
+  "websocket_connections": 0,
+  "retries": 0,
+  "markets_meeting_activity_threshold": 7,
+  "markets_with_ten_valid_quotes_in_every_cost": 16,
+  "activity_and_quote_windows_simultaneous": false,
+  "quote_widths_are_profit": false,
+  "matching_engine_completeness": "unknown",
+  "limitation": "Fixed top-twenty metadata/reported-volume screen and later finite recent lists. No source clock for aggregate stats. Correlated sparse quotes, uncertain unique trade identity and volumes, no fills, inventory or adverse-selection calibration. No threshold relaxation after results."
+}

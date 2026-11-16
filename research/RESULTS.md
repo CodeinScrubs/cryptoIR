@@ -429,3 +429,36 @@ These two routes now have observed payload evidence, but this does not retroacti
 qualify RDNT/G/SKL or prove their activity/inactivity. No accepted strategy,
 return, passive fill, unit conversion or live execution follows from the control.
 Further maker screening needs measured activity as well as net quote width.
+
+
+## maker-activity-v1: no market meets the fixed joint activity/width gate
+
+Registration `56bf5f6`; capture/evaluation `3848c93`. This is a fresh bounded
+screen informed by previous maker/control findings, not independent strategy
+validation. Current native metadata and reported quote volume identified 208
+eligible USDT markets, from which twenty were fixed before requesting books
+or recent trades. Excluded metadata markets number 59: 28 closed/unknown,
+16 nonpositive reported volumes, nine scaled and six inactive/unknown.
+
+All 32 public GETs completed on 2026-11-17 Tehran time: ten books at thirty-second
+spacing followed by twenty recent lists at two-second spacing. The source age
+of aggregate stats remains unknown and its rank does not become an execution
+signal. Recent lists inform only final follow-up selection, not earlier orders.
+
+Each cost scenario has 187 valid and 13 excluded comparisons. Positive counts
+are 187 zero-cost, 18 base and 13 stress. Across all 600 rows, all 561 valid
+cash/base/fee/dust/reserve identities passed, and all 39 minimum/footprint
+exclusions remain explicit. No width is counted as an executed round trip.
+
+Seven markets meet the recent positive-fingerprint threshold; sixteen have all
+ten valid quote samples per cost. None meets all conditions. HUMA has nine
+positive stressed widths and nine recent fingerprints, but one invalid quote
+footprint; ONE has only four valid positive widths and no recent qualifying
+fingerprint. The median stressed conditional widths of 0.0075458208/0.0145044345
+USDT are not returns or grounds to relax the rule. No candidate progresses
+from this screen. No market substitution, extension or parameter sweep occurred.
+
+[Full evidence](evidence/maker-activity-v1-summary.json) preserves the complete
+selection, exclusions, per-market activity/quote summaries, original raw and
+comparison hashes, and source/registration verification. No private operation,
+fill calibration, accepted strategy or profitable paper result is established.

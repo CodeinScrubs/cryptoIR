@@ -344,3 +344,14 @@ No retry, new candidate substitution, account action or parameter grid occurs.
 Recent lists inform the final follow-up selection only, never historical fills
 or quote decisions. At most three qualify for separately registered observation;
 all exclusions and nonpositive widths remain visible, with no P&L claim.
+
+
+## 2026-11-17: activity-aware maker screen completed without selection
+
+All 32 fixed GETs completed. Of 208 metadata/statistics-eligible USDT markets,
+the initial top twenty remained fixed. Per cost there were 187 valid quote
+comparisons and thirteen minimum/footprint exclusions; base/stress positives
+number eighteen/thirteen. Seven markets satisfy recent activity, but no market
+meets the entire unchanged follow-up rule. HUMA's nine valid positives and
+single failed footprint are not promoted into ten. No alternative candidate,
+longer window, threshold change, private action or realized profit was added.

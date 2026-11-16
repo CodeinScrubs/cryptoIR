@@ -639,3 +639,31 @@ historical fees.
   with zero volume versus REST 0.01. Trade identity and root cause remain
   unknown, and no automatic correction, order fill or P&L is inferred.
   Capture completeness is not cross-source agreement or whole-venue coverage.
+
+
+## Version 0.24.0 implementation checks (2026-11-17)
+
+- All 372 local tests passed. Eight activity-screen cases cover frozen scope
+  and quote-cost pins; active/unscaled/open metadata and exact Decimal volume
+  ranking; twenty-market cap and exclusions; duplicate, zero, stale and future
+  recent rows; raw replay and later activity availability; insufficient valid
+  quotes/activity; hash, selection, request-order, spacing, clock and footer
+  tampering; interrupted capture; exclusive outputs; and the exact maximum
+  thirty-two-GET request/sleep budget with no source-error retry.
+- Registration `56bf5f6`; implementation `3848c93`. All four Windows/Linux
+  Python 3.11/3.13 jobs passed in CI run `43954978305`. No exchange request or
+  credential is used in CI. The screen reuses the existing tested quote-width
+  accounting and preserves its pinned base/stress assumptions.
+- All thirty-two registered public GETs completed. Raw replay verified
+  deterministic top-twenty selection, 10 books, 20 recent lists, 35 journal
+  records, sequence, response hashes, monotonic spacing and terminal count.
+  Both captured/audited source hashes match `3848c93`; plan bytes match `56bf5f6`.
+- All 561 valid quote rows passed exact cash/base/fee/dust/reserve identities.
+  There are 39 minimum/footprint exclusions across costs. Per scenario: 187
+  valid comparisons; zero/base/stress positives are 187/18/13. Seven markets
+  meet the fixed activity threshold and sixteen have ten valid quotes per cost,
+  but no market meets every follow-up condition. No threshold was relaxed.
+- HUMA's nine positive valid widths and one failed footprint remain nine,
+  rather than being rounded up to the required ten. Recent duplicate/zero
+  rows are not invented unique trades or fills. No account, portfolio, order,
+  withdrawal or transfer changed. Complete capture is not strategy acceptance.

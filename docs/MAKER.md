@@ -203,3 +203,40 @@ activity threshold. At most three are ranked first by recent distinct positive
 fingerprints, then median stressed width per spent USDT and native symbol.
 This permits only separately registered prospective measurement. No candidate
 has earned fills, portfolio returns, strategy acceptance or live permission.
+
+### Activity-aware screen result
+
+The capture ran on 2026-11-17 at 00:26:46-00:32:05 Tehran
+(2026-11-16, 20:56:46-21:02:05 UTC), lasting about 319 seconds. All thirty-two
+registered GETs completed. The audit reconstructed 35 journal records and
+10,620,827 logical bytes; the maximum local clock discrepancy was 0.7672 ms.
+Code/plan bytes match implementation `3848c93` and registration `56bf5f6`.
+
+Of 267 USDT metadata markets, 208 were eligible. The exclusions were 28 closed
+or unknown market states, 16 nonpositive reported quote volumes, nine scaled
+assets and six inactive/unknown currencies. The top twenty were fixed before
+books; the remaining 188 eligible markets were not substituted later.
+
+| Cost scenario | Valid comparisons | Positive conditional widths | Excluded comparisons |
+| --- | ---: | ---: | ---: |
+| Zero-cost diagnostic | 187 | 187 | 13 |
+| Base assumed | 187 | 18 | 13 |
+| Stress assumed | 187 | 13 | 13 |
+
+There are 600 comparisons across costs, 561 valid and 39 excluded for the
+minimum/quote-footprint constraint. Cash, received-fee, dust and reserve
+identities were checked on every valid row. Quotes and markets are correlated;
+these are not 600 independent trading trials or realized returns.
+
+Seven markets have at least five recent distinct positive fingerprints. Sixteen
+have ten valid comparisons in every scenario. No market meets all fixed
+follow-up conditions. HUMA has nine valid positive stressed widths and nine
+recent qualifying fingerprints, but one below-minimum quote prevents its
+selection. ONE has four valid positive stressed widths and no qualifying recent
+fingerprint. Their median conditional stressed widths are 0.0075458208 and
+0.0145044345 USDT, respectively; neither is earned profit or a portfolio return.
+
+The registered screen ends with no candidate. Costs/reserves remain assumptions,
+activity lists are finite, and quote/activity windows differ. No parameter,
+threshold, symbol or duration was changed to promote a near-pass result.
+[Complete market summaries, exclusions and hashes](../research/evidence/maker-activity-v1-summary.json).

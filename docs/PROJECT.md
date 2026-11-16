@@ -85,13 +85,28 @@ versus REST 0.01. Without stable trade IDs this is a candidate volume conflict,
 not a proven revision or permission to repair the data. All 135 other unmatched
 WebSocket occurrences predate the finite twenty-row post-REST list.
 
-The next maker feasibility step should require measured activity as well as
-cost-bearing quoted width before selecting a market. The previous three-asset
-activity gate remains unmet. Reference-route acceptance does not establish those
-assets' activity or matching-engine completeness. Raw volume uncertainty,
-aggressor semantics, native fiat unit validation, queue/fill calibration,
-inventory costs and prospective maker performance remain unresolved. Avoid
-inferring fills from reported trades or silently replacing zero volume.
+The activity-aware maker screen is now completed: 208 eligible USDT markets
+from current metadata/statistics, with the top twenty fixed before new books or
+recent trades. Ten all-book samples and twenty recent lists completed within
+the registered thirty-two-GET budget. There are 187 valid comparisons per cost,
+18 positive base widths and 13 positive stressed widths. Seven markets meet
+the recent-activity threshold and sixteen have ten valid quotes per cost, but
+none meets every fixed follow-up condition.
+
+HUMA has nine positive stressed widths and nine recent distinct positive
+fingerprints; its tenth quote fails the minimum/footprint condition. ONE has
+only four valid positive widths and no recent qualifying fingerprint. No
+near-pass asset is promoted and no threshold, market or observation window is
+changed after results. This closes the fixed screen without a selected maker
+candidate. The synthetic adverse-selection reserves are still assumptions,
+not measured execution losses; negative results under them are not a proof
+that all market making is unprofitable. Any later hypothesis must disclose the
+known results and independently justify its scope and calibration evidence.
+
+Reference-route acceptance does not establish matching-engine completeness,
+trade identity, native fiat conversion, maker fills or inventory risk. Preserve
+zero-volume conflicts and all source/minimum exclusions. No accepted candidate
+or paper-performance result currently justifies a live execution route.
 
 The fixed daily relative-reversal counter-hypothesis also failed discovery:
 base/stress returns -14.7889%/-22.6397%, maximum hourly-close drawdowns
