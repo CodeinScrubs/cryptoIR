@@ -350,3 +350,27 @@ trials, raw-data audits, full daily tables, journal, model source and regression
 parity evidence. No paper portfolio, account or live order changed. This closes
 the fixed reversal hypothesis without relaxing its rules or claiming statistical
 independence from earlier discovery work.
+
+## maker-spread-v1: quoted width permits only fresh observation
+
+Registration: `3e55ae7`. Evaluation: `f4b28f9`. This new family diagnostic reuses
+the pinned all-market recording and deterministic 248-asset metadata universe;
+it does not reuse triangular-route proceeds as market-making profit. Only
+USDT books are considered, under a hypothetical 10-USDT maximum quote footprint.
+Buy/sell fee assets, native increments/minimums, residuals and 10% top-level
+footprint limits remain explicit. No passive order is inferred to fill.
+
+There were 4,202 valid comparisons per scenario across 217 markets. Positive
+quote widths numbered 4,202 without costs, 3,026 with base costs, and 1,898 under
+stress. Each scenario excludes 540 missing/invalid books and 218 insufficient
+quote footprints. These correlated snapshots cannot be summed into profit.
+
+The fixed at-most-three follow-up rule selects RDNT, G and SKL, each with twenty
+valid positive stressed widths. Median spent footprints are only 0.5038600,
+1.9994912 and 9.999858 USDT. Corresponding hypothetical stressed widths are
+0.1156357800, 0.0747024994 and 0.349913771 USDT; no such profit was realized.
+A wide spread may coexist with no trading activity or an unreachable queue.
+Selection permits separately registered fresh public book/trade observation
+only. [Full results and artifact hashes](evidence/maker-spread-v1-summary.json).
+Fees/reserves remain assumptions; historical and paper strategy gates remain
+unsatisfied. No market, threshold or sample was changed after calculation.

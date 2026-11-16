@@ -555,3 +555,29 @@ historical fees.
   allocation-matched BTC comparison. Only discovery ran; no 2026 strategy or
   benchmark performance, threshold tuning, account action or paper mutation
   occurred. [Evidence](../research/evidence/rotation-v2-reversal-summary.json).
+
+## Version 0.21.0 additions (2026-11-16)
+
+- All 343 local tests passed. Nine new maker-width scenarios cover exact
+  received-asset costs, quote/cash conservation, reserves, dust, post-fee minimums,
+  footprint limits, Decimal context, positive gross but negative net width,
+  unknown/stale/skewed/wrong-venue/tick data, frozen scope/cost ordering,
+  registration hashes, raw tampering, sample order/spacing, records after the
+  footer, interrupted capture, exclusions and fixed follow-up selection.
+- Plan registration is `3e55ae7`; implementation/evaluation source is `f4b28f9`.
+  All four Windows/Linux Python 3.11/3.13 CI jobs passed in run `43818616029`.
+  The screen made no new exchange request. Every source-module hash matches that
+  implementation commit, and the evaluated plan hash matches the registered bytes.
+- Across three scenarios there were 14,880 sample comparisons: 12,606 valid and
+  2,274 explicitly excluded. Cash/base/fee/dust and cost-reserve identities were
+  checked on every valid row. Per-sample and report hashes are retained in the
+  [public evidence](../research/evidence/maker-spread-v1-summary.json).
+- All twenty source samples were reconstructed. Universe coverage is partial:
+  217 markets have some valid comparisons, 181 have all twenty, and 31 have none.
+  Each scenario retains 540 missing/invalid-book and 218 insufficient-footprint
+  exclusions. Base/stress had 3,026/1,898 positive conditional quote widths,
+  respectively; these are not trades or independent observations.
+- RDNT, G and SKL meet the unchanged observation-selection rule. Their stressed
+  widths are positive in all twenty samples, but quoted footprints differ and
+  passive fills remain unknown. No strategy acceptance, portfolio-return claim,
+  account access, paper mutation or real order occurred.

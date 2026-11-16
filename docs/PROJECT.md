@@ -69,6 +69,15 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
+The registered maker-width screen now narrows fresh public book/trade observation
+to RDNT, G and SKL. The reused twenty-sample recording provided 4,202 valid
+comparisons per cost scenario across 217 of 248 metadata-eligible USDT markets;
+1,898 stressed quoted widths were positive. This is not fill or profit evidence.
+Queue dynamics, actual trade activity, inventory costs and prospective maker
+performance must be investigated before any passive execution model is trusted.
+The fixed selection rule and complete exclusions remain public; no candidate
+has earned strategy acceptance or permission to trade.
+
 The fixed daily relative-reversal counter-hypothesis also failed discovery:
 base/stress returns -14.7889%/-22.6397%, maximum hourly-close drawdowns
 17.7795%/26.4956%, and 74 completed exits each. The daily switching costs did

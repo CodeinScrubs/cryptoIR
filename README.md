@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.20.0، آزمایش ثبت‌شدهٔ خریدِ ضعیف‌ترین دارایی روز گذشته اجرا شد. بازده مدل در سناریوهای هزینهٔ پایه و تشدیدشده منفی ۱۴٫۷۹٪ و منفی ۲۲٫۶۴٪ بود؛ فرضیه رد شد و ارزیابی ۲۰۲۶ باز نشد. هر هشت خروجی آزمایش روند هفتگی قبلی عیناً حفظ شد. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم؛ معاملهٔ واقعی غیرفعال است.**
+**وضعیت فعلی: نسخهٔ 0.21.0، بررسی فاصلهٔ قیمت برای بازارسازی روی ۲۴۸ بازار انجام شد؛ RDNT، G و SKL فقط برای مشاهدهٔ تازهٔ دفتر سفارش و معاملات انتخاب شدند. این فاصله‌ها به معنی پرشدن سفارش یا سود واقعی نیستند. آزمایش بازگشت روزانه نیز با بازده منفی رد شد. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم؛ معاملهٔ واقعی غیرفعال است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -65,6 +65,10 @@ against both matched-allocation and full-capital BTC holding.
 The [historical Toman-reference audit](docs/HISTORICAL_FX.md) preserves explicit
 Wallex quote-unit metadata and rejects the first FX dataset for five daily
 disagreements. Historical IRT portfolio returns remain unavailable.
+
+The [maker quote-width screen](docs/MAKER.md) separates positive quoted spreads
+from actual passive fills. It preserves fees, dust, minimums, quote-size limits
+and every exclusion; its three selected markets require fresh public observation.
 
 The intended progression is collection -> faithful replay -> out-of-sample strategy evaluation -> forward paper trading -> separately authorized, limited live evaluation. No stage establishes guaranteed future profitability. Public documentation must distinguish planned, implemented, tested and account-verified capabilities.
 
