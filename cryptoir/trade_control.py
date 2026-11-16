@@ -144,6 +144,22 @@ def compare(symbol, ws_rows, rest_rows, protocol, report, plan):
     ws = Counter(fingerprint(row) for row in ws_rows if inside(row))
     rest = Counter(fingerprint(row) for row in (rest_rows or []) if inside(row))
     matched, missing_ws, missing_rest = sum((ws & rest).values()), sum((rest-ws).values()), sum((ws-rest).values())
+    # Post-observation diagnostic only: zero-volume publications stay available
+    # as candidates. Shared fields are not stable IDs and cannot repair a row.
+    candidates = {}
+    for row in ws_rows:
+        if eligible_interval and start <= row['source_ns'] <= end:
+            key = row['source_ns'], row['price'], row['raw_type']
+            candidates.setdefault(key, Counter())[row['volume']] += 1
+    unmatched_details = []
+    for (source, price, volume, raw_type), count in sorted((rest-ws).items()):
+        nearby = candidates.get((source, price, raw_type), {})
+        unmatched_details.append({'source_ns': source, 'price_native_raw': price,
+            'raw_type': raw_type, 'rest_volume_raw': volume, 'unmatched_rest_occurrences': count,
+            'same_time_price_type_ws_candidates': [{'volume_raw': v, 'occurrences': n}
+                                                  for v, n in sorted(nearby.items())],
+            'nonmatching_volume_candidate_observed': any(v != volume for v in nearby),
+            'same_exchange_trade_identity_verified': False, 'automatic_volume_repair': False})
     if not report['capture_complete']:
         status = 'incomplete_capture'
     elif rest_rows is None:
@@ -168,6 +184,7 @@ def compare(symbol, ws_rows, rest_rows, protocol, report, plan):
         'guarded_ws_occurrences': sum(ws.values()), 'guarded_post_rest_occurrences': sum(rest.values()),
         'matched_fingerprint_occurrences': matched, 'rest_occurrences_without_matching_ws': missing_ws,
         'ws_occurrences_without_matching_post_rest': missing_rest,
+        'unmatched_rest_details': unmatched_details,
         'post_rest_timestamp_span_covers_guarded_interval': bool(eligible_interval and times
                                                                and min(times) <= start and max(times) >= end),
         'recent_list_coverage_complete': None, 'unique_exchange_trade_count': None,

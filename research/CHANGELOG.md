@@ -318,3 +318,15 @@ Raw values are compared per native symbol using guarded in-session fingerprint
 multisets. Unique trade IDs, aggressor semantics, unit conversion and complete
 history are not inferred. Finite list coverage and unmatched occurrences remain
 explicit; no positive evidence stays inconclusive rather than proving inactivity.
+
+
+## 2026-11-17: diagnose recorded trade-volume discrepancy without changing matches
+
+The completed control retained one unmatched USDTIRT REST fingerprint. Offline
+inspection found a WebSocket publication with the same source time, native
+price and raw type but volume zero, versus REST volume 0.01. A diagnostic now
+lists such candidate field conflicts, including zero-volume publications.
+It does not declare common trade identity, repair volume, change the guarded
+interval, matching rule, counts, scope or acceptance. Original raw files and
+initial report remain intact; the enriched replay is a separate artifact.
+No new network request is required for this diagnosis.

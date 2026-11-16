@@ -122,6 +122,22 @@ class TradeControlTests(unittest.TestCase):
         capture['capture_complete'] = False
         self.assertEqual(c.compare('BTCUSDT', [], [], protocol, capture, self.plan)['status'], 'incomplete_capture')
 
+    def test_zero_ws_and_positive_rest_volume_conflict_is_not_repaired(self):
+        protocol = ready_protocol()
+        event = protocol.parse_frame(dumps(pub('USDTIRT', payload=trade(volume='0'))), 201*NS)[0]
+        result = c.compare('USDTIRT', [{**event, 'available_ns': 201*NS}],
+            [m.trade_payload(trade(volume='0.01'))], protocol,
+            {'capture_complete': True, 'capture_end_ns': 283*NS}, self.plan)
+        self.assertEqual(result['status'], 'cross_source_discrepancy')
+        self.assertEqual(result['fresh_positive_ws_publications'], 0)
+        self.assertEqual(result['matched_fingerprint_occurrences'], 0)
+        self.assertEqual(result['rest_occurrences_without_matching_ws'], 1)
+        detail = result['unmatched_rest_details'][0]
+        self.assertEqual(detail['same_time_price_type_ws_candidates'], [{'volume_raw': 0, 'occurrences': 1}])
+        self.assertTrue(detail['nonmatching_volume_candidate_observed'])
+        self.assertFalse(detail['same_exchange_trade_identity_verified'])
+        self.assertFalse(detail['automatic_volume_repair'])
+
     def recording(self, root):
         (root/'plan.json').write_bytes(self.raw)
         raw_options = dumps(options()).encode()
