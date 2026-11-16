@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "experiment": "maker-activity-v1",
+  "venue": "nobitex",
+  "quote_plan": {
+    "repository_path": "research/maker-spread-v1.json",
+    "sha256": "459cd641cd410ae88f9c3193d5477a6b19a861b70420f747866338f7138b9d4d"
+  },
+  "maximum_markets": 20,
+  "book_samples": 10,
+  "book_interval_seconds": 30,
+  "recent_interval_seconds": 2,
+  "recent_window_seconds": 300,
+  "minimum_distinct_positive_recent_fingerprints": 5,
+  "maximum_recent_rows": 1000,
+  "max_logical_mb": 64,
+  "minimum_free_disk_mb": 512,
+  "maximum_clock_error_ns": 1000000000,
+  "public_options_url": "https://apiv2.nobitex.ir/v2/options",
+  "public_stats_url": "https://apiv2.nobitex.ir/market/stats",
+  "public_books_url": "https://apiv2.nobitex.ir/v3/orderbook/all",
+  "public_trades_prefix": "https://apiv2.nobitex.ir/v2/trades/",
+  "selection_rule": "From current options and stats, take unscaled active USDT native markets with explicit positive increments/minimum, isClosed exactly false, and positive reported volumeDst. Rank descending Decimal volumeDst, then ascending native symbol; keep first twenty. Preserve every exclusion. This reported 24-hour statistic has no source clock and is only an initial ranking input, never a fresh execution signal.",
+  "network_budget": "One public options GET, one public all-market stats GET, ten all-book GETs spaced at least thirty seconds after each preceding book response, then one recent-trades GET for each selected native symbol spaced at least two seconds after each preceding trade response. At most thirty-two public GETs, no retry, replacement, refresh, WebSocket or private request.",
+  "capture_policy": "Select the twenty-market maximum before requesting any book or recent trade list for this study. Preserve raw bodies, hashes, wall/monotonic timing, fixed request order and terminal reason. Source-wide/transport/clock/storage failure stops without retry. Per-market missing or invalid data stay excluded. Do not expand the selection or duration after seeing results.",
+  "activity_semantics": "Per-symbol recent REST list only. Count rows and distinct exact time/price/volume/raw-type fingerprints with positive volume and source time within the last 300 seconds at that response availability. This is a finite-list activity indicator, not unique exchange trade IDs, complete flow, venue volume or a fill. Keep zero volume and duplicate occurrence counts explicit.",
+  "comparison_policy": "Use unchanged maker-spread-v1 received-asset fees, reserves, synthetic quote footprint, increments, minimums and freshness checks on all ten source-time-verified books. Keep all stale/missing/below-minimum comparisons. Calculate no fills or portfolio returns.",
+  "follow_up_rule": {
+    "complete_capture_required": true,
+    "minimum_valid_quotes_in_each_cost": 10,
+    "minimum_positive_fraction_in_both_costs": "0.50",
+    "positive_median_stressed_width_required": true,
+    "maximum_candidates": 3,
+    "ranking": "descending recent distinct positive fingerprints, then descending median stressed width per spent USDT, then ascending native symbol",
+    "permission": "Separately registered prospective book/trade measurement only; never paper strategy or live acceptance."
+  },
+  "causality": "Initial membership is fixed before books/trades. Quote metrics use their own receive/availability time. Recent lists arrive after the book series; they are available only to the final follow-up decision, not retroactively to historical orders or individual quote decisions. Book and activity windows need not coincide and remain separately timestamped.",
+  "fee_source": "https://nobitex.ir/pricing/",
+  "fee_scope": "Public base USDT maker fee 0.1 percent rechecked 2026-11-17. Same base/stress assumptions as pinned quote plan, not account-specific or historical tiers.",
+  "registration_state": "No current options, market stats, all-book snapshot or selected recent-trades list has been requested for this study before registration. Prior maker observations and trade-route controls are known; this is a new fixed activity-aware feasibility screen, not independent strategy validation.",
+  "limitations": "Only current metadata, reported aggregate activity and sparse quotes. Listing/survivorship bias, unknown stats source age, finite REST lists, uncertain cross-source trade volumes, absent queue identity/fills, inventory and adverse-selection costs remain. No fiat conversion, owner settings, leverage, account changes or live order route.",
+  "official_sources": [
+    "https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_market_data.md",
+    "https://nobitex.ir/pricing/"
+  ]
+}

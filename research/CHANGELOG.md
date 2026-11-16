@@ -330,3 +330,17 @@ It does not declare common trade identity, repair volume, change the guarded
 interval, matching rule, counts, scope or acceptance. Original raw files and
 initial report remain intact; the enriched replay is a separate artifact.
 No new network request is required for this diagnosis.
+
+
+## 2026-11-17: register activity-aware maker feasibility screen
+
+`maker-activity-v1.json` fixes a twenty-market maximum selected by reported USDT
+quote volume and current native metadata before any new book/trade request.
+It reuses the unchanged maker-width arithmetic and cost assumptions, requiring
+ten valid quote observations per cost and recent positive fingerprint activity.
+Ten all-book requests at thirty-second spacing and one recent list per selected
+market at two-second spacing fit a maximum thirty-two-public-GET budget.
+No retry, new candidate substitution, account action or parameter grid occurs.
+Recent lists inform the final follow-up selection only, never historical fills
+or quote decisions. At most three qualify for separately registered observation;
+all exclusions and nonpositive widths remain visible, with no P&L claim.
