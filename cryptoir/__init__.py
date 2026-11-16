@@ -1,3 +1,3 @@
 """Read-only research foundation. No live execution capability."""
 
-__version__ = "0.23.0"
+__version__ = "0.24.0"

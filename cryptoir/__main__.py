@@ -229,7 +229,23 @@ def main() -> int:
     trade_audit = commands.add_parser("trade-feed-audit", help="compare public native trade fingerprint occurrences")
     trade_audit.add_argument("directory", type=Path)
     trade_audit.add_argument("--output", type=Path, required=True)
+    activity = commands.add_parser("maker-activity", help="registered activity-aware maker quote feasibility capture")
+    activity.add_argument("--plan", type=Path, required=True)
+    activity.add_argument("--directory", type=Path, required=True)
+    activity_audit = commands.add_parser("maker-activity-audit", help="replay activity-aware maker quote feasibility")
+    activity_audit.add_argument("directory", type=Path)
+    activity_audit.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "maker-activity":
+        from .maker_activity import capture
+        report = capture(args.plan, args.directory)
+        print(encode(report))
+        return int(report["status"] not in ("completed", "no_eligible_markets"))
+    if args.command == "maker-activity-audit":
+        from .maker_activity import audit
+        report = audit(args.directory, args.output)
+        print(encode({k: report[k] for k in ("status", "capture_complete", "requests", "selected_for_observation", "execution_ready")}))
+        return int(not report["capture_complete"])
     if args.command == "trade-feed-control":
         from .trade_control import capture
         report = capture(args.plan, args.directory)

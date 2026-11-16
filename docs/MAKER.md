@@ -163,3 +163,43 @@ zero-versus-0.01 volume conflict and does not establish the prior selected
 markets' trade activity. Their activity gate remains unmet. Further maker
 selection needs measured activity together with net quote width; a wide quote
 alone does not justify queue simulation or deployment.
+
+
+## Activity-aware feasibility screen (0.24.0)
+
+The [new registered screen](../research/maker-activity-v1.json), committed in
+`56bf5f6`, ranks active unscaled USDT native markets by reported quote-volume
+statistics before requesting new books or recent trades. It keeps at most
+twenty, with closed/unknown markets and invalid/missing metadata explicitly
+excluded. The aggregate statistic has no source timestamp; it is a ranking
+input, not evidence of current executable activity. No below-cutoff market is
+substituted after quote or activity results.
+
+```powershell
+uv run python -m cryptoir maker-activity --plan research/maker-activity-v1.json --directory data/maker-activity-v1
+uv run python -m cryptoir maker-activity-audit data/maker-activity-v1 --output data/maker-activity-v1-result
+```
+
+Use new directories and no overlapping venue collector. One options read and
+one market-statistics read precede ten all-book requests at thirty-second
+spacing. One recent-trades list per selected symbol follows, at two-second
+spacing. The maximum is thirty-two public GETs, with no retry, WebSocket,
+private account or order action. Raw response hashes, sequence, clocks,
+monotonic request spacing, deterministic selection and termination are audited.
+The logical cap is 64 MiB and the disk-reserve guard is 512 MiB.
+
+The existing synthetic quote footprint and all three maker fee/reserve scenarios
+are pinned unchanged. Both received-asset fees, rounding, minimum notionals,
+dust, stale data and size limits remain in every comparison. A later recent
+list never enters an earlier quote calculation. It supplies only a final
+follow-up activity indicator: at least five distinct positive time/price/volume/
+raw-type fingerprints within five minutes of list availability. Repeated rows,
+zero volumes, stale rows and unknown unique-trade identity remain explicit.
+Recent lists are finite; quote and activity windows need not coincide.
+
+Further observation requires ten valid quotes per cost, at least half positive
+in both base/stress, and a positive median stressed width, plus the fixed
+activity threshold. At most three are ranked first by recent distinct positive
+fingerprints, then median stressed width per spent USDT and native symbol.
+This permits only separately registered prospective measurement. No candidate
+has earned fills, portfolio returns, strategy acceptance or live permission.
