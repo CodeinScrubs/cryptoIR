@@ -116,6 +116,14 @@ def main() -> int:
     quote.add_argument("--output",type=Path,required=True)
     quote_audit=commands.add_parser("margin-quote-audit",help="reconstruct an accepted public calculation; no network")
     quote_audit.add_argument("path",type=Path)
+    costs=commands.add_parser("margin-cost",help="offline fixed-quote fee sensitivity; no P&L or position")
+    costs.add_argument("--quote",type=Path,required=True)
+    costs.add_argument("--renewals",type=int,required=True)
+    costs.add_argument("--mark",action="append",required=True,help="CURRENCY=collateral_units_per_unit; repeat for every fee/collateral currency")
+    costs.add_argument("--output",type=Path,required=True)
+    costs_audit=commands.add_parser("margin-cost-audit",help="reconstruct fee sensitivity from its source quote; no network")
+    costs_audit.add_argument("--quote",type=Path,required=True)
+    costs_audit.add_argument("path",type=Path)
     account=commands.add_parser("account-check",help="read-only account assessment; optional local Windows credential storage")
     account.add_argument("--venue",choices=("nobitex","wallex","tabdeal"),required=True)
     account.add_argument("--legacy-token",action="store_true",help="Nobitex legacy token instead of the default Ed25519 API key")
@@ -226,6 +234,14 @@ def main() -> int:
     if args.command=="margin-quote-audit":
         from .products import audit_quote
         print(encode(audit_quote(args.path)))
+        return 0
+    if args.command=="margin-cost":
+        from .margin_costs import parse_marks, write_scenario
+        print(encode(write_scenario(args.quote,args.output,args.renewals,parse_marks(args.mark))))
+        return 0
+    if args.command=="margin-cost-audit":
+        from .margin_costs import audit_scenario
+        print(encode(audit_scenario(args.quote,args.path)))
         return 0
     if args.command=="account-check":
         from .accounts import account_check

@@ -69,6 +69,14 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
+Offline Wallex fee sensitivity now preserves native fee amounts, explicit
+renewal counts and hypothetical currency valuations. Two fresh public quotes
+and eighteen scenarios reconstruct from raw evidence. This is conditional cost
+accounting, not a leveraged P&L or survival model. Exit costs, settlement
+conversion, liquidation and historical terms remain outstanding. Nobitex's
+official API and pricing sources disagree on maximum age and describe renewal
+timing differently; no one-source rule was promoted into a backtest.
+
 Historical Toman reporting remains blocked on accepted FX evidence. A scoped
 Wallex USDT/IRT collector now preserves source-declared currency metadata, but
 five of the first 155 daily comparisons disagreed. Nobitex USDTIRT history probes

@@ -104,12 +104,81 @@ It detects changes to normalized costs or prices. Exit fees and historical cost
 coverage remain unknown; these quotes do not establish a complete net-return
 model and are not applied to paper balances or fee settings.
 
+## Offline fee sensitivity (0.19.0, reviewed 2026-11-16)
+
+**Implemented and locally tested**, with two new public dry-run responses and
+eighteen reconstructed scenarios. This calculation is separate from the paper
+ledger and contains no network calls. It reads one immutable quote artifact,
+reconstructs its normalized terms from the raw response, and pins that artifact
+and response by SHA-256. A quote is an observation at its recorded receive time;
+using it in a scenario does not establish that its terms remain available.
+
+```powershell
+uv run python -m cryptoir margin-cost --quote data/margin-long.json --renewals 42 --mark USDT=1 --mark BTC=64500 --output data/margin-long-cost.json
+uv run python -m cryptoir margin-cost-audit --quote data/margin-long.json data/margin-long-cost.json
+```
+
+The prices are explicit hypothetical valuation inputs, in collateral units per
+native unit. Every fee and collateral currency needs a positive exact mark;
+the collateral's own mark must equal one. Missing, duplicate, extra, non-finite
+or floating-point marks fail. No cross-currency conversion is inferred from a
+symbol, and no conversion rate is presented as the venue's settlement rule.
+
+For each quoted fee, the model retains its native currency and amount. It
+includes `trade_fee` and `open_fee` once each, and `extend_fee` exactly the
+requested number of times. This is an explicit fixed-amount scenario, not proof
+of how a live account would be charged. The native totals are then marked at
+the supplied scenario rates. Revaluing an entry fee in BTC is an opportunity-cost
+valuation; it is not an extra settlement debit. The quoted `trade_fee` does not
+establish complete round-trip trading costs. Exit and other unquoted costs,
+net P&L, settlement conversion, liquidation and survival remain unknown or
+unverified in every report. There is no break-even or profitability claim.
+
+The [Wallex terms](https://developers.wallex.ir/docs/margin-types) describe
+four-hour renewals, charging activation/renewal costs on closing, and a maximum
+age of 21 days. The calculator supplies interval and age in its response.
+The tool deliberately accepts a renewal **count**, not a holding duration:
+actual partial-period billing and close-at-boundary ordering are unverified.
+`count * quoted_interval` is only nominal elapsed renewal time. A count reaching
+or exceeding quoted expiry is rejected; the model does not extend expired
+positions or assume they survive an adverse price scenario. Future fee changes
+are not inferred from one quote.
+
+The bounded fresh probe used one public BTC/USDT book and two public dry-run
+requests, without keys, retries or position creation. Both sides used synthetic
+100 USDT collateral, native ratio 5 and the observed ask of 64,935.07. These are
+research inputs, not owner settings. For counts 0, 6 and 42, each response was
+valued at 0.5, 1 and 1.5 times that price. At count 42 and the unchanged mark,
+known fees totaled 4.6900000975 USDT for long and 4.4889612916 USDT for short.
+For the short, the same native fees were worth 2.86948064580 to 6.10844193740
+USDT across the three marks. None of these numbers is net trading loss or P&L.
+[Evidence and hashes](../research/evidence/margin-cost-v1-summary.json).
+
+## Conflicting Nobitex lifecycle descriptions
+
+The official [API source](https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_position.md)
+describes `Expired` as a maximum of 30 days from the initial order and
+`extensionFee` as an end-of-day amount. The current
+[pricing page](https://nobitex.ir/pricing/) instead describes renewal every eight
+hours for up to 60 days, with the rate at renewal time applied. It also describes
+a pool share after a profitable close for each renewed day. These observations
+were checked on 2026-11-16. The downloaded API source hash is retained in the
+evidence summary. The daily rate label alone does not specify an eight-hour
+charge formula or resolve its tiers and account scope.
+
+No 30/60-day expiry, fixed historical renewal rate, inferred rate division or
+profit-sharing basis is selected for a simulation. These require clarification
+or account-level position evidence before a faithful Nobitex margin replay.
+Current spot hourly candles cannot resolve them.
+
 ## Next evidence
 
 1. Reconcile account read results after local hidden credential entry. Preserve
    unknown units rather than importing venue lookalikes' assumptions.
-2. Establish side-specific cost accrual and liquidation/expiry formulas against
-   official specifications and observed calculations, including gaps and outages.
+2. Resolve expiry and renewal-source differences, exit costs, partial-period
+   billing, settlement currency conversion and liquidation/expiry formulas
+   against official specifications and observed calculations, including gaps
+   and outages. Fixed-quote sensitivity does not close these gaps.
 3. Obtain point-in-time underlying/mark/index prices and product rules. Spot
    candles alone cannot validate leveraged liquidation or funding performance.
 4. Add leveraged replay/paper only for a product whose necessary terms are known.

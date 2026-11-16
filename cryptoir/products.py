@@ -377,13 +377,20 @@ def margin_quote(path: Path,market,side,collateral,risk_coef,open_price):
             'execution_ready':False,'output':str(path)}
 
 
-def audit_quote(path: Path):
-    record=strict_json(Path(path).read_text(encoding='utf-8'))
+def verified_quote(raw: bytes):
+    """Reconstruct one immutable in-memory artifact before any downstream use."""
+    record=strict_json(raw)
     if record.get('schema')!=1 or record.get('kind')!='public_margin_quote' or record.get('venue')!='wallex':
         raise DataError('invalid public quote artifact')
     calculation_request('dry-run',record['request'])
     quote=parse_quote(record['response'],record['request'])
     if record['status']!='observed' or encoded(record['quote'])!=encoded(quote):
         raise DataError('quote does not reconstruct from raw response')
-    return {'kind':'public_margin_quote_audit','status':'observed','sha256':hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+    return record,quote
+
+
+def audit_quote(path: Path):
+    raw=Path(path).read_bytes()
+    verified_quote(raw)
+    return {'kind':'public_margin_quote_audit','status':'observed','sha256':hashlib.sha256(raw).hexdigest(),
             'position_created':False,'execution_ready':False}

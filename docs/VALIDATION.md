@@ -504,3 +504,29 @@ historical fees.
   every source attempt, failed date, input/artifact hash and unit interpretation.
   No IRT return, window trimming, delta tolerance, source repair, retry, strategy
   trial, 2026 performance inspection, account action or paper mutation followed.
+
+## Version 0.19.0 additions (2026-11-16)
+
+- All 328 local tests passed. Ten new fee-sensitivity tests cover exact native
+  long/short costs, mark-price effects, zero renewals, incremental renewal
+  accounting, expiry boundaries, absent/extra/duplicate/inexact marks, ambient
+  Decimal precision, tampered quotes/reports, source replacement and exclusive
+  writes. Unknown costs, survival and execution cannot become verified through
+  this calculation. Existing product and quote tests still pass.
+- Quote audit now reads source bytes once and shares its reconstruction routine
+  with fee sensitivity, avoiding separate reads for validation and hashing.
+  Both calculation and audit are offline; the CLI summary omits scenario amounts.
+- A bounded public probe made exactly three requests: one Wallex BTC/USDT book
+  and one dry-run for each side. All returned HTTP 200. The price was selected
+  once from the observed ask and was not changed/retried. Synthetic collateral
+  and ratio are clearly distinguished from owner settings. Two quote artifacts
+  and eighteen cost scenarios reconstructed successfully from raw responses.
+- [Public evidence](../research/evidence/margin-cost-v1-summary.json) pins the
+  source book, quotes, probe assumptions and all scenario artifacts. It records
+  native fee currencies and hypothetical valuations, never realized returns.
+  Exit fees, other unquoted costs, net P&L and venue settlement conversion remain
+  unknown. No historical strategy, account or paper balance was changed.
+- Official Nobitex API/pricing descriptions disagree on 30/60-day expiry and
+  describe renewal timing differently. This is unresolved specification evidence,
+  not permission to select favorable assumptions. Wallex's documented four-hour
+  interval does not establish partial-period or boundary-time billing rules.

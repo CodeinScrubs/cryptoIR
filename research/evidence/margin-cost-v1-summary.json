@@ -1,0 +1,309 @@
+{
+  "schema": 1,
+  "kind": "public_margin_fee_sensitivity_evidence",
+  "status": "conditional_cost_only",
+  "date": "2026-11-16",
+  "synthetic_inputs_are_not_owner_settings": true,
+  "public_requests": 3,
+  "retries": 0,
+  "http_statuses": [
+    200,
+    200,
+    200
+  ],
+  "probe_plan_sha256": "cde0350bd341faaaa053abde2d6b17dafed64c4b0b6e626cd017bd9427782c69",
+  "book_artifact_sha256": "8979550e4baafaf338f66ffa61e0b4f3508d54c1b7109b4483b309cb60dd00be",
+  "book_body_sha256": "bee1433e40c6860da24d7c7b193d2a0d3af4b04b426b7f5115fced68aab2b773",
+  "open_price_rule": "first observed ask from one current Wallex BTC/USDT book, shared across sides",
+  "renewal_count_is_explicit_not_inferred_from_holding_time": true,
+  "fixed_quote_fee_assumption": true,
+  "scenario_conversion_is_not_venue_settlement": true,
+  "observations": [
+    {
+      "side": "long",
+      "quote_sha256": "b3d6720b6f8f091ed92f9fdf9c31bcb2df02ca6e554587da41d243f3762972d2",
+      "response_body_sha256": "8bbaa2ad063a2c43469cbde20269d32dd8608c7e12cdd9b9cd6310c5c6685b00",
+      "received_utc": "2026-11-16T01:04:11.460538+00:00",
+      "synthetic_input": {
+        "market": "BTCUSDT",
+        "side": "long",
+        "collateral": "100",
+        "risk_coef": "5",
+        "open_price": "64935.07"
+      },
+      "quoted_amounts": {
+        "collateral": {
+          "value": "100",
+          "native_currency": "USDT"
+        },
+        "loan": {
+          "value": "500",
+          "native_currency": "USDT"
+        },
+        "trade_fee": {
+          "value": "0.00001925",
+          "native_currency": "BTC"
+        },
+        "open_fee": {
+          "value": "0.08",
+          "native_currency": "USDT"
+        },
+        "extend_fee": {
+          "value": "0.08",
+          "native_currency": "USDT"
+        }
+      },
+      "extend_time_seconds": 14400,
+      "max_age_seconds": 1814400,
+      "scenarios": [
+        {
+          "renewals": 0,
+          "scenario_mark_multiplier": "0.5",
+          "sha256": "e6bdf660b189c169866521b081d73139a70acf0a4a80f1ed1876b84af9cbf5b5",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "0.08"
+          },
+          "marked_known_fees_in_collateral": "0.70500004875"
+        },
+        {
+          "renewals": 0,
+          "scenario_mark_multiplier": "1",
+          "sha256": "767b20b8dcafc0faf22bc2edba6b74c8b3a0c118ea7ece86171e3a4c3a5bd3f0",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "0.08"
+          },
+          "marked_known_fees_in_collateral": "1.3300000975"
+        },
+        {
+          "renewals": 0,
+          "scenario_mark_multiplier": "1.5",
+          "sha256": "60666294f76a4d5dfba59482157a907ed412e3e77e73a1b2d402e96376c14fd9",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "0.08"
+          },
+          "marked_known_fees_in_collateral": "1.95500014625"
+        },
+        {
+          "renewals": 6,
+          "scenario_mark_multiplier": "0.5",
+          "sha256": "f657875ea8cbd2990958e4aa1095a8c14612fd34798e0339616db0af169cbbd0",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "0.56"
+          },
+          "marked_known_fees_in_collateral": "1.18500004875"
+        },
+        {
+          "renewals": 6,
+          "scenario_mark_multiplier": "1",
+          "sha256": "f415144e00b86120ff58b314c5a5db4a33cbc0b225e002e994e1c9577f69e049",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "0.56"
+          },
+          "marked_known_fees_in_collateral": "1.8100000975"
+        },
+        {
+          "renewals": 6,
+          "scenario_mark_multiplier": "1.5",
+          "sha256": "052c923943cb8051789dae5c5fd6dc5c36706289e550509f7c7297b04c2c4ca6",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "0.56"
+          },
+          "marked_known_fees_in_collateral": "2.43500014625"
+        },
+        {
+          "renewals": 42,
+          "scenario_mark_multiplier": "0.5",
+          "sha256": "96b60b1b360a4801da639a105fb11e3cf5b2b2d2277de5841fe122071de8420e",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "3.44"
+          },
+          "marked_known_fees_in_collateral": "4.06500004875"
+        },
+        {
+          "renewals": 42,
+          "scenario_mark_multiplier": "1",
+          "sha256": "d7ba20c52e86564e23229b294b76d3d2bb240900c9abad460d00ffa313150b39",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "3.44"
+          },
+          "marked_known_fees_in_collateral": "4.6900000975"
+        },
+        {
+          "renewals": 42,
+          "scenario_mark_multiplier": "1.5",
+          "sha256": "7c3c8522147d33a50916b1a3f2575e9d187323d9d353a01ab2d2ac74bdb7d428",
+          "native_fee_totals": {
+            "BTC": "0.00001925",
+            "USDT": "3.44"
+          },
+          "marked_known_fees_in_collateral": "5.31500014625"
+        }
+      ]
+    },
+    {
+      "side": "short",
+      "quote_sha256": "eda8bcb62fcd59d58f704b528eb7a0fe803f8f4aa2d1d0f0ccdda3c27205ca7a",
+      "response_body_sha256": "c6ffa96f113559e1badc6ace170c20dc86bf0adfbfdd26ce4305f59fd23dd351",
+      "received_utc": "2026-11-16T01:04:12.943505+00:00",
+      "synthetic_input": {
+        "market": "BTCUSDT",
+        "side": "short",
+        "collateral": "100",
+        "risk_coef": "5",
+        "open_price": "64935.07"
+      },
+      "quoted_amounts": {
+        "collateral": {
+          "value": "100",
+          "native_currency": "USDT"
+        },
+        "loan": {
+          "value": "0.00769999",
+          "native_currency": "BTC"
+        },
+        "trade_fee": {
+          "value": "1.25",
+          "native_currency": "USDT"
+        },
+        "open_fee": {
+          "value": "0.00000116",
+          "native_currency": "BTC"
+        },
+        "extend_fee": {
+          "value": "0.00000116",
+          "native_currency": "BTC"
+        }
+      },
+      "extend_time_seconds": 14400,
+      "max_age_seconds": 1814400,
+      "scenarios": [
+        {
+          "renewals": 0,
+          "scenario_mark_multiplier": "0.5",
+          "sha256": "18274e849ebe91aca6f09d4e739110fbb8e003e2ec6aeb1e5421e73e9286c36c",
+          "native_fee_totals": {
+            "BTC": "0.00000116",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "1.28766234060"
+        },
+        {
+          "renewals": 0,
+          "scenario_mark_multiplier": "1",
+          "sha256": "91d41f35d62a09ade23bac0622c320d081cb75ae985d8e585f8356b9fb793606",
+          "native_fee_totals": {
+            "BTC": "0.00000116",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "1.3253246812"
+        },
+        {
+          "renewals": 0,
+          "scenario_mark_multiplier": "1.5",
+          "sha256": "4a419701efd5eb1752aad1a393e6bc6eafbc39feb2906cc6c4a28fa38cb031f7",
+          "native_fee_totals": {
+            "BTC": "0.00000116",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "1.36298702180"
+        },
+        {
+          "renewals": 6,
+          "scenario_mark_multiplier": "0.5",
+          "sha256": "e683473ba8158a8d7e6f1925b6bfe1bc60d3ecc5ed5d94957b75003e8307c7ba",
+          "native_fee_totals": {
+            "BTC": "0.00000812",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "1.51363638420"
+        },
+        {
+          "renewals": 6,
+          "scenario_mark_multiplier": "1",
+          "sha256": "29d6b6ec1411a80de78846d30c8519468c44c95f731360d7ab8f613fbd892e34",
+          "native_fee_totals": {
+            "BTC": "0.00000812",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "1.7772727684"
+        },
+        {
+          "renewals": 6,
+          "scenario_mark_multiplier": "1.5",
+          "sha256": "4f38073b10a2ec9c6a1723f63515a5fab68f7327cecdce540fbaed47c2ad9b00",
+          "native_fee_totals": {
+            "BTC": "0.00000812",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "2.04090915260"
+        },
+        {
+          "renewals": 42,
+          "scenario_mark_multiplier": "0.5",
+          "sha256": "0bd6ebffa7e3bc5979642129904c02f835334be040d93b4509d5e23637b3b88b",
+          "native_fee_totals": {
+            "BTC": "0.00004988",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "2.86948064580"
+        },
+        {
+          "renewals": 42,
+          "scenario_mark_multiplier": "1",
+          "sha256": "95d28c9c0d650a74abc96c80e9b24c4f9e60b01fe11242413b0fbd1cd1715d78",
+          "native_fee_totals": {
+            "BTC": "0.00004988",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "4.4889612916"
+        },
+        {
+          "renewals": 42,
+          "scenario_mark_multiplier": "1.5",
+          "sha256": "5ffa1c8087c72fc832f19e1fe960aefd4d9815ba68e95e6c9a87a418eafddc76",
+          "native_fee_totals": {
+            "BTC": "0.00004988",
+            "USDT": "1.25"
+          },
+          "marked_known_fees_in_collateral": "6.10844193740"
+        }
+      ]
+    }
+  ],
+  "official_sources": [
+    "https://developers.wallex.ir/docs/margin-types",
+    "https://developers.wallex.ir/docs/margin-dry-run",
+    "https://nobitex.ir/pricing/",
+    "https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_position.md"
+  ],
+  "nobitex_api_doc_sha256": "8ee617b41ca40a9262e55fd3765d72d7cf724e56e6e2a4e64f8249b00b409117",
+  "source_conflicts": {
+    "nobitex_expiry_days": {
+      "api_documentation": 30,
+      "pricing_page": 60
+    },
+    "nobitex_renewal_timing": {
+      "api_extensionFee_description": "end of day",
+      "pricing_page": "every eight hours"
+    }
+  },
+  "exit_fee": null,
+  "net_pnl": null,
+  "position_created": false,
+  "paper_balances_changed": false,
+  "historical_cost_model_verified": false,
+  "liquidation_model_verified": false,
+  "execution_ready": false,
+  "model_source_sha256": {
+    "cryptoir/products.py": "4242bc5821514646836837fab616bd41c54f73eda14452d1539d653d9a7e20c4",
+    "cryptoir/margin_costs.py": "19b48fc2149b4c40846a4609f1f1903ea075dbc8566e371f9c9b9ccd42c3dd22"
+  }
+}
