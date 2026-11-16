@@ -530,3 +530,28 @@ historical fees.
   describe renewal timing differently. This is unresolved specification evidence,
   not permission to select favorable assumptions. Wallex's documented four-hour
   interval does not establish partial-period or boundary-time billing rules.
+
+## Version 0.20.0 additions (2026-11-16)
+
+- All 334 local tests passed. Six new reversal scenarios cover percentage-loss
+  ranking and ties, zero/positive-return cash, fixed daily direction/horizons,
+  unchanged costs and gates, separately delayed cash-funded switches, fee/P&L
+  identities, prior-volume capacity, future-data isolation and failed-discovery
+  stopping. The existing eighteen momentum tests continue to pass.
+- Registration commit `e8daee0` passed all four CI jobs in run `43785187735`.
+  Implementation/evaluation source `81f71f1` also passed all four Windows/Linux
+  Python 3.11/3.13 jobs in run `43785524124`. All eight previous momentum
+  discovery artifacts reproduced with exact byte equality after the extension.
+- Each raw-derived dataset audit passed 482 complete daily comparisons and
+  11,568 contiguous hourly bars, with no missing day, nonzero OHLCV delta or
+  unusable-volume flag. Complete Tehran-date delta tables remain local. No new
+  exchange download or performance outside the registered discovery was needed.
+- All eight new trial hashes, source-module hashes, registered plan hash and
+  journal hash were checked. The two candidate trials each contain 153 scheduled
+  decisions, no trade sooner than its one-hour delay, nonnegative shared cash
+  and quantities, and reconciled realized/unrealized P&L.
+- Daily reversal failed unchanged gates: base/stress returns -14.7889%/-22.6397%,
+  drawdowns 17.7795%/26.4956%, with 74 completed exits each. Base also failed the
+  allocation-matched BTC comparison. Only discovery ran; no 2026 strategy or
+  benchmark performance, threshold tuning, account action or paper mutation
+  occurred. [Evidence](../research/evidence/rotation-v2-reversal-summary.json).

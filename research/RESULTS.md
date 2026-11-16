@@ -316,3 +316,37 @@ total starting cash, not just the invested portion. Maximum drawdown is measured
 at hourly closes and does not bound intrahour loss. These results do not include
 IRT attribution, full-capital BTC benchmarks, historical fee tiers or calibrated
 execution. More trials on the same discovery interval do not create new evidence.
+
+## rotation-v2: fixed daily relative reversal rejected
+
+Plan `rotation-v2-reversal.json` was published in `e8daee0` before return
+calculation. Evaluation code: `81f71f1`. This is one further exploratory
+hypothesis on the already inspected August-December 2025 discovery window.
+The selector targets the lowest negative completed 24-hour return among BTC,
+ETH and SOL, or cash when none is negative. Its 24-hour schedule is fixed.
+Capital, allocation, execution delay, fees, price costs, dataset pins and gates
+are unchanged from rotation-v1; no downloaded history or parameter grid was added.
+
+| Model | Base return | Stressed return | Base drawdown | Stressed drawdown | Completed exits, base/stress |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| USDT cash | 0% | 0% | 0% | 0% | 0 / 0 |
+| BTC holding, 25% entry allocation | -6.2867% | -6.3468% | 9.2676% | 9.2091% | 0 / 0 |
+| BTC holding, full entry allocation | -24.9717% | -25.3882% | 35.2458% | 35.2560% | 0 / 0 |
+| Daily relative reversal | -14.7889% | -22.6397% | 17.7795% | 26.4956% | 74 / 74 |
+
+Returns use synthetic total starting cash. Drawdown is at hourly closes, not an
+intrahour loss bound. The candidate generated 149/148 modeled trades and
+33.8664/32.2685 times starting cash in turnover under base/stress costs. Negative
+returns and drawdowns above 10% fail both scenarios; base also trails the
+matched-allocation BTC benchmark. Beating full BTC during its decline does not
+meet the registered gates. No 2026 strategy or benchmark performance was opened.
+
+All three raw-derived audits again passed 482/482 complete daily OHLCV
+comparisons and reported-volume checks. Full per-date zero-delta tables remain
+local. The original weekly-momentum experiment's eight discovery artifacts
+reproduced byte for byte after extending the engine. The
+[public evidence](evidence/rotation-v2-reversal-summary.json) pins all eight new
+trials, raw-data audits, full daily tables, journal, model source and regression
+parity evidence. No paper portfolio, account or live order changed. This closes
+the fixed reversal hypothesis without relaxing its rules or claiming statistical
+independence from earlier discovery work.

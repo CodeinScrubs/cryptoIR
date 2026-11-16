@@ -1,4 +1,4 @@
-# Shared-cash relative-momentum research
+# Shared-cash momentum and reversal research
 
 Implemented in 0.17.0. This is a conditional hourly cost screen for one
 preregistered spot portfolio hypothesis, not an execution service or accepted
@@ -75,6 +75,44 @@ The first registered run stopped at discovery: base/stress net returns were
 completed exits each. It beat both declining BTC benchmarks but failed the
 profit, drawdown and exit-count gates. No 2026 performance was evaluated and no
 rule changed. [All results and hashes](../research/RESULTS.md) retain the rejection.
+
+## Fixed daily reversal extension (0.20.0)
+
+The separately [registered v2 plan](../research/rotation-v2-reversal.json)
+selects the lowest strictly negative 24-hour close-to-close return among the
+same three assets, otherwise cash. Exact ties still use ascending asset name.
+It decides at the first evaluation close and every 24 completed hours after
+that. The window is aligned to those completed hourly closes, not relabeled as
+midnight daily candles. No shorts, averaging down, off-schedule signal updates
+or new execution assumptions were added.
+
+The shared-cash execution, cost scenarios, synthetic capital, allocation cap,
+dataset pins, split dates, benchmarks and gates are identical to the original
+plan. Buy the loser is a counter-hypothesis, not an assumption that a declining
+price must recover. Published findings depend on size and liquidity; see the
+sources and limitations in the registered plan. Reusing the already inspected
+2025 discovery window adds to the research search count and does not create an
+independent confirmation. There is no parameter grid.
+
+```powershell
+uv run python -m cryptoir rotation-research --plan research/rotation-v2-reversal.json --dataset data/baseline-v2-nobitex-btc --dataset data/baseline-v2-nobitex-eth --dataset data/baseline-v2-nobitex-sol --output data/rotation-v2-reversal-result
+```
+
+All 482 complete days per asset again reconciled exactly, with no gaps and
+usable reported volume. The new candidate failed discovery with base/stress
+returns -14.7889%/-22.6397% and hourly-close drawdowns 17.7795%/26.4956%.
+Each scenario completed 74 exits; base also failed to exceed matched-allocation
+BTC holding. No 2026 strategy or benchmark performance opened. Daily targets
+were evaluated 153 times; modeled trades retained the required separate delays.
+No thresholds, costs or data window were changed after seeing this result.
+[Result and evidence hashes](../research/evidence/rotation-v2-reversal-summary.json).
+
+Extending the selector did not change old behavior: all eight original weekly-
+momentum discovery artifacts, including benchmarks, reproduced byte for byte.
+Synthetic tests additionally check the reversal ranking, exact-zero cash case,
+direction/interval validation, delayed exits before entries, prior-volume
+capacity, future-data isolation and sequential gates. This is implemented and
+locally tested research software, not an accepted paper or live strategy.
 
 ## Limits of the model
 

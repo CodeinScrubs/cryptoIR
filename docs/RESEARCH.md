@@ -134,3 +134,9 @@ Version 0.18.0 adds scoped Wallex USDT/IRT historical collection with original
 catalog evidence of the Toman quote unit. Its first 155-day reference failed exact
 reconciliation on five dates and was rejected before attribution. Existing USDT
 strategy plans now explicitly reject fiat-quoted inputs. [Unit and audit details](HISTORICAL_FX.md).
+
+Version 0.20.0 adds one fixed daily relative-reversal selector to the shared-cash
+engine. Its separately registered exploratory trial failed the unchanged
+profit/drawdown gates and the allocation-matched BTC comparison. The 74 completed
+exits in each cost scenario did not establish an edge. Prior weekly-momentum
+artifacts retained exact byte parity; all 2026 performance remained gated.

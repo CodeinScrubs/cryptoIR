@@ -2,7 +2,7 @@
 
 پایهٔ پژوهش و ساخت ربات معامله‌گر برای صرافی‌های ایرانی؛ شروع با دادهٔ عمومی، سپس بک‌تست و paper trading.
 
-**وضعیت فعلی: نسخهٔ 0.19.0، ابزار بررسی هزینهٔ کارمزدهای تعهدی والکس با حفظ ارز هر کارمزد اضافه شد؛ دو پاسخ عمومی و ۱۸ سناریوی فرضی بازسازی شدند. هزینهٔ خروج، مدل کامل لیکوییدشدن و سود خالص هنوز نامعلوم‌اند. اختلاف منابع رسمیِ عمر و تمدید موقعیت نوبیتکس ثبت شد. گزارش تاریخی بازده تومانی همچنان به دادهٔ معتبر نیاز دارد. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم؛ معاملهٔ واقعی غیرفعال است.**
+**وضعیت فعلی: نسخهٔ 0.20.0، آزمایش ثبت‌شدهٔ خریدِ ضعیف‌ترین دارایی روز گذشته اجرا شد. بازده مدل در سناریوهای هزینهٔ پایه و تشدیدشده منفی ۱۴٫۷۹٪ و منفی ۲۲٫۶۴٪ بود؛ فرضیه رد شد و ارزیابی ۲۰۲۶ باز نشد. هر هشت خروجی آزمایش روند هفتگی قبلی عیناً حفظ شد. هنوز استراتژی پذیرفته‌شده یا سودآوری تأییدشده نداریم؛ معاملهٔ واقعی غیرفعال است.**
 
 This repository collects public spot order books over REST and WebSocket from Nobitex, Wallex and Tabdeal, audits their provenance, and replays conditional cross-exchange spread estimates.
 
@@ -57,8 +57,8 @@ The [single-venue triangular diagnostic](docs/TRIANGULAR.md) separately replays
 both USDT/crypto/IRR directions with three received-asset costs, bounded depth,
 native increments and retained residuals. It also remains a snapshot estimate.
 
-The [shared-cash rotation screen](docs/ROTATION.md) tests one registered relative-
-momentum portfolio across BTC, ETH and SOL. It requires delayed exits before
+The [shared-cash rotation screen](docs/ROTATION.md) tests separately registered
+weekly-momentum and daily-reversal portfolios across BTC, ETH and SOL. It requires delayed exits before
 new entries, preserves residual holdings and compares the same initial cash
 against both matched-allocation and full-capital BTC holding.
 

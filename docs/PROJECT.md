@@ -69,6 +69,15 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
+The fixed daily relative-reversal counter-hypothesis also failed discovery:
+base/stress returns -14.7889%/-22.6397%, maximum hourly-close drawdowns
+17.7795%/26.4956%, and 74 completed exits each. The daily switching costs did
+not produce an accepted candidate. All old weekly-momentum trial artifacts
+retain exact byte parity, and no 2026 performance was opened. Further search
+must disclose reuse of the same observed discovery window and avoid an
+unbounded horizon/filter sweep. Prospective evidence, historical IRT reporting
+and execution calibration remain necessary even if another screen passes.
+
 Offline Wallex fee sensitivity now preserves native fee amounts, explicit
 renewal counts and hypothetical currency valuations. Two fresh public quotes
 and eighteen scenarios reconstruct from raw evidence. This is conditional cost
