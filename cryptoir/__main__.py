@@ -210,7 +210,18 @@ def main() -> int:
     rotation.add_argument("--plan", type=Path, required=True)
     rotation.add_argument("--dataset", type=Path, action="append", required=True)
     rotation.add_argument("--output", type=Path, required=True)
+    maker = commands.add_parser("maker-screen", help="offline quoted maker-width feasibility; never passive fills")
+    maker.add_argument("--plan", type=Path, required=True)
+    maker.add_argument("--universe-plan", type=Path, required=True)
+    maker.add_argument("--catalog", type=Path, required=True)
+    maker.add_argument("--recording", type=Path, required=True)
+    maker.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "maker-screen":
+        from .maker_spread import run_screen
+        report = run_screen(args.plan,args.universe_plan,args.catalog,args.recording,args.output)
+        print(encode({k:report[k] for k in ("experiment","status","capture_complete","selected_for_observation","execution_ready")}))
+        return int(not report["capture_complete"])
     if args.command == "rotation-research":
         from .rotation import run_experiment
         report = run_experiment(args.plan, args.dataset, args.output)
