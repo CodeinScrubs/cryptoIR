@@ -155,3 +155,11 @@ and [REST trade-list](https://raw.githubusercontent.com/nobitex/docs-api/master/
 documentation provide discovery routes; documentation alone is not observed
 acceptance, and a public trade is not our order's fill. No private credentials,
 paper account changes or live orders are part of this screen.
+
+
+The subsequent [reference trade-feed control](STREAMS.md#reference-trade-feed-control-0230)
+observed fresh trade publications for BTCUSDT and USDTIRT. It retains a candidate
+zero-versus-0.01 volume conflict and does not establish the prior selected
+markets' trade activity. Their activity gate remains unmet. Further maker
+selection needs measured activity together with net quote width; a wide quote
+alone does not justify queue simulation or deployment.

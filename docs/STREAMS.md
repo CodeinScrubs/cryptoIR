@@ -84,3 +84,36 @@ Fresh positive-volume WebSocket payload observation is reported separately
 from complete capture and from REST agreement. No suitable in-window evidence
 remains inconclusive; no route, unique-trade identity, liquidity, fills or profit
 is invented. No account, order, portfolio, withdrawal or transfer is involved.
+
+### Recorded control result
+
+Capture `10afc65` ran on 2026-11-16 from 16:21:11 to 16:24:11 UTC
+(19:51:11-19:54:11 Tehran), for 180.0969701 seconds. Both subscriptions and all
+five public REST reads completed. The recording contains 192 records and
+91,163 logical bytes, with maximum local clock discrepancy 0.4275 ms. All
+observed publication offsets were contiguous. No private operation occurred.
+
+| Native symbol | WS publications | Fresh positive-volume WS publications | Guarded post-REST occurrences | Exact guarded matches | Unmatched guarded REST occurrences |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| BTCUSDT | 13 | 13 | 13 | 13 | 0 |
+| USDTIRT | 160 | 159 | 16 | 15 | 1 |
+
+All received source ages were below 353 ms. The post-REST lists each contained
+only twenty rows. All 135 USDTIRT WebSocket occurrences without a matching
+post-REST row predate that list's oldest timestamp; they are not evidence of
+message loss. Neither list proves whole-window or matching-engine completeness.
+
+The remaining USDTIRT REST fingerprint has volume 0.01; a WebSocket publication
+with the same source time, native price and raw type has volume zero. The
+registered exact match remains absent. Diagnostic audit `3e512b0` exposes this
+candidate association without asserting trade identity, repairing volume or
+changing any original match count/status. The original report and raw data
+remain intact; enriched replay is a separate artifact. Zero volume contributes
+nothing to positive activity and cannot drive a hypothetical fill.
+
+The reference routes are publicly observed for these two native symbols. This
+is not acceptance of the prior maker candidates or evidence of profitable
+execution. Capture/control completeness describes bounded software/source reads;
+USDTIRT still has a cross-source discrepancy. [Evidence and hashes](../research/evidence/trade-feed-control-v1-summary.json)
+include both code versions, original/diagnostic reports, plans, raw recording,
+REST phases, unchanged-match verification and finite-list limits.

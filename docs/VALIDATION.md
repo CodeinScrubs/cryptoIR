@@ -611,3 +611,31 @@ historical fees.
   the unchanged fresh-trade activity gate. Trade payloads, aggressor semantics,
   unique-trade IDs and matching-engine completeness remain unverified.
   No private account, portfolio, order, withdrawal or transfer changed.
+
+
+## Version 0.23.0 checks (2026-11-17)
+
+- All 364 local tests passed. Nine new cases cover fixed native reference scope,
+  current metadata, no implicit fiat conversion, exact values and duplicate
+  occurrences, malformed/hash-mismatched/unsorted/future REST data, guarded
+  multiset comparisons, stale/zero/missing evidence, phase order and omissions,
+  exclusive outputs, the exact five-GET/one-socket budget, loopback reception
+  on both channels, and zero/positive-volume conflicts without repair.
+- The original maker observation replay matches every original field except
+  the current audit-code hashes after sharing its raw session verifier.
+  The trade control's diagnostic replay preserves every original match count,
+  status and field except added diagnostic details and current audit hashes.
+- Registration `43aba35`, capture `10afc65`, diagnostic replay `3e512b0`.
+  Captured and audited source bytes match their respective commits; registered
+  plan bytes match the preregistration. Implementation CI `43906524128` passed
+  all four Windows/Linux Python 3.11/3.13 jobs; diagnostic CI `43951601842`
+  also passed all four jobs after adding the volume-conflict regression case.
+- The bounded real control completed 180.0969701 seconds: 13 BTCUSDT and 160
+  USDTIRT publications, 172 fresh positive volumes and one zero volume. Native
+  values remain unconverted. All 13 guarded BTCUSDT fingerprint occurrences
+  match REST; USDTIRT matches 15 of 16 guarded REST occurrences. All 135 other
+  unmatched WS occurrences predate the twenty-row post-REST list.
+- USDTIRT's remaining REST occurrence has a same-time/price/type WS candidate
+  with zero volume versus REST 0.01. Trade identity and root cause remain
+  unknown, and no automatic correction, order fill or P&L is inferred.
+  Capture completeness is not cross-source agreement or whole-venue coverage.

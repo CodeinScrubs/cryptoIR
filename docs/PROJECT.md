@@ -76,14 +76,22 @@ any selected asset. All observed offsets were contiguous and the raw audit
 passed. Positive conditional widths remain, but none met the fixed activity
 gate; no candidate progresses from this observation to queue/fill calibration.
 
-Before attributing silent trade channels to market inactivity, the next useful
-step is a separately registered bounded trade-feed control on a reference
-market, with observed payload/availability evidence. This is a data-route check,
-not a replacement candidate, extension of this window, relaxed strategy gate or
-permission to trade. Matching-engine completeness, aggressor semantics, passive
-fills, inventory costs and prospective maker performance remain unverified.
-The prior quote-width screen and this independent fresh observation retain
-separate provenance and all exclusions.
+The separate 180-second reference control now publicly observes both BTCUSDT
+and USDTIRT trade routes: 13 and 160 publications, respectively, with 172 fresh
+positive-volume publications and one zero-volume publication. All 13 guarded
+BTCUSDT occurrences match REST. USDTIRT retains one guarded REST fingerprint
+with no exact match: a same-time/price/type WebSocket candidate has volume zero
+versus REST 0.01. Without stable trade IDs this is a candidate volume conflict,
+not a proven revision or permission to repair the data. All 135 other unmatched
+WebSocket occurrences predate the finite twenty-row post-REST list.
+
+The next maker feasibility step should require measured activity as well as
+cost-bearing quoted width before selecting a market. The previous three-asset
+activity gate remains unmet. Reference-route acceptance does not establish those
+assets' activity or matching-engine completeness. Raw volume uncertainty,
+aggressor semantics, native fiat unit validation, queue/fill calibration,
+inventory costs and prospective maker performance remain unresolved. Avoid
+inferring fills from reported trades or silently replacing zero volume.
 
 The fixed daily relative-reversal counter-hypothesis also failed discovery:
 base/stress returns -14.7889%/-22.6397%, maximum hourly-close drawdowns

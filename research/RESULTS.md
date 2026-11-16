@@ -400,3 +400,32 @@ control channel was included. A separate reference-market feed control is a
 protocol/availability diagnostic, not strategy acceptance. [Complete public
 summary](evidence/maker-observation-v1-summary.json) pins raw, options, plans,
 source and report hashes. No private or trading state changed.
+
+
+## trade-feed-control-v1: payload routes observed; volume discrepancy retained
+
+This reference control was registered in `43aba35` before fresh data requests.
+Capture `10afc65` completed one 180-second connection and the fixed five REST
+reads on 2026-11-16. Both trade channels were accepted. BTCUSDT produced thirteen
+fresh positive-volume publications; USDTIRT produced 160 publications, of which
+159 had fresh positive volume and one had zero volume. No account or order call
+occurred. Source times/offsets and raw integrity passed the bounded audit.
+
+The original five-second guarded exact fingerprint comparison matches all
+thirteen BTCUSDT in-window REST occurrences. USDTIRT matches fifteen of sixteen;
+the unmatched REST row has volume 0.01, while a same-time/price/type WS candidate
+has volume zero. The association is not a stable exchange trade ID, and source
+root cause is unknown. All 135 additional unmatched WS occurrences are older
+than the post-REST list's oldest timestamp. Its twenty-row limit is not stream
+loss or complete historical coverage.
+
+Diagnostic replay `3e512b0` adds candidate details without changing any original
+match, status, interval, threshold or result. It makes no new network request.
+Zero volume stays zero; no fill is inferred or synthetic correction applied.
+[Public evidence](evidence/trade-feed-control-v1-summary.json) verifies code and
+plan commits, original/diagnostic report hashes and finite-list limits.
+
+These two routes now have observed payload evidence, but this does not retroactively
+qualify RDNT/G/SKL or prove their activity/inactivity. No accepted strategy,
+return, passive fill, unit conversion or live execution follows from the control.
+Further maker screening needs measured activity as well as net quote width.
