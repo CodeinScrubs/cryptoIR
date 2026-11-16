@@ -275,3 +275,20 @@ a separately registered public book/trade observation, never paper acceptance
 or live orders. All exclusions and nonpositive results must remain visible.
 There is no parameter grid, new network request, cumulative profit claim or
 threshold relaxation in this screen.
+
+## 2026-11-16: register fresh maker book/trade activity observation
+
+`maker-observation-v1.json` freezes RDNT, G and SKL from the pinned maker-width
+selection before requesting fresh selected-market data. One current public
+options read must confirm active unscaled markets and unchanged native rules.
+One 900-second public WebSocket connection then subscribes to both book and
+trade channels for each asset. Raw frames and clocks are preserved, with a
+64-MiB logical cap, 512-MiB disk reserve and no reconnection/retry.
+
+Source freshness, detected sequence/clock breaks, subscription acceptance,
+positive-volume trade publications and fresh quote-width sensitivity determine
+only eligibility for another separately registered measurement. Public trade
+types are not guessed aggressor flags; no stable trade IDs or unique-trade
+counts are assumed. Prior-book price comparisons do not simulate our fills.
+Quiet markets stay quiet in the report; no asset replacement or time extension
+is allowed after results. This is not paper strategy performance.

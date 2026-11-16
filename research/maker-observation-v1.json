@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "experiment": "maker-observation-v1-public-book-trade-activity",
+  "venue": "nobitex",
+  "assets": [
+    "RDNT",
+    "G",
+    "SKL"
+  ],
+  "reference_files": {
+    "selection": {
+      "repository_path": "research/evidence/maker-spread-v1-summary.json",
+      "sha256": "17561c3239cd648466d9c9d61eb59e2801aeb4ba43f106baf7fdbd1dfb1b37a1"
+    },
+    "quote_plan": {
+      "repository_path": "research/maker-spread-v1.json",
+      "sha256": "459cd641cd410ae88f9c3193d5477a6b19a861b70420f747866338f7138b9d4d"
+    },
+    "universe_plan": {
+      "repository_path": "research/triangular-v2-universe.json",
+      "sha256": "e5870587082d88ed31b4f362adb4aa435d0e4e3dbce99d1ee206c5e9d2569010"
+    }
+  },
+  "catalog_sha256": "875757f2572d8bbce15df846cf01110480175a96370c21b79b0f548973ba033e",
+  "duration_seconds": 900,
+  "max_logical_mb": 64,
+  "minimum_free_disk_mb": 512,
+  "max_age_ms": 5000,
+  "maximum_metadata_age_seconds": 60,
+  "maximum_clock_error_ns": 1000000000,
+  "connect_timeout_seconds": 10,
+  "subscription_timeout_seconds": 10,
+  "reconnects": 0,
+  "public_options_url": "https://apiv2.nobitex.ir/v2/options",
+  "websocket_url": "wss://ws.nobitex.ir/connection/websocket",
+  "channels": [
+    "public:orderbook-RDNTUSDT",
+    "public:trades-RDNTUSDT",
+    "public:orderbook-GUSDT",
+    "public:trades-GUSDT",
+    "public:orderbook-SKLUSDT",
+    "public:trades-SKLUSDT"
+  ],
+  "network_budget": "One unauthenticated current-options GET, one public WebSocket connection, six subscriptions, application/transport heartbeats only; no retry or recovery requests. Stop on connection loss, invalid protocol, offset gap/regression, unsupported delta, source-time regression or local clock discontinuity. No account or order endpoints.",
+  "metadata_rule": "Current selected USDT markets must be active and unscaled with the same explicit quantity step, price tick and minimum notional as the pinned universe. Otherwise stop before WebSocket connection; preserve source response.",
+  "source_semantics": "Books use lastUpdate milliseconds; trade publications use time milliseconds, price, volume and raw type. Buy/sell labels are retained without inferring aggressor semantics. No stable exchange trade ID is assumed. Identical publications are not deduplicated into guessed unique trades. Public trades are not our fills.",
+  "capture_policy": "Exclusive local recording of original text frames, raw hashes, sequence, wall and monotonic clocks, public outgoing commands, subscription acknowledgements and terminal reason. Reconstruct all derived metrics offline. Missing terminal record stays interrupted. No reconnect or missed-history claim.",
+  "comparison_policy": "Reuse fixed maker-spread-v1 cost assumptions for fresh books only. Preserve all stale, skewed, wrong-tick and minimum/footprint exclusions. Quote widths remain conditional two-passive-fill values, never P&L.",
+  "trade_book_association": "Use only a previously received and source-timed book no older than five seconds at trade availability, whose source timestamp is not after the trade timestamp. Compare trade price to prior best bid/ask for descriptive counts only; no fills or queue depletion inference.",
+  "further_measurement_rule": {
+    "all_six_subscriptions_accepted": true,
+    "normal_full_duration_required": true,
+    "no_detected_continuity_or_clock_failure": true,
+    "minimum_fresh_book_publications_per_asset": 10,
+    "minimum_positive_volume_fresh_trade_publications_per_asset": 5,
+    "positive_median_stressed_quote_width_required": true,
+    "purpose": "consider a separately registered queue/adverse-selection measurement; never strategy acceptance"
+  },
+  "zero_activity_policy": "Zero received trade publications is an observation over this window, not proof that no exchange trades occurred or that a market never trades. Preserve unobserved continuity and unique-trade identity. Do not extend the run or replace an asset after seeing low activity.",
+  "registration_state": "Selection was RDNT, G, SKL from the prior pinned exploratory screen. No fresh selected-market books/trades have been requested for this study before registration.",
+  "official_sources": [
+    "https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_websocket.md",
+    "https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_market_data.md"
+  ],
+  "limitations": "Short protocol/activity diagnostic, not prospective strategy performance. Source offsets do not establish matching-engine completeness or order priority. No maker fills, cancellation behavior, markout/P&L, inventory model, account verification, paper mutation or live orders."
+}
