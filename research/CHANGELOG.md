@@ -231,3 +231,26 @@ so even a pass is retrospective robustness evidence, **not independent temporal
 confirmation**. None of this new plan's strategy returns has been evaluated at
 registration. The original baseline-v2 validation and 2026 holdout are not opened
 by this plan. Fresh independent validation and prospective evidence remain needed.
+
+## 2026-11-16: fixed daily relative-reversal counter-hypothesis
+
+`rotation-v2-reversal.json` registers one long-only daily selector before its
+performance is calculated. It chooses the lowest negative 24-hour return among
+BTC, ETH and SOL, otherwise cash. Decisions occur every 24 completed hours from
+the first evaluation close; execution still waits at least one full hour and
+switches require cash from a separately delayed exit. No other signal/filter is
+added. The prior weekly-momentum plan remains unchanged.
+
+The three existing hash-pinned datasets, synthetic capital, total entry cap,
+base/stress costs, allocation-matched/full BTC comparisons, split dates and all
+advancement gates remain unchanged. This is a further exploratory trial on the
+already seen August-December 2025 discovery window. It does not produce new
+independent evidence by renaming old data. Failure stops before 2026 performance;
+no automatic parameter grid or new data requests are authorized by this plan.
+
+The [daily-return literature](https://www.sciencedirect.com/science/article/pii/S1057521921002349)
+motivates a test, not an expected return. A
+[primary working paper](https://wp.ffu.vse.cz/pdfs/wps/2023/01/03.pdf) specifically
+warns that size and liquidity matter and reports momentum for large/liquid coins.
+The available three-asset survivor universe is a limitation; this is a cheap
+counter-hypothesis screen, not replication of a published long-short portfolio.

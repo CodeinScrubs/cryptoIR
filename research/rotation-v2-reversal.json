@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "experiment": "rotation-v2-daily-relative-reversal",
+  "venue": "nobitex",
+  "assets": [
+    "BTC",
+    "ETH",
+    "SOL"
+  ],
+  "data_start": "2025-07-06",
+  "data_end_exclusive": "2026-11-01",
+  "dataset_pins": [
+    {
+      "venue": "nobitex",
+      "pair": "BTC/USDT",
+      "manifest_sha256": "f84749adb30da70e9b8ea667806c95d2b712ebbd1bd0d406aabdba454ead51c7",
+      "normalized_sha256": "cafdb285307878a12193e8135be7f1fa3620edcab019cf0d351bedbad98f3c0a"
+    },
+    {
+      "venue": "nobitex",
+      "pair": "ETH/USDT",
+      "manifest_sha256": "30e52b233c1bee7368c2a1a8b25036db77dc5b8482e46fa185b060166352c091",
+      "normalized_sha256": "0271ab4809c3a30214991f146acbcf579889dc47da8fe19ae564911dd03d8c82"
+    },
+    {
+      "venue": "nobitex",
+      "pair": "SOL/USDT",
+      "manifest_sha256": "ca2c645d109699119b5a7838dc26f6575309cfb5496088dd6a96771dfa534933",
+      "normalized_sha256": "735fa75b85abf03c5dfc6ef3bc20ee753af0c09b7c71ce7e5deaaf90c90a5080"
+    }
+  ],
+  "splits": [
+    {
+      "name": "discovery",
+      "start": "2025-08-01",
+      "end": "2026-01-01"
+    },
+    {
+      "name": "validation",
+      "start": "2026-01-01",
+      "end": "2026-05-01"
+    },
+    {
+      "name": "held_out",
+      "start": "2026-05-01",
+      "end": "2026-11-01"
+    }
+  ],
+  "strategy": {
+    "name": "relative_reversal",
+    "lookback_hours": 24,
+    "rebalance_hours": 24,
+    "negative_absolute_return_required": true,
+    "tie_break": "ascending_asset",
+    "schedule": "first evaluation bar close then every 24 completed hours; no off-schedule signal changes"
+  },
+  "benchmarks": [
+    "cash",
+    "btc_hold_matched",
+    "btc_hold_full"
+  ],
+  "assumptions": {
+    "capital": "100",
+    "allocation": "0.25",
+    "prior_volume_fraction": "0.01",
+    "delay_hours": 1,
+    "buy_fee_mode": "received_base"
+  },
+  "market_rules": {
+    "BTC": {
+      "quantity_step": "0.000001",
+      "minimum_notional": "5"
+    },
+    "ETH": {
+      "quantity_step": "0.00001",
+      "minimum_notional": "5"
+    },
+    "SOL": {
+      "quantity_step": "0.0001",
+      "minimum_notional": "5"
+    }
+  },
+  "cost_scenarios": [
+    {
+      "name": "base_assumed",
+      "fee": "0.0013",
+      "adverse_bps": "15"
+    },
+    {
+      "name": "stress_assumed",
+      "fee": "0.0026",
+      "adverse_bps": "30"
+    }
+  ],
+  "gate": {
+    "minimum_completed_sells": 10,
+    "maximum_drawdown": "0.10",
+    "positive_return_in_every_cost_scenario": true,
+    "beat_both_btc_benchmarks_in_base": true
+  },
+  "execution_policy": "One shared USDT cash account. At most one tradeable target asset; sell previous assets first and wait for realized cash. Each order has at least one complete hour delay, previous-hour volume cap, IOC remainder cancellation and explicit min/lot. Dust remains owned. Re-evaluate exit/entry need each hour using the latest scheduled target; no fabricated atomic switches or same-open sell and buy. No topping up a tradeable target holding between switches. Entry exposure cap includes all residual inventory; weights may drift thereafter.",
+  "research_rationale": "One fixed long-only cross-sectional daily reversal hypothesis: select the lowest completed close-to-close 24-hour return if strictly negative, otherwise cash. Unlike prior weekly momentum, this buys the most recent loser, not the winner. Unlike the existing single-asset moving-average reversion rule, it selects one asset by relative daily rank on a fixed daily schedule. No parameter grid, volatility filter or after-result revision.",
+  "hypothesis_source": "https://www.sciencedirect.com/science/article/pii/S1057521921002349",
+  "fee_source": "https://nobitex.ir/pricing/",
+  "fee_note": "Current public base USDT taker 0.13 percent, reviewed 2026-11-16; stress doubles it. Received-base buy fee and quote sell fee; adverse costs 15/30 bp. Current-cost counterfactual, not historical fee tiers or account execution evidence.",
+  "rules_note": "Quantity increments match the preserved current catalog used by triangular-v1; hypothetical 5-USDT minimum is more restrictive than its 0.5-USDT public minimum. Historical rules unknown. No fee or minimum relaxation after outcomes.",
+  "prior_observation": "August-December 2025 baseline-v4 and weekly-momentum discovery outcomes have been inspected. Reusing that window is exploratory and adds to the total search count. No daily relative-reversal performance was calculated before registration. January-October 2026 strategy and benchmark performance remains gated. Prior rejections remain unchanged.",
+  "network_budget": "No new downloads; reuse only the three hash-pinned v2 histories after full raw reconstruction and exact daily reconciliation.",
+  "capital_note": "100 USDT and 25 percent total entry exposure are synthetic research assumptions, not personal capital or live permissions.",
+  "limitations": "Three survivors chosen for existing accepted data; selection bias and source revision risk. Hourly conditional cost model, not a full execution simulator. No IRT history, historical rules, liquidation, calibrated depth, statistical confidence, paper acceptance or real orders. Full BTC benchmark can have different risk from the allocation-limited candidate.",
+  "selection": "Single fixed candidate; unchanged cost, benchmark, positive-return, drawdown and ten-exit gates from rotation-v1. Every stage must pass both cost scenarios before the next stage opens. Failed discovery stops; no threshold relaxation, horizon/universe search or renamed holdout.",
+  "counter_evidence_source": "https://wp.ffu.vse.cz/pdfs/wps/2023/01/03.pdf",
+  "literature_scope": "Prior-day return reversal is a studied hypothesis, not evidence of profitability here. Ficura (2023) warns that reversal effects depend on size/liquidity and reports momentum for large/liquid coins. BTC/ETH/SOL are large survivors, so this is a low-cost counter-hypothesis test, not a claimed replication or an expected edge. No foreign execution or shorts."
+}
