@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "experiment": "trade-feed-control-v1",
+  "venue": "nobitex",
+  "native_symbols": [
+    "BTCUSDT",
+    "USDTIRT"
+  ],
+  "channels": [
+    "public:trades-BTCUSDT",
+    "public:trades-USDTIRT"
+  ],
+  "duration_seconds": 180,
+  "max_logical_mb": 16,
+  "minimum_free_disk_mb": 512,
+  "max_age_ms": 5000,
+  "comparison_boundary_guard_seconds": 5,
+  "maximum_metadata_age_seconds": 60,
+  "maximum_clock_error_ns": 1000000000,
+  "connect_timeout_seconds": 10,
+  "subscription_timeout_seconds": 10,
+  "reconnects": 0,
+  "maximum_rest_rows": 1000,
+  "public_options_url": "https://apiv2.nobitex.ir/v2/options",
+  "websocket_url": "wss://ws.nobitex.ir/connection/websocket",
+  "rest_urls": {
+    "BTCUSDT": "https://apiv2.nobitex.ir/v2/trades/BTCUSDT",
+    "USDTIRT": "https://apiv2.nobitex.ir/v2/trades/USDTIRT"
+  },
+  "purpose": "Public trade-data route control only, motivated by no trade publications in maker-observation-v1; not a candidate replacement or strategy trial.",
+  "network_budget": "One fresh unauthenticated options GET; one recent-trades GET per symbol before and after one 180-second public WebSocket connection; two trade subscriptions and heartbeats only. No retry, recovery, extra markets, window extension or private endpoints.",
+  "metadata_rule": "Both native symbols must occur exactly in fresh options, with active unscaled base currencies and positive explicit native increments. Currency metadata is not order-placement acceptance.",
+  "capture_policy": "Preserve original REST bodies and WebSocket frames, hashes, public commands, sequence, wall and monotonic clocks. Stop WebSocket on connection, schema, offset, source-time or clock failure. Preserve REST failures as unavailable; do not silently replace them. Missing terminal or before/after evidence stays incomplete.",
+  "price_volume_semantics": "Decimal raw values are compared only within the same native symbol. No cross-market prices, fiat conversion, fee calculations, P&L or claimed verified fiat unit. Raw buy/sell labels are not inferred aggressor labels.",
+  "comparison_policy": "Compare multiset occurrences of exact time/price/volume/raw-type fingerprints; never unique exchange trade IDs. Use post-REST rows and WebSocket publications inside the acknowledged session, excluding five seconds at each boundary. Preserve unmatched occurrences and finite recent-list coverage. Matches do not establish complete exchange history.",
+  "outcome_policy": "Report fresh positive-volume WebSocket payload observation separately from capture completeness. Positive-volume REST rows inside the guarded session with no matching WebSocket occurrence are cross-source discrepancies, not automatic attribution to exchange, transport or client. No suitable in-window evidence remains inconclusive. No symbol or threshold changes after results.",
+  "registration_state": "No fresh BTCUSDT or USDTIRT trade list or trade channel requested for this control before registration.",
+  "official_sources": [
+    "https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_websocket.md",
+    "https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_market_data.md"
+  ],
+  "limitations": "Short public protocol/availability diagnostic. No maker fills, order queues, trade identity/completeness guarantee, return estimate, account action or live trading."
+}

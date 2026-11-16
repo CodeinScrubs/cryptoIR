@@ -304,3 +304,17 @@ unchanged trade-activity gate. No retry, longer window, substitution or private
 operation occurred. Silence remains a bounded observation; a separately
 registered reference-market trade-feed control is still needed before claiming
 that lack of observed trades describes venue activity rather than route limits.
+
+
+## 2026-11-16: register public trade-feed reference control
+
+`trade-feed-control-v1.json` fixes BTCUSDT and USDTIRT, one 180-second public
+connection with two trade channels, and one recent-trades REST read per symbol
+before and after capture. One current options read validates native membership.
+The limit is five REST calls and one WebSocket connection, without retries.
+This diagnoses the unobserved trade route from the previous maker observation;
+it does not replace its candidates, extend its window or relax an activity gate.
+Raw values are compared per native symbol using guarded in-session fingerprint
+multisets. Unique trade IDs, aggressor semantics, unit conversion and complete
+history are not inferred. Finite list coverage and unmatched occurrences remain
+explicit; no positive evidence stays inconclusive rather than proving inactivity.
