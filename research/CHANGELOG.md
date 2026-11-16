@@ -292,3 +292,15 @@ types are not guessed aggressor flags; no stable trade IDs or unique-trade
 counts are assumed. Prior-book price comparisons do not simulate our fills.
 Quiet markets stay quiet in the report; no asset replacement or time extension
 is allowed after results. This is not paper strategy performance.
+
+
+## 2026-11-16: maker activity observation completed without qualification
+
+The registered 900-second run ended normally. All six subscriptions were
+accepted; G/SKL yielded 90/59 fresh book publications, RDNT yielded none, and
+no selected trade publication arrived. Raw audit and source-commit verification
+passed. All valid stressed widths remain positive, but no asset satisfies the
+unchanged trade-activity gate. No retry, longer window, substitution or private
+operation occurred. Silence remains a bounded observation; a separately
+registered reference-market trade-feed control is still needed before claiming
+that lack of observed trades describes venue activity rather than route limits.

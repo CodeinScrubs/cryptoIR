@@ -114,9 +114,40 @@ registered queue/adverse-selection measurement. Quiet assets are not replaced,
 and a quiet window is not proof that the venue had no trades. No public
 observation qualifies as strategy acceptance or prospective portfolio P&L.
 
+## Fresh observation result (0.22.0)
+
+The single connection ran from 15:40:00 to 15:55:00 UTC on 2026-11-16
+(19:10 to 19:25 Tehran), ending normally after 900.0869162 seconds. All six
+subscriptions were accepted. The raw audit reconstructed 233 records and
+229,372 logical bytes; source hashes match implementation commit `1fcf67a`.
+The maximum local clock discrepancy was 5.4383 ms. All 149 received book
+publications had source ages below 447 ms and contiguous observed offsets.
+These are properties of this recorded connection, not a completeness claim
+about the matching engine or unobserved channels.
+
+| Asset | Fresh book publications | Trade publications | Valid widths per scenario | Median stressed conditional width (USDT) | Further-measurement gate |
+| --- | ---: | ---: | ---: | ---: | --- |
+| RDNT | 0 | 0 | 0 | Unknown | Not met |
+| G | 90 | 0 | 87 | 0.0535331600 | Not met |
+| SKL | 59 | 0 | 59 | 0.258093210 | Not met |
+
+All valid base/stress widths were positive. Three G books per scenario were
+excluded by the unchanged minimum/footprint rule. These publication-weighted
+values remain hypothetical two-fill widths, not earned profit, independent
+trials or time-weighted returns. G had two same-price bid-quantity decreases;
+none is classified as a trade or our fill. RDNT has no measured width in this
+window; its previous screen result is not substituted.
+
+No asset meets the preregistered activity condition. The run was not extended
+and assets were not replaced. Acknowledgement without any trade publication
+also leaves the end-to-end trade-data route unverified. No independent active
+control market was included in this fixed six-channel run. A separately
+registered reference-market control is the next data-quality question; silence
+here is not proof that the venue had no trades. [Evidence and hashes](../research/evidence/maker-observation-v1-summary.json).
+
 ## Still needed
 
-Fresh book/trade reception, continuity, trade activity, queue evolution,
+Actual trade-payload reception, unobserved-channel continuity, queue evolution,
 adverse-selection markouts, inventory risk, cancellations, conditional fill
 bounds and sustained prospective performance remain unverified. Official
 [public WebSocket trades](https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_websocket.md)

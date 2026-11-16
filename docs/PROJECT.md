@@ -69,14 +69,21 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
-The registered maker-width screen now narrows fresh public book/trade observation
-to RDNT, G and SKL. The reused twenty-sample recording provided 4,202 valid
-comparisons per cost scenario across 217 of 248 metadata-eligible USDT markets;
-1,898 stressed quoted widths were positive. This is not fill or profit evidence.
-Queue dynamics, actual trade activity, inventory costs and prospective maker
-performance must be investigated before any passive execution model is trusted.
-The fixed selection rule and complete exclusions remain public; no candidate
-has earned strategy acceptance or permission to trade.
+The registered fresh maker book/trade diagnostic completed its single
+900-second connection: all six subscriptions accepted, 90 fresh G and 59 fresh
+SKL book publications, no RDNT book publications, and no trade publications for
+any selected asset. All observed offsets were contiguous and the raw audit
+passed. Positive conditional widths remain, but none met the fixed activity
+gate; no candidate progresses from this observation to queue/fill calibration.
+
+Before attributing silent trade channels to market inactivity, the next useful
+step is a separately registered bounded trade-feed control on a reference
+market, with observed payload/availability evidence. This is a data-route check,
+not a replacement candidate, extension of this window, relaxed strategy gate or
+permission to trade. Matching-engine completeness, aggressor semantics, passive
+fills, inventory costs and prospective maker performance remain unverified.
+The prior quote-width screen and this independent fresh observation retain
+separate provenance and all exclusions.
 
 The fixed daily relative-reversal counter-hypothesis also failed discovery:
 base/stress returns -14.7889%/-22.6397%, maximum hourly-close drawdowns

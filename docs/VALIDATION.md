@@ -581,3 +581,33 @@ historical fees.
   widths are positive in all twenty samples, but quoted footprints differ and
   passive fills remain unknown. No strategy acceptance, portfolio-return claim,
   account access, paper mutation or real order occurred.
+
+
+## Version 0.22.0 implementation checks (2026-11-16)
+
+- All 355 local tests passed. Twelve new observation tests cover pinned scope,
+  current metadata and native rules, one-character catalog symbols, exact trade
+  decimals, repeated publication values, raw buy/sell labels, offsets, source
+  regressions, duplicate JSON keys, delta rejection and command ordering.
+- Freshness is measured at persistence/availability; a delayed receive or a
+  future/stale source cannot become fresh through replay. Only causal fresh
+  prior books enter descriptive trade-price comparisons. A zero-volume trade
+  does not satisfy positive activity, and unique-trade identity remains unknown.
+- Raw audit tests cover altered hashes, sequences, commands, clocks, receive
+  times, false completion, missing terminal records and source protocol failure.
+  Actual loopback WebSocket tests exercise six subscriptions, heartbeat replies,
+  quiet channels, early disconnect, protocol rejection and handshake timeout.
+  The collector never reconnects. Synthetic fixtures make no exchange requests.
+- Registration: `4a2ab36`. Implementation: `1fcf67a`. All four Windows/Linux
+  Python 3.11/3.13 jobs passed in CI run `43898787087`. Public observation and
+  financial acceptance remain separate from these software checks.
+- The fresh public observation completed 900.0869162 seconds with all six
+  subscriptions accepted and no detected offset/source-time/clock failure.
+  There were 90 G and 59 SKL fresh book publications, all with observed offsets;
+  RDNT books and all three trade channels had zero received publications.
+  All 233 raw records replayed; captured source bytes match `1fcf67a` exactly.
+- There are 438 valid conditional-width comparisons and nine minimum/footprint
+  exclusions across three scenarios. None is an executed trade. No asset meets
+  the unchanged fresh-trade activity gate. Trade payloads, aggressor semantics,
+  unique-trade IDs and matching-engine completeness remain unverified.
+  No private account, portfolio, order, withdrawal or transfer changed.

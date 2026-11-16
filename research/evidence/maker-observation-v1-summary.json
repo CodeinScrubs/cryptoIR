@@ -1,0 +1,274 @@
+{
+  "schema": 1,
+  "experiment": "maker-observation-v1-public-book-trade-activity",
+  "status": "duration_completed",
+  "capture_complete": true,
+  "plan_sha256": "d53d26b0e25b92706550e9bed1ea4c9c1bcaa5bba020a45b4492eb0143924f4b",
+  "options_sha256": "ec812b4ded183474d1e8bab890993443d35073629265da43bd0d3891bb0d7737",
+  "recording_sha256": "a738f0ff624e0ba79b39287af61d14f7857570586ada9b460b3b17bc4d1225f9",
+  "source_sha256": {
+    "__init__.py": "c41edf873e1c9e76a749cf56c4a0957c9a110ef77d6eed5e5a8bcf4dfef55c69",
+    "__main__.py": "a0da11d76401af3219eb34c58a7b345d1cd2340832b7f726b52657632e5dd5c5",
+    "accounts.py": "12caa1da987b85f8f225a135681783e5f1fe8cbe6211858378477e4d6d042c82",
+    "arbitrage.py": "450eb0c09b2c9ebebe55ee76cf52c954e7ad29c8ec112a2ebb1c39735a3de2cc",
+    "backtest.py": "ed10d2bb02e5591fbbd8a395f2d306dc494baa5d2dd7c12678d99df2d9a83011",
+    "catalog.py": "a38caf67e863ccaf850ba564271ac19b9a674d9eba56e5470a1d16287da000d0",
+    "credentials.py": "529e2d23a895fbee6614e495960af694c1917155f59a8efcaa7ce8bcc3d35123",
+    "dashboard.py": "e135c1dfcebe2c2184cd87c51246036838aa71de04c784a5d1067e6fe7707881",
+    "domain.py": "33e9588594fa0cd481b60a2b799c10d29ddf25364ba84963070b946de59d140a",
+    "feeds.py": "e2ab29ccb324b79e8e8a5470e2131044960011e580ad7af41d642b492e840dae",
+    "forward.py": "560ea2ef1a23085b337b6c051f7db0a1783f1383557c1a95d05d16a8935f780c",
+    "funding.py": "745066d1b9d3f4d166e19a68efac4dc1dd8db1b0beb7c136cc007ff5743e90d8",
+    "history.py": "1cd4bf0d419fc8f20085af69bfc8853e1674217a7f0993dbfcceeaafa0ede01e",
+    "maker_observation.py": "01772accd9ea48612237676d63ade478bd782266b6bc3e064d7934267b1b81c5",
+    "maker_spread.py": "86874eb20a144dbb27d103a1fca36c81c9c21466da943f27a61a6e1b376e558c",
+    "margin_costs.py": "19b48fc2149b4c40846a4609f1f1903ea075dbc8566e371f9c9b9ccd42c3dd22",
+    "monitor.py": "763a9c200ac1bc656fc114a314710c75245fbd35222a6802e527853cc8f8af17",
+    "paper.py": "ffb735d099223ec3cb342478c17418a7f0c3af1592f64d34157f5bd1cb65f89a",
+    "products.py": "4242bc5821514646836837fab616bd41c54f73eda14452d1539d653d9a7e20c4",
+    "research.py": "15a74e231f7bc67fcb05c7410215a35bd64b23bd32dac46833e8e02a5b32a1d6",
+    "risk.py": "522c3c1eefa090de8a6040b757358def2b3a25b401eb72a6f00a6ded3ceeda59",
+    "rotation.py": "11e14150487f6a4370c48d5479ac41bdf67f3041038036d01622dbf154f9059a",
+    "runner.py": "c5fabcf49afdca11efa837ac331dc7f3b39948c31eb10357e0a6c9492e0f9be4",
+    "runtime.py": "fd885046a28944acc863f2d5351bd627c8916fe0f7d7cfbc9e428572f5858446",
+    "stream_audit.py": "9181e13c590910434c3e0ed45c34f243a98dd84f1759faf43213012af570491e",
+    "streams.py": "ab65b81b064458b79683dd6cbfb2471a74f9c68095b9b12fe14fbe3502406e56",
+    "triangular.py": "3c447a7c451babe17a60f99439e5ee8e2c3aa5f1ba90b575275179195b7df335",
+    "upgrade.py": "08fc12c21c898186a6b46b521a4a3183e4c109f102970a9cb32ea6f8df2f8584",
+    "valuation.py": "29dd8c5569dd33057dbf11b46e6b5e3fc6635c8dd6bf622fb30301efd66105c8"
+  },
+  "audit_source_sha256": {
+    "__init__.py": "c41edf873e1c9e76a749cf56c4a0957c9a110ef77d6eed5e5a8bcf4dfef55c69",
+    "__main__.py": "a0da11d76401af3219eb34c58a7b345d1cd2340832b7f726b52657632e5dd5c5",
+    "accounts.py": "12caa1da987b85f8f225a135681783e5f1fe8cbe6211858378477e4d6d042c82",
+    "arbitrage.py": "450eb0c09b2c9ebebe55ee76cf52c954e7ad29c8ec112a2ebb1c39735a3de2cc",
+    "backtest.py": "ed10d2bb02e5591fbbd8a395f2d306dc494baa5d2dd7c12678d99df2d9a83011",
+    "catalog.py": "a38caf67e863ccaf850ba564271ac19b9a674d9eba56e5470a1d16287da000d0",
+    "credentials.py": "529e2d23a895fbee6614e495960af694c1917155f59a8efcaa7ce8bcc3d35123",
+    "dashboard.py": "e135c1dfcebe2c2184cd87c51246036838aa71de04c784a5d1067e6fe7707881",
+    "domain.py": "33e9588594fa0cd481b60a2b799c10d29ddf25364ba84963070b946de59d140a",
+    "feeds.py": "e2ab29ccb324b79e8e8a5470e2131044960011e580ad7af41d642b492e840dae",
+    "forward.py": "560ea2ef1a23085b337b6c051f7db0a1783f1383557c1a95d05d16a8935f780c",
+    "funding.py": "745066d1b9d3f4d166e19a68efac4dc1dd8db1b0beb7c136cc007ff5743e90d8",
+    "history.py": "1cd4bf0d419fc8f20085af69bfc8853e1674217a7f0993dbfcceeaafa0ede01e",
+    "maker_observation.py": "01772accd9ea48612237676d63ade478bd782266b6bc3e064d7934267b1b81c5",
+    "maker_spread.py": "86874eb20a144dbb27d103a1fca36c81c9c21466da943f27a61a6e1b376e558c",
+    "margin_costs.py": "19b48fc2149b4c40846a4609f1f1903ea075dbc8566e371f9c9b9ccd42c3dd22",
+    "monitor.py": "763a9c200ac1bc656fc114a314710c75245fbd35222a6802e527853cc8f8af17",
+    "paper.py": "ffb735d099223ec3cb342478c17418a7f0c3af1592f64d34157f5bd1cb65f89a",
+    "products.py": "4242bc5821514646836837fab616bd41c54f73eda14452d1539d653d9a7e20c4",
+    "research.py": "15a74e231f7bc67fcb05c7410215a35bd64b23bd32dac46833e8e02a5b32a1d6",
+    "risk.py": "522c3c1eefa090de8a6040b757358def2b3a25b401eb72a6f00a6ded3ceeda59",
+    "rotation.py": "11e14150487f6a4370c48d5479ac41bdf67f3041038036d01622dbf154f9059a",
+    "runner.py": "c5fabcf49afdca11efa837ac331dc7f3b39948c31eb10357e0a6c9492e0f9be4",
+    "runtime.py": "fd885046a28944acc863f2d5351bd627c8916fe0f7d7cfbc9e428572f5858446",
+    "stream_audit.py": "9181e13c590910434c3e0ed45c34f243a98dd84f1759faf43213012af570491e",
+    "streams.py": "ab65b81b064458b79683dd6cbfb2471a74f9c68095b9b12fe14fbe3502406e56",
+    "triangular.py": "3c447a7c451babe17a60f99439e5ee8e2c3aa5f1ba90b575275179195b7df335",
+    "upgrade.py": "08fc12c21c898186a6b46b521a4a3183e4c109f102970a9cb32ea6f8df2f8584",
+    "valuation.py": "29dd8c5569dd33057dbf11b46e6b5e3fc6635c8dd6bf622fb30301efd66105c8"
+  },
+  "records": 233,
+  "logical_bytes": 229372,
+  "elapsed_seconds": 900.0869162,
+  "max_clock_error_ns": 5438300,
+  "parse_error": null,
+  "execution_ready": false,
+  "strategy_accepted": false,
+  "passive_fills_verified": false,
+  "portfolio_return_available": false,
+  "matching_engine_completeness": "unknown",
+  "aggressor_semantics": "unknown",
+  "capture_start_ns": 1794843600379049100,
+  "capture_end_ns": 1794844500465671400,
+  "assets": [
+    {
+      "asset": "RDNT",
+      "counts": {
+        "book_publications": 0,
+        "fresh_book_publications": 0,
+        "trade_publications": 0,
+        "positive_volume_fresh_trade_publications": 0,
+        "zero_volume_trade_publications": 0
+      },
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 0,
+          "positive": 0,
+          "median_conditional_width_usdt": null,
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 0,
+          "positive": 0,
+          "median_conditional_width_usdt": null,
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 0,
+          "positive": 0,
+          "median_conditional_width_usdt": null,
+          "exclusions": {}
+        }
+      ],
+      "unique_trade_count": null,
+      "eligible_for_further_measurement": false
+    },
+    {
+      "asset": "G",
+      "counts": {
+        "book_publications": 90,
+        "fresh_book_publications": 90,
+        "bids_top_price_changes": 53,
+        "bids_same_price_quantity_decreases": 2,
+        "asks_top_price_changes": 5,
+        "asks_same_price_quantity_decreases": 0,
+        "trade_publications": 0,
+        "positive_volume_fresh_trade_publications": 0,
+        "zero_volume_trade_publications": 0
+      },
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 87,
+          "positive": 87,
+          "median_conditional_width_usdt": "0.0686092",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 3
+          }
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 87,
+          "positive": 87,
+          "median_conditional_width_usdt": "0.06106710150",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 3
+          }
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 87,
+          "positive": 87,
+          "median_conditional_width_usdt": "0.0535331600",
+          "exclusions": {
+            "buy_below_minimum_or_quote_footprint": 3
+          }
+        }
+      ],
+      "unique_trade_count": null,
+      "eligible_for_further_measurement": false
+    },
+    {
+      "asset": "SKL",
+      "counts": {
+        "book_publications": 59,
+        "fresh_book_publications": 59,
+        "bids_top_price_changes": 26,
+        "bids_same_price_quantity_decreases": 0,
+        "asks_top_price_changes": 5,
+        "asks_same_price_quantity_decreases": 0,
+        "trade_publications": 0,
+        "positive_volume_fresh_trade_publications": 0,
+        "zero_volume_trade_publications": 0
+      },
+      "cost_scenarios": [
+        {
+          "scenario": "zero_cost_diagnostic",
+          "valid": 59,
+          "positive": 59,
+          "median_conditional_width_usdt": "0.360646",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_base",
+          "valid": 59,
+          "positive": 59,
+          "median_conditional_width_usdt": "0.3093435350",
+          "exclusions": {}
+        },
+        {
+          "scenario": "assumed_stress",
+          "valid": 59,
+          "positive": 59,
+          "median_conditional_width_usdt": "0.258093210",
+          "exclusions": {}
+        }
+      ],
+      "unique_trade_count": null,
+      "eligible_for_further_measurement": false
+    }
+  ],
+  "channels": {
+    "public:orderbook-RDNTUSDT": {
+      "accepted": true,
+      "publications": 0,
+      "with_offset": 0,
+      "without_offset": 0
+    },
+    "public:trades-RDNTUSDT": {
+      "accepted": true,
+      "publications": 0,
+      "with_offset": 0,
+      "without_offset": 0
+    },
+    "public:orderbook-GUSDT": {
+      "accepted": true,
+      "publications": 90,
+      "with_offset": 90,
+      "first_source_ns": 1794843605054000000,
+      "last_source_ns": 1794844495554000000,
+      "min_source_age_ns": 21308100,
+      "max_source_age_ns": 410060300,
+      "without_offset": 0
+    },
+    "public:trades-GUSDT": {
+      "accepted": true,
+      "publications": 0,
+      "with_offset": 0,
+      "without_offset": 0
+    },
+    "public:orderbook-SKLUSDT": {
+      "accepted": true,
+      "publications": 59,
+      "with_offset": 59,
+      "first_source_ns": 1794843654076000000,
+      "last_source_ns": 1794844488576000000,
+      "min_source_age_ns": 23272200,
+      "max_source_age_ns": 446874400,
+      "without_offset": 0
+    },
+    "public:trades-SKLUSDT": {
+      "accepted": true,
+      "publications": 0,
+      "with_offset": 0,
+      "without_offset": 0
+    }
+  },
+  "selected_for_further_measurement": [],
+  "registration_commit": "4a2ab36abfc74b0c0355be778e341b13c5f1f5e5",
+  "implementation_commit": "1fcf67a57d4b3eb07421c3d509ff2e43c8b3457d",
+  "report_sha256": "ffd1e398956adc853f797df6d882965b21a65a1fce18adc1ce182ca0f01f1482",
+  "source_commit_verified": true,
+  "public_options_get_invocations": 1,
+  "public_websocket_connections": 1,
+  "requested_subscriptions": 6,
+  "reconnects": 0,
+  "private_account_calls": 0,
+  "zero_activity_interpretation": "Zero received publications only within this connection/window; not proof of no exchange trades.",
+  "offset_interpretation": "Contiguous observed channel publications do not prove matching-engine completeness or unique trade IDs.",
+  "sample_interpretation": "Publication-weighted descriptions, not independent trials or time-weighted portfolio returns.",
+  "trade_route_acceptance": "A subscription acknowledgement without a trade publication does not verify the complete trade-data route; no independent active-market control is included in this fixed six-channel run.",
+  "queue_interpretation": "Displayed quantity decreases are descriptive; trades/cancels/replacements and our queue position are unknown.",
+  "width_interpretation": "Conditional two-passive-fill quote width only, under unchanged maker-spread-v1 costs. No fills, P&L or inventory model.",
+  "further_measurement_interpretation": "Only eligibility for separately registered measurement; never strategy acceptance.",
+  "book_publication_assets": 2,
+  "selected_assets": 3,
+  "trade_payload_publicly_observed": false,
+  "total_width_comparisons": 447,
+  "valid_width_comparisons": 438,
+  "excluded_width_comparisons": 9
+}

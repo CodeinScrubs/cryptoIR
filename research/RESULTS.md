@@ -374,3 +374,29 @@ Selection permits separately registered fresh public book/trade observation
 only. [Full results and artifact hashes](evidence/maker-spread-v1-summary.json).
 Fees/reserves remain assumptions; historical and paper strategy gates remain
 unsatisfied. No market, threshold or sample was changed after calculation.
+
+
+## maker-observation-v1: activity gate not met
+
+Registration `4a2ab36`; capture/audit implementation `1fcf67a`. The fixed single
+public connection completed 900.0869162 seconds on 2026-11-16, 15:40-15:55 UTC.
+Fresh public metadata matched the pinned selected-market rules. All six
+subscriptions were accepted; source/clock/offset audit found no break in the
+received publications. There were 90 fresh G and 59 fresh SKL book publications,
+no RDNT book publication, and zero trade publications across the three assets.
+
+G provides 87 valid comparisons per cost scenario and three minimum/footprint
+exclusions; SKL provides 59 valid per scenario. All valid base/stress widths are
+positive, with median stressed conditional widths 0.0535331600 and 0.258093210
+USDT. No RDNT width is available. Positive widths remain conditional on two
+unobserved passive fills and are not summed into profit.
+
+None meets the fixed requirement for five positive-volume fresh trade
+publications. No candidate progresses to queue/fill measurement from this run;
+no window extension, asset replacement or threshold change occurred. Silence
+does not prove absence of venue trades. Subscription acceptance without a trade
+payload leaves that route's operation unverified; no independently active
+control channel was included. A separate reference-market feed control is a
+protocol/availability diagnostic, not strategy acceptance. [Complete public
+summary](evidence/maker-observation-v1-summary.json) pins raw, options, plans,
+source and report hashes. No private or trading state changed.
