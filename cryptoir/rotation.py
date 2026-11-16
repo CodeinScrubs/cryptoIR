@@ -41,15 +41,33 @@ class RelativeMomentum:
             self.history[asset].append(bars[asset].close)
         self.previous = now
 
-    def choose(self):
+    def past_returns(self):
         if any(len(h) != self.lookback+1 for h in self.history.values()):
             raise DataError("incomplete causal momentum warmup")
-        returns = {a: h[-1]/h[0]-1 for a, h in self.history.items()}
+        return {a: h[-1]/h[0]-1 for a, h in self.history.items()}
+
+    def choose(self):
+        returns = self.past_returns()
         best = min(self.assets, key=lambda a: (-returns[a], a))
         return (best if returns[best] > 0 else None), returns
 
 
-def rotation_screen(series, assumptions, start, end, *, lookback_hours, rebalance_hours):
+class RelativeReversal(RelativeMomentum):
+    """Long-only relative loser selection; no shorting of the winners."""
+
+    def choose(self):
+        returns = self.past_returns()
+        worst = min(self.assets, key=lambda a: (returns[a], a))
+        return (worst if returns[worst] < 0 else None), returns
+
+
+SELECTORS = {"relative_momentum": RelativeMomentum, "relative_reversal": RelativeReversal}
+
+
+def rotation_screen(series, assumptions, start, end, *, lookback_hours, rebalance_hours,
+                    strategy_name="relative_momentum"):
+    if strategy_name not in SELECTORS:
+        raise DataError("unsupported rotation selector")
     if type(start) is not int or type(end) is not int or not 0 < start < end:
         raise DataError("invalid screening interval")
     if type(rebalance_hours) is not int or not 1 <= rebalance_hours <= 24*365:
@@ -71,7 +89,7 @@ def rotation_screen(series, assumptions, start, end, *, lookback_hours, rebalanc
     if start not in times or end-HOUR not in times:
         raise DataError("evaluation boundaries exceed aligned data")
     first, last = times.index(start), times.index(end-HOUR)
-    selector = RelativeMomentum(assets, lookback_hours)
+    selector = SELECTORS[strategy_name](assets, lookback_hours)
     if first < lookback_hours or last-first < 1:
         raise DataError("insufficient warmup or evaluation hours")
     for i in range(first-lookback_hours, first):
@@ -164,7 +182,7 @@ def rotation_screen(series, assumptions, start, end, *, lookback_hours, rebalanc
     unrealized = liquidation-cash-sum(basis.values())
     if abs(liquidation-cfg.capital-realized-unrealized) > Decimal("1e-20")*cfg.capital:
         raise AssertionError("shared-cash P&L identity")
-    return {"kind": "hourly_rotation_cost_screen", "strategy": "relative_momentum", "execution_ready": False,
+    return {"kind": "hourly_rotation_cost_screen", "strategy": strategy_name, "execution_ready": False,
         "start": start, "end_exclusive": end, "bars": last-first+1, "assets": list(assets),
         "assumptions_by_asset": {a: asdict(c) for a, c in assumptions.items()},
         "lookback_hours": lookback_hours, "rebalance_hours": rebalance_hours,
@@ -183,12 +201,18 @@ def validate_plan(plan):
             or plan.get("assets") != ["BTC", "ETH", "SOL"] or plan.get("benchmarks") != list(BENCHMARKS)):
         raise DataError("unsupported rotation universe or benchmarks")
     strategy = plan["strategy"]
-    if (strategy["name"] != "relative_momentum" or strategy["positive_absolute_return_required"] is not True
-            or strategy["tie_break"] != "ascending_asset"):
+    name = strategy["name"]
+    if name not in SELECTORS or strategy["tie_break"] != "ascending_asset":
         raise DataError("unsupported rotation signal")
+    required = "positive_absolute_return_required" if name == "relative_momentum" else "negative_absolute_return_required"
+    opposite = "negative_absolute_return_required" if name == "relative_momentum" else "positive_absolute_return_required"
+    if strategy.get(required) is not True or opposite in strategy:
+        raise DataError("rotation signal must declare one matching absolute-return condition")
     for key in ("lookback_hours", "rebalance_hours"):
         if type(strategy[key]) is not int or not 1 <= strategy[key] <= 24*365:
             raise DataError("invalid signal horizon")
+    if name == "relative_reversal" and (strategy["lookback_hours"], strategy["rebalance_hours"]) != (24, 24):
+        raise DataError("registered reversal requires fixed daily lookback and schedule")
     if set(plan["market_rules"]) != set(plan["assets"]):
         raise DataError("per-asset rules required")
     scenarios = plan["cost_scenarios"]
@@ -228,15 +252,16 @@ def validate_plan(plan):
 
 def gate_failures(results, plan):
     failures = []
+    name = plan["strategy"]["name"]
     for scenario in plan["cost_scenarios"]:
         s = scenario["name"]
-        r = results[("relative_momentum", s)]
+        r = results[(name, s)]
         for failed, label in ((r["net_return"] <= 0, "nonpositive_return"),
                 (r["max_drawdown"] > number(plan["gate"]["maximum_drawdown"]), "drawdown"),
                 (r["completed_sells"] < plan["gate"]["minimum_completed_sells"], "insufficient_exits")):
             if failed:
                 failures.append(s+":"+label)
-    candidate = results[("relative_momentum", "base_assumed")]["net_return"]
+    candidate = results[(name, "base_assumed")]["net_return"]
     for name in BENCHMARKS[1:]:
         if candidate <= results[(name, "base_assumed")]["net_return"]:
             failures.append("base_assumed:did_not_beat_"+name)
@@ -297,11 +322,11 @@ def run_experiment(plan_path, datasets, output):
             for scenario in plan["cost_scenarios"]:
                 cfgs = {a: Assumptions(**plan["assumptions"], **plan["market_rules"][a], fee=scenario["fee"],
                                       adverse_bps=scenario["adverse_bps"]) for a in plan["assets"]}
-                for name in (*BENCHMARKS, "relative_momentum"):
+                for name in (*BENCHMARKS, plan["strategy"]["name"]):
                     identity = {"stage": stage["name"], "strategy": name, "scenario": scenario["name"]}
                     journal({"kind": "trial_started", **identity})
-                    if name == "relative_momentum":
-                        result = rotation_screen(scoped, cfgs, start, end,
+                    if name == plan["strategy"]["name"]:
+                        result = rotation_screen(scoped, cfgs, start, end, strategy_name=name,
                             **{k: plan["strategy"][k] for k in ("lookback_hours", "rebalance_hours")})
                     else:
                         cfg = replace(cfgs["BTC"], allocation=1) if name == "btc_hold_full" else cfgs["BTC"]

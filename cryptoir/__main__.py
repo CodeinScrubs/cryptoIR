@@ -206,7 +206,7 @@ def main() -> int:
     research.add_argument("--plan", type=Path, required=True)
     research.add_argument("--dataset", type=Path, required=True)
     research.add_argument("--output", type=Path, required=True)
-    rotation = commands.add_parser("rotation-research", help="registered shared-cash relative-momentum screen; no real orders")
+    rotation = commands.add_parser("rotation-research", help="registered shared-cash momentum/reversal screen; no real orders")
     rotation.add_argument("--plan", type=Path, required=True)
     rotation.add_argument("--dataset", type=Path, action="append", required=True)
     rotation.add_argument("--output", type=Path, required=True)

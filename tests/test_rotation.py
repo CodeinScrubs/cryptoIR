@@ -10,7 +10,7 @@ from unittest.mock import patch
 from cryptoir.backtest import Assumptions
 from cryptoir.domain import DataError
 from cryptoir.history import Candle, HOUR, DAY
-from cryptoir.rotation import RelativeMomentum, rotation_screen, validate_plan, gate_failures, run_experiment
+from cryptoir.rotation import RelativeMomentum, RelativeReversal, rotation_screen, validate_plan, gate_failures, run_experiment
 from cryptoir.research import epoch
 
 PLAN = Path(__file__).resolve().parents[1]/"research/rotation-v1.json"
@@ -244,6 +244,113 @@ class RotationTests(unittest.TestCase):
                 events=[json.loads(line) for line in (root/"output/trials.jsonl").read_text().splitlines()]
                 self.assertEqual(sum(e["kind"]=="held_out_opened" for e in events),int(not fail_validation))
                 self.assertFalse(r["execution_ready"])
+
+
+class ReversalTests(unittest.TestCase):
+    def setUp(self):
+        self.plan = json.loads(PLAN.with_name('rotation-v2-reversal.json').read_bytes())
+        self.assets = ('BTC', 'ETH', 'SOL')
+        self.origin = 1000*HOUR
+        self.cfg = {a: Assumptions(1000, '.25', '.0013', 15, '.01', '.001', 1,
+                                  buy_fee_mode='received_base') for a in self.assets}
+        self.rows = {a: [] for a in self.assets}
+        for i in range(44):
+            for a in self.assets:
+                price = 90 if (a == 'BTC' and 4 <= i < 12) or (a == 'ETH' and 12 <= i < 20) else 100
+                self.rows[a].append(Candle(self.origin+i*HOUR, price, price, price, price, 10000))
+
+    def screen(self, rows=None, end=44):
+        return rotation_screen(rows or self.rows, self.cfg, self.origin+4*HOUR,
+                               self.origin+end*HOUR, lookback_hours=4, rebalance_hours=4,
+                               strategy_name='relative_reversal')
+
+    def test_selector_ranks_percentage_losses_and_preserves_cash_when_none_negative(self):
+        s = RelativeReversal(self.assets, 2)
+        # Lowest nominal price is not the worst percentage return.
+        values = [(100, 1000, 10), (95, 900, 11), (90, 800, 12)]
+        for i, prices in enumerate(values):
+            s.observe({a: Candle((i+1)*HOUR, p, p, p, p, 100) for a, p in zip(self.assets, prices)})
+        target, returns = s.choose()
+        self.assertEqual(target, 'ETH')
+        self.assertEqual(returns, {'BTC': D('-.1'), 'ETH': D('-.2'), 'SOL': D('.2')})
+        s.observe({a: Candle(4*HOUR, p, p, p, p, 100) for a, p in zip(self.assets, (95, 900, 11))})
+        self.assertIsNone(s.choose()[0])  # all exactly zero, not just positive
+        for i, p in ((5, 1000), (6, 1100)):
+            s.observe({a: Candle(i*HOUR, p, p, p, p, 100) for a in self.assets})
+        self.assertIsNone(s.choose()[0])
+        s.observe({a: Candle(7*HOUR, 500, 500, 500, 500, 100) for a in self.assets})
+        self.assertEqual(s.choose()[0], 'BTC')  # equal negative returns
+
+    def test_plan_locks_daily_horizons_direction_and_previous_assumptions(self):
+        validate_plan(self.plan)
+        old = json.loads(PLAN.read_bytes())
+        for key in ('assets', 'dataset_pins', 'splits', 'benchmarks', 'assumptions', 'market_rules', 'cost_scenarios', 'gate'):
+            self.assertEqual(self.plan[key], old[key])
+        for key, value in (('lookback_hours', 48), ('rebalance_hours', 12),
+                           ('negative_absolute_return_required', False),
+                           ('positive_absolute_return_required', True), ('name', 'unknown')):
+            bad = copy.deepcopy(self.plan); bad['strategy'][key] = value
+            with self.subTest(key=key), self.assertRaises(DataError): validate_plan(bad)
+        with self.assertRaises(DataError):
+            rotation_screen(self.rows, self.cfg, self.origin+4*HOUR, self.origin+44*HOUR,
+                            lookback_hours=4, rebalance_hours=4, strategy_name='unknown')
+
+    def test_reversal_switch_has_separate_delayed_cash_funded_legs_and_costs(self):
+        r = self.screen()
+        self.assertEqual(r['strategy'], 'relative_reversal')
+        btc_buy = next(t for t in r['trades'] if t['asset'] == 'BTC' and t['side'] == 'buy')
+        btc_sell = next(t for t in r['trades'] if t['asset'] == 'BTC' and t['side'] == 'sell')
+        eth_buy = next(t for t in r['trades'] if t['asset'] == 'ETH' and t['side'] == 'buy')
+        self.assertGreater(eth_buy['decision_time'], btc_sell['execution_time'])
+        self.assertEqual(btc_buy['execution_time']-btc_buy['decision_time'], HOUR)
+        for t in r['trades']:
+            self.assertGreaterEqual(t['execution_time']-t['decision_time'], HOUR)
+            self.assertGreaterEqual(t['cash_after'], 0)
+            self.assertTrue(all(q >= 0 for q in t['quantities_after'].values()))
+            self.assertEqual(t['fee_quote_equivalent'], t['quantity']*t['price']*D('.0013'))
+        self.assertAlmostEqual(r['final_liquidation_mark']-1000, r['realized_pnl']+r['unrealized_pnl_with_exit_costs'], places=20)
+        self.assertEqual([d['time'] for d in r['decisions']], list(range(self.origin+5*HOUR, self.origin+45*HOUR, 4*HOUR)))
+        self.assertFalse(r['execution_ready'])
+
+    def test_future_prices_do_not_change_earlier_reversal_decisions_or_trades(self):
+        old = self.screen(); rows = copy.deepcopy(self.rows)
+        for a in self.assets:
+            for i in range(30, 44): rows[a][i] = Candle(rows[a][i].time, 2000, 2000, 2000, 2000, 0)
+        changed = self.screen(rows); boundary = self.origin+30*HOUR
+        for key, timekey in (('decisions', 'time'), ('trades', 'execution_time'), ('equity', 'time')):
+            self.assertEqual([v for v in old[key] if v[timekey] < boundary],
+                             [v for v in changed[key] if v[timekey] < boundary])
+        self.assertEqual(self.screen(end=30), self.screen({a:s[:30] for a,s in self.rows.items()}, end=30))
+        first = old['trades'][0]; i = (first['execution_time']-self.origin)//HOUR
+        rows = copy.deepcopy(self.rows); rows['BTC'][i-1] = replace(rows['BTC'][i-1], volume=0)
+        self.assertGreater(self.screen(rows)['trades'][0]['execution_time'], first['execution_time'])
+
+    def test_failed_reversal_discovery_keeps_later_prices_out_of_models(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); plan, paths, audits = RotationTests.experiment_fixture(self, root)
+            with patch('cryptoir.rotation.audit_history', side_effect=lambda p:audits[p]), \
+                    patch('cryptoir.rotation.rotation_screen', wraps=rotation_screen) as runner:
+                report = run_experiment(plan, paths, root/'result')
+            self.assertEqual(report['status'], 'rejected_at_discovery')
+            self.assertFalse(report['held_out_inspected'])
+            self.assertEqual(len(report['stages']), 1)
+            self.assertEqual(runner.call_count, 2)
+            for call in runner.call_args_list:
+                self.assertEqual(call.kwargs['strategy_name'], 'relative_reversal')
+                self.assertTrue(all(b.time < epoch('2025-01-10') for rows in call.args[0].values() for b in rows))
+            self.assertEqual({t['strategy'] for t in report['stages'][0]['trials']},
+                             {'cash', 'btc_hold_matched', 'btc_hold_full', 'relative_reversal'})
+
+    def test_reversal_gate_uses_both_costs_and_rejects_insufficient_exits(self):
+        results = {(name, scenario): {'net_return': D('.03') if name == 'relative_reversal' else D('.02'),
+                                      'max_drawdown': D('.02'), 'completed_sells': 10}
+                   for name in ('relative_reversal', 'btc_hold_matched', 'btc_hold_full')
+                   for scenario in ('base_assumed', 'stress_assumed')}
+        self.assertEqual(gate_failures(results, self.plan), [])
+        results[('relative_reversal', 'stress_assumed')]['completed_sells'] = 9
+        self.assertEqual(gate_failures(results, self.plan), ['stress_assumed:insufficient_exits'])
+        results[('relative_reversal', 'stress_assumed')]['net_return'] = 0
+        self.assertIn('stress_assumed:nonpositive_return', gate_failures(results, self.plan))
 
 
 if __name__ == "__main__":
