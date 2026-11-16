@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "experiment": "maker-spread-v1-quoted-width-feasibility",
+  "venue": "nobitex",
+  "evaluation_type": "exploratory_existing_recording",
+  "universe_plan": {
+    "repository_path": "research/triangular-v2-universe.json",
+    "sha256": "e5870587082d88ed31b4f362adb4aa435d0e4e3dbce99d1ee206c5e9d2569010"
+  },
+  "universe_rule": "Same 248 metadata-eligible active unscaled dual-quote assets, USDT market only. Selection uses metadata, not observed spreads. Single-quote and scaled assets remain excluded; this is not the entire exchange.",
+  "catalog_sha256": "875757f2572d8bbce15df846cf01110480175a96370c21b79b0f548973ba033e",
+  "replay_recording": {
+    "sha256": "660caff10fa050e15299ff5d89dd2e0fb07904090ac951556678ebc1aba4846a",
+    "capture_plan_sha256": "f4c0d24d04b699c91c7a80b43fffaf08d2688650822850516da66d9647182164",
+    "evaluation_type": "exploratory_existing_recording"
+  },
+  "samples": 20,
+  "interval_seconds": 30,
+  "max_age_ms": 5000,
+  "max_logical_mb": 64,
+  "quote_budget_usdt": "10",
+  "maximum_fraction_of_displayed_top_level": "0.10",
+  "scenarios": [
+    {
+      "name": "zero_cost_diagnostic",
+      "maker_fee": "0",
+      "reserve_bps_per_leg": "0"
+    },
+    {
+      "name": "assumed_base",
+      "maker_fee": "0.001",
+      "reserve_bps_per_leg": "15"
+    },
+    {
+      "name": "assumed_stress",
+      "maker_fee": "0.002",
+      "reserve_bps_per_leg": "30"
+    }
+  ],
+  "fee_source": "https://nobitex.ir/pricing/",
+  "fee_scope": "Public base USDT maker fee 0.1 percent checked 2026-11-16; stress doubles it. Buy fee in received base and sell fee in received USDT. This is an assumed public fee scenario, not account acceptance or historical tiers.",
+  "calculation": "For each fresh uncrossed book, hypothetically buy at the displayed best bid and sell at the displayed best ask. Starting gross base size is floor_to_native_step(min(budget/bid, 10 percent of displayed best-bid quantity, 10 percent of displayed best-ask quantity)). Deduct buy fee in base, floor the remaining sell quantity, retain residual dust with zero assumed resale value, require both observed minimum notionals and ticks. Known-width margin is sold_quantity*ask*(1-sell_fee)-bought_quantity*bid. Deduct an explicit adverse-selection/cost reserve on each leg notional. No order or fill is inferred.",
+  "reserve_scope": "Hypothetical cost sensitivity only, not a measured markout, queue loss or calibrated slippage estimate.",
+  "follow_up_rule": {
+    "minimum_valid_samples_per_cost": 10,
+    "minimum_positive_fraction_in_both_costs": "0.50",
+    "strictly_positive_median_stressed_margin_required": true,
+    "maximum_candidates": 3,
+    "ranking": "descending median of per-sample stressed_margin_usdt / spent_usdt, then ascending asset"
+  },
+  "follow_up_permission": "A qualifying quote width permits only a separately registered fresh public order-book/trade observation. It does not pass a strategy or paper-performance gate and cannot authorize orders.",
+  "performance_status": "No maker-width result has been calculated before registration. The old recording was observed for triangular arbitrage and is not independent new data. Maker queue positions, fills, cancellations, adverse selection and inventory costs remain unobserved.",
+  "network_budget": "Zero requests for this screen; reuse the exact pinned existing recording and catalog only.",
+  "capital_note": "10 USDT is a synthetic per-market quote footprint applied independently, not owner capital or a funded multi-market portfolio.",
+  "limitations": "Sparse twenty-sample recording over about ten minutes; quotes are correlated. Displayed quantities are competitor quotes, not fill capacity. Two maker fills at the same snapshot prices need not occur, and holding inventory may dominate displayed spread. Do not sum margins into profit, infer touch fills or retune after results.",
+  "selection": "One fixed all-universe screen; no parameter grid, no positive-only reporting, no relaxed follow-up thresholds. Preserve all missing/stale/tick/minimum exclusions. No live or paper order routes."
+}

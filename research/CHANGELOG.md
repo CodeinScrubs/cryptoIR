@@ -254,3 +254,24 @@ motivates a test, not an expected return. A
 warns that size and liquidity matter and reports momentum for large/liquid coins.
 The available three-asset survivor universe is a limitation; this is a cheap
 counter-hypothesis screen, not replication of a published long-short portfolio.
+
+## 2026-11-16: register maker-width feasibility before calculation
+
+`maker-spread-v1.json` fixes one new strategy-family diagnostic after daily
+reversal failed. It reuses the exact twenty-sample all-market recording and the
+248 active, unscaled, dual-quote metadata universe from triangular-v2, considering
+only USDT books. No maker-width result was calculated before this registration.
+The recording is previously observed exploratory data, not fresh validation.
+
+Hypothetical bid/ask round trips retain native ticks/minimums, received-asset
+fees, quantity rounding and dust. Zero, base and stress scenarios are fixed.
+Displayed depth limits quote footprint only; it cannot establish that either
+passive order fills. Current public maker fees come from the official Nobitex
+pricing page; adverse-selection reserves are explicit assumptions.
+
+The preregistered follow-up rule selects at most three markets only after
+adequate fresh-source observations and positive cost-bearing width. It permits
+a separately registered public book/trade observation, never paper acceptance
+or live orders. All exclusions and nonpositive results must remain visible.
+There is no parameter grid, new network request, cumulative profit claim or
+threshold relaxation in this screen.
