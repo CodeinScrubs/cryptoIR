@@ -223,7 +223,23 @@ def main() -> int:
     observe_audit = commands.add_parser("maker-observation-audit", help="replay raw public book/trade activity")
     observe_audit.add_argument("directory", type=Path)
     observe_audit.add_argument("--output", type=Path, required=True)
+    trade_control = commands.add_parser("trade-feed-control", help="registered public REST/WebSocket trade route control")
+    trade_control.add_argument("--plan", type=Path, required=True)
+    trade_control.add_argument("--directory", type=Path, required=True)
+    trade_audit = commands.add_parser("trade-feed-audit", help="compare public native trade fingerprint occurrences")
+    trade_audit.add_argument("directory", type=Path)
+    trade_audit.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "trade-feed-control":
+        from .trade_control import capture
+        report = capture(args.plan, args.directory)
+        print(encode(report))
+        return int(report["status"] != "duration_completed")
+    if args.command == "trade-feed-audit":
+        from .trade_control import audit
+        report = audit(args.directory, args.output)
+        print(encode({k: report[k] for k in ("status", "capture_complete", "control_complete", "markets", "execution_ready")}))
+        return int(not report["control_complete"])
     if args.command == "maker-observe":
         from .maker_observation import capture
         report = capture(args.plan, args.catalog, args.directory)

@@ -43,3 +43,44 @@ A clean recording means the file completed its requested bounded observation.
 It does not prove complete history, executable liquidity, account access or
 profitability. Low-activity markets can legitimately emit no update for a while;
 frame heartbeats establish connection liveness, not current executable prices.
+
+
+## Reference trade-feed control (0.23.0)
+
+Implemented and locally tested; public results are reported separately. The
+[registered control](../research/trade-feed-control-v1.json), committed in
+`43aba35`, fixes BTCUSDT and USDTIRT for a single 180-second connection and two
+trade subscriptions. One current options read checks active, unscaled native
+membership. One recent-trades REST read per symbol before and after capture
+provides a bounded reference: five public GETs total, one WebSocket connection,
+no retries, recovery, extra symbols or adaptive time extension. Native currency
+metadata is not order-placement acceptance.
+
+```powershell
+uv run python -m cryptoir trade-feed-control --plan research/trade-feed-control-v1.json --directory data/trade-feed-control-v1
+uv run python -m cryptoir trade-feed-audit data/trade-feed-control-v1 --output data/trade-feed-control-v1/report.json
+```
+
+Use an exclusive new directory and no overlapping venue collector. The fixed
+scope is a diagnostic following silent trade channels in the maker observation;
+it does not replace that study's selected assets or relax its activity gate.
+Raw REST bodies and WebSocket frames are retained with hashes and clocks. The
+shared session audit verifies commands, acknowledgements, source time, offsets,
+termination and clock continuity. Errors remain failures, not successful empty
+lists. Missing before/after evidence makes the control incomplete.
+
+The official [WebSocket trade contract](https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_websocket.md)
+and [recent-trades REST contract](https://raw.githubusercontent.com/nobitex/docs-api/master/source/includes/_market_data.md)
+were checked on 2026-11-16. Exact decimal time/price/volume/raw-type fingerprints
+are compared as multisets only within one native symbol. Repeated identical
+values remain separate occurrences; a fingerprint is not an exchange trade ID.
+Prices undergo no fiat conversion and buy/sell labels imply no aggressor side.
+The comparison uses the acknowledged capture interval minus five seconds at
+each edge. It preserves unmatched occurrences and finite recent-list coverage.
+A match cannot establish complete history; an unmatched REST occurrence cannot
+by itself identify whether exchange, transport, client or semantics caused it.
+
+Fresh positive-volume WebSocket payload observation is reported separately
+from complete capture and from REST agreement. No suitable in-window evidence
+remains inconclusive; no route, unique-trade identity, liquidity, fills or profit
+is invented. No account, order, portfolio, withdrawal or transfer is involved.

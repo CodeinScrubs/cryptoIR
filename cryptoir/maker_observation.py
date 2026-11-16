@@ -83,13 +83,30 @@ def verify_current(record, plan, universe, now_ns):
             raise DataError('selected market metadata changed or unavailable')
 
 
+def trade_payload(data):
+    if not isinstance(data, dict):
+        raise DataError('invalid public trade payload')
+    price, volume = number(data['price']), number(data['volume'])
+    if price <= 0 or volume < 0 or data['type'] not in ('buy', 'sell'):
+        raise DataError('invalid trade price volume or type')
+    return dict(source_ns=millis(data['time']), price=price, volume=volume, raw_type=data['type'])
+
+
 class Protocol:
     """Raw Centrifuge JSON, without delta/recovery or inferred aggressor labels."""
-    def __init__(self, assets):
-        self.channels = channels(assets)
-        self.assets = {channel: asset for asset in assets for channel in channels([asset])}
+    def __init__(self, assets, *, trade_symbols=None):
+        self.trade_only = trade_symbols is not None
+        if self.trade_only:
+            if assets or trade_symbols != ['BTCUSDT', 'USDTIRT']:
+                raise DataError('unsupported reference trade control scope')
+            self.channels = ['public:trades-'+s for s in trade_symbols]
+            self.assets = dict(zip(self.channels, trade_symbols))
+        else:
+            self.channels = channels(assets)
+            self.assets = {channel: asset for asset in assets for channel in channels([asset])}
         self.connected = False
         self.acks, self.offsets, self.source_times = set(), {}, {}
+        self.acknowledged_ns = {}
         self.expected_commands = deque([{'id': 1, 'connect': {}}])
 
     def command(self, value):
@@ -132,6 +149,7 @@ class Protocol:
             if channel in self.acks or ack.get('publications') or ack.get('recovered') or ack.get('delta'):
                 raise DataError('duplicate acknowledgement or unsolicited recovery/delta')
             self.acks.add(channel)
+            self.acknowledged_ns[channel] = received_ns
             self.offset(channel, ack.get('offset'), initial=True)
             return []
         if set(message) != {'push'} or not isinstance(message['push'], dict):
@@ -165,10 +183,9 @@ class Protocol:
             result['book'] = Book('nobitex', asset+'/USDT', levels(data['bids']), levels(data['asks']),
                                   received_ns, 0, source_ns)
         else:
-            price, volume = number(data['price']), number(data['volume'])
-            if price <= 0 or volume < 0 or data['type'] not in ('buy', 'sell'):
-                raise DataError('invalid trade price volume or type')
-            result.update(price=price, volume=volume, raw_type=data['type'])
+            result.update(trade_payload(data))
+            if self.trade_only:
+                result['native_symbol'] = result.pop('asset')
         return [result]
 
     def offset(self, channel, value, initial=False):
@@ -182,10 +199,10 @@ class Protocol:
         self.offsets[channel] = value
 
 
-async def capture_socket(plan, writer, *, url=None, seconds=None):
-    """Overrides are for loopback tests only; CLI uses registered URL/duration."""
+async def capture_socket(plan, writer, *, protocol=None, url=None, seconds=None):
+    """Registered caller supplies protocol; URL/duration overrides are loopback only."""
     from websockets.asyncio.client import connect
-    protocol = Protocol(plan['assets'])
+    protocol = protocol or Protocol(plan['assets'])
     reason = 'interrupted'
     def write(event):
         row = writer.write('nobitex', event)
@@ -338,13 +355,10 @@ class Metrics:
                 for c, v in self.channel_counts.items()}, 'selected_for_further_measurement': selected}
 
 
-def audit(directory, output):
-    directory, output = Path(directory), Path(output)
-    raw, plan, quote, universe = load_plan(directory/'plan.json')
-    options_raw = (directory/'current-options.json').read_bytes()
+def replay_session(path, raw, options_raw, plan, protocol, on_publication, check_metadata):
+    """Shared raw evidence verifier; callers supply registered scope and metrics."""
+    path = Path(path)
     current = t.strict_json(options_raw)
-    protocol, metrics = Protocol(plan['assets']), Metrics(plan, quote, universe)
-    path = directory/'frames.jsonl.gz'
     if path.stat().st_size > (plan['max_logical_mb']+1)*1024*1024:
         raise DataError('compressed observation exceeds bound')
     header, footer, previous, failure, parse_error = None, None, None, None, None
@@ -367,7 +381,7 @@ def audit(directory, output):
                         or not isinstance(row.get('source_sha256'), dict)
                         or not isinstance(row.get('run_id'), str) or not row['run_id']):
                     raise DataError('observation header provenance mismatch')
-                verify_current(current, plan, universe, row['observed_ns'])
+                check_metadata(current, row['observed_ns'])
             if (row['run_id'] != header['run_id'] or previous and row['monotonic_ns'] < previous['monotonic_ns']):
                 raise DataError('observation run or monotonic ordering mismatch')
             clock_error = row['observed_ns']-header['clock_origin_wall_ns']-(row['monotonic_ns']-header['clock_origin_mono_ns'])
@@ -390,9 +404,14 @@ def audit(directory, output):
                         or previous and row['received_ns'] < previous['observed_ns']):
                     raise DataError('raw frame hash or receive time mismatch')
                 try:
+                    # At replay, acknowledgement availability is its persisted
+                    # timestamp; publications retain their actual receive time.
+                    before_acks = set(protocol.acks)
                     events = protocol.parse_frame(row['raw'], row['received_ns'])
+                    for channel in protocol.acks-before_acks:
+                        protocol.acknowledged_ns[channel] = row['observed_ns']
                     for event in events:
-                        metrics.observe(event, row['observed_ns'])
+                        on_publication(event, row['observed_ns'])
                 except (ValueError, KeyError, TypeError, IndexError) as exc:
                     parse_error = str(exc) if isinstance(exc, DataError) else 'invalid source schema'
             elif kind == 'failure':
@@ -424,8 +443,18 @@ def audit(directory, output):
               'execution_ready': False, 'strategy_accepted': False, 'passive_fills_verified': False,
               'portfolio_return_available': False, 'matching_engine_completeness': 'unknown',
               'aggressor_semantics': 'unknown', 'capture_start_ns': header['observed_ns'],
-              'capture_end_ns': footer['observed_ns'] if footer else None,
-              **metrics.result(complete, protocol)}
+              'capture_end_ns': footer['observed_ns'] if footer else None}
+    return report
+
+
+def audit(directory, output):
+    directory, output = Path(directory), Path(output)
+    raw, plan, quote, universe = load_plan(directory/'plan.json')
+    options_raw = (directory/'current-options.json').read_bytes()
+    protocol, metrics = Protocol(plan['assets']), Metrics(plan, quote, universe)
+    report = replay_session(directory/'frames.jsonl.gz', raw, options_raw, plan, protocol,
+                            metrics.observe, lambda current, now: verify_current(current, plan, universe, now))
+    report.update(metrics.result(report['capture_complete'], protocol))
     with output.open('x', encoding='utf-8', newline='\n') as target:
         target.write(dumps(report)+'\n')
     return report
