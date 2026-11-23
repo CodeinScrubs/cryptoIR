@@ -60,7 +60,7 @@ A strategy that finds no qualifying trade must remain idle. Research may conclud
 | G2: simulation | Portfolio accounting; venue-specific rules; causal fills; recovery/invariant tests | Partial: durable spot ledger, fee assets, source-ordered IOC model and atomic fill/risk updates |
 | G3: research | Reproducible held-out results after all costs and stress scenarios | Preliminary hourly screening engine and registered experiments; no accepted strategy |
 | G4: paper | Prospective net performance and operational reliability; calibrated fill assumptions | Experimental single-venue forward runner implemented; no performance acceptance |
-| G5: limited live | User-approved finite limits; account permissions; reconciliation and shutdown exercises | Disabled / not implemented |
+| G5: limited live | User-approved finite limits; account permissions; reconciliation and shutdown exercises | Execution disabled. Nobitex BTC/USDT order/fill read routes account-verified |
 | G6: autonomous operation | Sustained observed live results and ongoing risk/operational monitoring | Not established |
 
 Before G5, specify per-trade risk, per-venue and aggregate exposure, daily loss and drawdown limits, leverage, maximum order size and allowed markets. No unlimited spending or automatic capital replenishment. Stops can slip; finite loss limits cannot guarantee a maximum loss under gaps, liquidation or exchange failure.
@@ -68,6 +68,14 @@ Before G5, specify per-trade risk, per-venue and aggregate exposure, daily loss 
 Disconnects block new exposure. Managing existing exposure needs an explicit policy and exchange-native protection where supported. Stopping a process alone is not a safe position-management policy. Laptop sleep, loss of power/network and local clock changes require recovery tests before unattended operation.
 
 ## Next implementation milestone
+
+The Nobitex BTC/USDT `order-check` command provides read-only evidence for G5.
+All three filtered reads were accepted by the venue using a saved Ed25519 key.
+The quantity and state reconciliation is tested on synthetic populated pages.
+The observations cover one page per request and do not represent a complete
+or simultaneous account snapshot. Reconciliation of a local production intent,
+an accepted strategy, calibrated fills, approved limits and authority to trade
+remain open.
 
 The offline forward replay in 0.26.0 exercises the same strategy, risk and
 paper settlement code on a complete chain of recorded consumer inputs. Raw

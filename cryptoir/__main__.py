@@ -125,6 +125,7 @@ def main() -> int:
     costs_audit.add_argument("--quote",type=Path,required=True)
     costs_audit.add_argument("path",type=Path)
     account=commands.add_parser("account-check",help="read-only account assessment; optional local Windows credential storage")
+    commands.add_parser("order-check", help="read-only Nobitex BTC/USDT order and fill reconciliation using the saved key")
     account.add_argument("--venue",choices=("nobitex","wallex","tabdeal"),required=True)
     account.add_argument("--legacy-token",action="store_true",help="Nobitex legacy token instead of the default Ed25519 API key")
     account.add_argument("--save-credentials",action="store_true",help="prompt once and save/replace in local Windows Credential Manager")
@@ -308,6 +309,9 @@ def main() -> int:
         from .margin_costs import audit_scenario
         print(encode(audit_scenario(args.quote,args.path)))
         return 0
+    if args.command=="order-check":
+        from .order_observation import order_check
+        return order_check()
     if args.command=="account-check":
         from .accounts import account_check
         return account_check(args.venue,legacy_token=args.legacy_token,save=args.save_credentials)

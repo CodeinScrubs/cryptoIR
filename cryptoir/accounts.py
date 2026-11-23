@@ -32,6 +32,13 @@ READS = {
     "tabdeal": {"account":("GET","/r/api/v1/account",None),
                 "wallet":("GET","/r/api/v1/asset/get-funding-asset",None)},
 }
+# Separate explicit command for private order evidence. Ordinary account-check
+# never downloads order history. The signed query is identical to the sent one.
+NOBITEX_ORDER_READS = {
+    "open_spot_orders": ("GET", "/market/orders/list?srcCurrency=btc&dstCurrency=usdt&tradeType=spot&status=open&details=2&order=-id&page=1&pageSize=10", None),
+    "recent_spot_orders": ("GET", "/market/orders/list?srcCurrency=btc&dstCurrency=usdt&tradeType=spot&status=all&details=2&order=-id&page=1&pageSize=10", None),
+    "recent_spot_fills": ("GET", "/market/trades/list?srcCurrency=btc&dstCurrency=usdt&page=1&pageSize=10", None),
+}
 MAX_RESPONSE = 2*1024*1024
 
 
@@ -87,14 +94,17 @@ def prompt_credentials(venue: str, scheme: str | None = None, *, saving=False) -
 
 
 def build_read_request(venue: str, operation: str, credentials: Credentials, *, now_ns: int) -> Request:
-    if venue not in READS or operation not in READS[venue]:
+    route = READS.get(venue, {}).get(operation)
+    if route is None and venue == "nobitex":
+        route = NOBITEX_ORDER_READS.get(operation)
+    if route is None:
         raise AccountReadError("operation_not_in_read_allowlist")
     if credentials.scheme not in {"nobitex":("nobitex_ed25519","nobitex_token"),
                                   "wallex":("wallex_key",),"tabdeal":("tabdeal_hmac",)}[venue]:
         raise AccountReadError("credential_venue_mismatch")
     if type(now_ns) is not int or now_ns <= 0:
         raise AccountReadError("invalid_local_clock")
-    method,path,body=READS[venue][operation]
+    method,path,body=route
     headers={"User-Agent":"TraderBot/cryptoIR-readonly", "Accept":"application/json", "Content-Type":"application/json"}
     if credentials.scheme == "nobitex_token":
         headers["Authorization"]="Token "+credentials.key
@@ -399,7 +409,9 @@ def save_assessment(report: dict) -> Path:
     """Only normalized reports, exclusively created under this checkout's ignored .local."""
     root=Path(__file__).resolve().parent.parent
     venue=report["venue"]
-    if venue not in READS or report.get("kind") != "private_account_read_assessment":
+    kind = report.get("kind")
+    order_report = kind == "private_spot_reconciliation" and venue == "nobitex"
+    if not order_report and (kind != "private_account_read_assessment" or venue not in READS):
         raise AccountReadError("invalid_assessment")
     directory=root
     for name in (".local","accounts"):
@@ -410,7 +422,8 @@ def save_assessment(report: dict) -> Path:
         directory.mkdir(mode=0o700,exist_ok=True)
         if directory.resolve() != root.joinpath(*directory.relative_to(root).parts):
             raise AccountReadError("private_directory_redirected")
-    path=directory/(venue+"-"+uuid4().hex+".json")
+    name = venue+"-orders" if order_report else venue
+    path=directory/(name+"-"+uuid4().hex+".json")
     payload=json.dumps(report,ensure_ascii=True,default=str,allow_nan=False,indent=2)+"\n"
     fd=os.open(path,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
     with os.fdopen(fd,"w",encoding="utf-8",newline="\n") as stream:

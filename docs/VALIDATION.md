@@ -712,3 +712,15 @@ historical fees.
   Recording SHA-256: `9f5ffe8ef6895406d73afff51bb7050ab165a7c431351fb08b2a5ff96dede394`.
   This observed reception and verified replay parity. Fill behavior was
   checked with synthetic inputs. Calibration against venue executions remains open.
+
+
+## Version 0.27.0 Nobitex order reads
+
+- All 390 local tests passed. Six new cases verify exact query signatures,
+  GET-only routing and rejection of other venues and mutation routes, partial
+  fills, different order states, side and quantity conflicts, bounded pages,
+  duplicate IDs, unknown units, missing evidence and redacted output.
+- The three bounded BTC/USDT reads authenticated and passed the account-side
+  response envelope and page parser via the saved Ed25519 credential. This
+  verifies endpoint acceptance. Populated row handling and quantity matching
+  were tested with synthetic fixtures. Account data stayed local.

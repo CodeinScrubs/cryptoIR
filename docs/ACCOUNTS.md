@@ -152,3 +152,38 @@ The paper runner remains independent of this optional command. Its source seal
 includes Python modules, so changing versions requires the documented upgrade
 procedure or continuing the previously frozen runtime; never reset capital to
 work around a source mismatch.
+
+
+## Nobitex spot order reconciliation (0.27.0)
+
+`order-check` uses the saved Windows credential for three authenticated GETs on
+BTC/USDT. The official [API key guide](https://apidocs.nobitex.ir/api_key/api-key-guide)
+specifies READ permission for these routes and signing the full path including
+the query. See the official [spot trade section](https://apidocs.nobitex.ir/spot_trade/معاملات-اسپات)
+for the order and fill endpoints.
+
+```powershell
+uv run python -m cryptoir order-check
+```
+
+It checks page 1 with a requested size of ten for open spot orders, recent
+spot orders across statuses and recent spot fills. These three GETs run in
+sequence. The bounded report carries the pagination flag when present and the
+timing of each accepted page. Missing pagination stays unknown. No subsequent
+page, retry or alternate market is requested by this command.
+
+The report compares overlapping order states and sums observed fill quantities
+by venue order ID using Decimal. A changed order, side disagreement, missing
+order or incomplete quantity produces a distinct result. Matching quantities
+describe only the rows observed at those separate request times. Empty pages
+produce no fill evidence. Fees are preserved as reported amounts with unknown
+fee assets and are excluded from settlement. This reconciliation covers the
+venue's own records. Local live intents and balances are outside its scope.
+
+The terminal reports operation statuses and a file name. Normalized account
+observations stay under the ignored `.local/accounts/` directory. The client
+does not retain raw bodies, raw client-order IDs or credential material.
+The three requests were **account-verified for endpoint acceptance** with
+a saved Ed25519 key. Populated order and fill rows and quantity matching were
+**locally tested with synthetic fixtures**. Trading requires a separate
+authorization and prospective strategy evidence.
