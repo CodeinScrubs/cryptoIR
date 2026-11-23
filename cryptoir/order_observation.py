@@ -16,7 +16,8 @@ PAIR = "BTC/USDT"
 PAGE_SIZE = 10
 OPEN_STATES = {"New", "Active", "Inactive"}
 TERMINAL_STATES = {"Done", "Canceled"}
-ORDER_FIELDS = ("side", "status", "requested_base", "matched_base", "execution", "observed_trade_type")
+ORDER_FIELDS = ("side", "status", "requested_base", "matched_base", "execution", "observed_trade_type",
+                "limit_price_quote_per_base", "client_order_id_sha256", "source_created_at_utc")
 
 
 def exchange_id(value):
@@ -45,6 +46,13 @@ def optional_fee(row):
     return nonnegative(value) if value is not None else None
 
 
+def utc_time(value):
+    timestamp = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if timestamp.utcoffset() is None:
+        raise AccountReadError("source_timestamp_requires_offset")
+    return timestamp.astimezone(timezone.utc).isoformat()
+
+
 def parse_order(row, *, open_only):
     verify_pair(row)
     status, execution, trade_type = row["status"], row["execution"], row.get("tradeType")
@@ -61,24 +69,27 @@ def parse_order(row, *, open_only):
     # The bridge joins by venue ID. Retain only a digest of a supplied client ID.
     if client_id is not None and (not isinstance(client_id, str) or len(client_id) > 128):
         raise AccountReadError("invalid_client_order_identifier")
+    limit = nonnegative(row["price"]) if execution == "Limit" and row.get("price") is not None else None
+    if limit is not None and limit <= 0:
+        raise AccountReadError("invalid_limit_price")
     return {"exchange_order_id": exchange_id(row["id"]), "side": side(row),
             "status": status, "execution": execution, "observed_trade_type": trade_type,
             "requested_base": amount, "matched_base": matched, "reported_fee": optional_fee(row),
+            "limit_price_quote_per_base": limit,
+            "source_created_at_utc": utc_time(row["created_at"]) if row.get("created_at") is not None else None,
             "fee_asset": None, "client_order_id_sha256": sha256(client_id.encode()).hexdigest() if client_id else None}
 
 
 def parse_fill(row):
     verify_pair(row)
-    timestamp = datetime.fromisoformat(row["timestamp"].replace("Z", "+00:00"))
-    if timestamp.utcoffset() is None:
-        raise AccountReadError("fill_timestamp_requires_offset")
+    timestamp = utc_time(row["timestamp"])
     amount, price, total = [nonnegative(row[field]) for field in ("amount", "price", "total")]
     if min(amount, price, total) <= 0:
         raise AccountReadError("invalid_fill_quantity_or_price")
     return {"exchange_fill_id": exchange_id(row["id"]), "exchange_order_id": exchange_id(row["orderId"]),
             "side": side(row), "reported_base_quantity": amount, "reported_price_quote_per_base": price,
             "reported_total_quote": total, "reported_fee": optional_fee(row), "fee_asset": None,
-            "source_time_utc": timestamp.astimezone(timezone.utc).isoformat()}
+            "source_time_utc": timestamp}
 
 
 def parse_page(operation, value):

@@ -126,6 +126,8 @@ def main() -> int:
     costs_audit.add_argument("path",type=Path)
     account=commands.add_parser("account-check",help="read-only account assessment; optional local Windows credential storage")
     commands.add_parser("order-check", help="read-only Nobitex BTC/USDT order and fill reconciliation using the saved key")
+    recovery = commands.add_parser("order-recovery-demo", help="offline rehearsal of an uncertain order and restart")
+    recovery.add_argument("--directory", required=True, type=Path)
     account.add_argument("--venue",choices=("nobitex","wallex","tabdeal"),required=True)
     account.add_argument("--legacy-token",action="store_true",help="Nobitex legacy token instead of the default Ed25519 API key")
     account.add_argument("--save-credentials",action="store_true",help="prompt once and save/replace in local Windows Credential Manager")
@@ -308,6 +310,10 @@ def main() -> int:
     if args.command=="margin-cost-audit":
         from .margin_costs import audit_scenario
         print(encode(audit_scenario(args.quote,args.path)))
+        return 0
+    if args.command=="order-recovery-demo":
+        from .order_recovery import demo
+        print(encode(demo(args.directory)))
         return 0
     if args.command=="order-check":
         from .order_observation import order_check

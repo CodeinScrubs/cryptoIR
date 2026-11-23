@@ -187,3 +187,38 @@ The three requests were **account-verified for endpoint acceptance** with
 a saved Ed25519 key. Populated order and fill rows and quantity matching were
 **locally tested with synthetic fixtures**. Trading requires a separate
 authorization and prospective strategy evidence.
+
+
+## Lost acknowledgement recovery rehearsal (0.28.0)
+
+```powershell
+uv run python -m cryptoir order-recovery-demo --directory data/order-recovery-example
+```
+
+Use a new directory. The command produces an SQLite journal and a JSON report
+from fixed synthetic BTC/USDT spot limit fixtures. It shares the authenticated
+read parsers for order and fill shape validation. The rehearsal runs locally
+and uses no account or network access.
+
+The journal commits the attempt marker before a hypothetical handoff.
+After a restart the state is uncertain. A second attempt for the same ID
+fails, and one unresolved intent blocks preparing another rehearsal order.
+An empty page leaves the prior state in place. This matters because the
+[official order status notes](https://github.com/nobitex/docs-api/blob/master/source/includes/_market_trade.md#مشاهده-وضعیت-سفارش)
+describe an experimental client-order-ID lookup with limited status coverage.
+
+Recovery checks the echoed client ID, stable venue ID, spot limit terms, side,
+exact quantity and timestamps. Its synthetic clock requires the order creation
+time to follow the attempt and fills to precede the end of observation.
+While open, the order continues to block another intent. A terminal order
+requires the observed fills to match the reported executed quantity and limit.
+Stale or missing data and disagreements keep the intent blocked. State changes
+and an evidence digest commit together.
+
+The scope is one unresolved synthetic intent. Tests kill a child process
+after the attempt marker and before receiving a synthetic acknowledgement.
+They also exercise competing writers and incomplete fill history. The same
+journal is reopened after the failure. Live venue linkage, client ID
+uniqueness across closed orders, real clock tolerance, fee settlement,
+portfolio exposure and live authorization require separate evidence.
+`RESOLVED` in this exercise describes the synthetic order's recovery only.

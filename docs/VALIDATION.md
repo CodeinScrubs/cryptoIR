@@ -724,3 +724,18 @@ historical fees.
   response envelope and page parser via the saved Ed25519 credential. This
   verifies endpoint acceptance. Populated row handling and quantity matching
   were tested with synthetic fixtures. Account data stayed local.
+
+
+## Version 0.28.0 order recovery rehearsal
+
+- All 398 local tests passed.
+- The offline CLI demonstrated an uncertain attempt across reopen, an open
+  order, a terminal partial order waiting for fills and resolution after
+  exact quantity reconciliation. One attempt was committed.
+- Eight new tests cover an actual child-process exit after the synthetic
+  venue receipt, two concurrent SQLite writers, partial cancellation, missing
+  and stale evidence, bad identity/limit/time/quantity, non-atomic status
+  changes, rollback on journal failure and exclusive CLI output.
+- The account parsers retain optional reported limit price and creation time
+  for identity checks. Their populated-row behavior remains fixture-tested.
+  No private account or real order was used in this rehearsal.
