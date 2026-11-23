@@ -58,7 +58,10 @@ does not prevent a legitimate resume. One experiment has one writer.
 - Orders use a finite marketable limit, explicit latency and a short TTL.
   Matching occurs on a later source-timed snapshot, with configured depth
   participation. Processing delay counts against freshness and TTL; a queued
-  old book cannot become fresh merely because it is processed now.
+  old book cannot become fresh merely because it is processed now. Each
+  accepted source timestamp can drive at most one incoming book event. Replays
+  cannot dispatch a due decision or refresh data after a gap. The risk mark,
+  fill, balance updates and fill journal commit in the same SQLite transaction.
 - A durable decision ID ties the signal to its order. A crash after reservation
   and before decision acknowledgement cannot create a second reservation.
 

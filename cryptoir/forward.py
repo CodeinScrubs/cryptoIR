@@ -219,9 +219,11 @@ class ForwardEngine:
             self._finish_decision("expired_without_execution",now_ns)
 
     def on_book(self, book: Book, *, now_ns: int):
-        self.latest_book = book
         self.advance(now_ns)
-        fills=self.guard.on_book(book,now_ns=now_ns)
+        accepted, fills = self.guard.process_book(book, now_ns=now_ns)
+        if not accepted:
+            return fills
+        self.latest_book = book
         state,risk=self.state(),self.guard.state()
         decision=state["decision"]
         if not decision or not state["candles_ok"] or not risk["data_ok"] or now_ns<decision["due_ns"]:

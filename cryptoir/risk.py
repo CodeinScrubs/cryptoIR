@@ -120,11 +120,6 @@ class SpotRiskGuard:
     def _mark(self, book: Book, now_ns: int) -> dict:
         state = self.state()
         try:
-            if book.venue != self.venue or book.pair != self.pair:
-                raise DataError("wrong risk venue or pair")
-            book.validate_age(now_ns, self.limits.max_feed_age_ns)
-            if book.exchange_ns is None:
-                raise DataError("unknown source time")
             if self._unknown_inventory():
                 raise DataError("unvalued inventory outside configured venue/pair")
             quantity = sum(self.ledger.balance(self.venue, self.base))
@@ -163,7 +158,8 @@ class SpotRiskGuard:
             self.ledger._event("risk_pending_buys_canceled", reason="projected_exposure")
         state.update(equity=str(equity), peak=str(peak), daily_loss_fraction=str(daily_loss),
                      drawdown_fraction=str(drawdown), data_ok=True, data_reason=None,
-                     mark_ns=now_ns, base_quantity=str(quantity), dust_quantity=str(quantity-saleable),
+                     mark_ns=now_ns, mark_source_ns=book.exchange_ns,
+                     base_quantity=str(quantity), dust_quantity=str(quantity-saleable),
                      gross_exposure_fraction=str(quantity*book.asks[0].price/equity) if equity else None)
         self._save(state)
         return state
@@ -182,11 +178,37 @@ class SpotRiskGuard:
         projected_equity = max(ZERO, equity-costs)
         return exposure <= projected_equity*self.limits.max_exposure_fraction
 
+    def _observe_book(self, book: Book, now_ns: int, *, for_submission=False):
+        """Validate and mark a source observation inside a write transaction."""
+        state = self.state()
+        try:
+            if book.venue != self.venue or book.pair != self.pair:
+                raise DataError("wrong risk venue or pair")
+            book.validate_age(now_ns, self.limits.max_feed_age_ns)
+            if book.exchange_ns is None:
+                raise DataError("unknown source time")
+        except DataError as exc:
+            return False, self._blocked_data(state, str(exc))
+        source_status = self.ledger._book_source_status(book)
+        if source_status == "duplicate":
+            # Submission may use the already admitted mark while fresh. An
+            # incoming replay never resumes an invalidated feed or dispatches.
+            if for_submission and state["data_ok"]:
+                if state.get("mark_source_ns") != book.exchange_ns:
+                    return False, self._blocked_data(state, "book_has_no_matching_risk_mark")
+                return False, self._mark(book, now_ns)
+            return False, state
+        if source_status != "new":
+            return False, self._blocked_data(state, source_status)
+        self.ledger._remember_book_source(book)
+        return True, self._mark(book, now_ns)
+
     def observe(self, book: Book, *, now_ns: int):
         with self.ledger.db:
             self.ledger.db.execute("BEGIN IMMEDIATE")
+            self.ledger._ensure_book_source_floor()
             self.ledger._advance(timestamp(now_ns))
-            return self._mark(book, now_ns)
+            return self._observe_book(book, now_ns)[1]
 
     def invalidate(self, *, now_ns: int, reason="feed_gap"):
         with self.ledger.db:
@@ -200,7 +222,8 @@ class SpotRiskGuard:
             self.ledger.db.execute("BEGIN IMMEDIATE")
             self.ledger._advance(timestamp(now_ns))
             state = self.state()
-            if state["mark_ns"] is None or now_ns-state["mark_ns"] > self.limits.max_feed_age_ns:
+            source_ns = state.get("mark_source_ns")
+            if source_ns is None or now_ns-source_ns > self.limits.max_feed_age_ns:
                 self._blocked_data(state, "feed_timer_expired")
 
     def halt(self, *, now_ns: int, reason="manual_stop"):
@@ -219,7 +242,7 @@ class SpotRiskGuard:
         quantity, price = number(quantity), number(limit_price)
 
         def preflight():
-            state = self._mark(book, now_ns)
+            _, state = self._observe_book(book, now_ns, for_submission=True)
             if not state["data_ok"]:
                 return state["data_reason"]
             if side == "buy" and state["halt"]:
@@ -240,16 +263,22 @@ class SpotRiskGuard:
                                   now_ns=now_ns, latency_ns=latency_ns, ttl_ns=ttl_ns, preflight=preflight)
 
     def on_book(self, book: Book, *, now_ns: int | None = None):
+        return self.process_book(book, now_ns=now_ns)[1]
+
+    def process_book(self, book: Book, *, now_ns: int | None = None):
+        """Return admission and fills after one durable market-event transaction."""
         now_ns = book.received_ns if now_ns is None else timestamp(now_ns)
-        state = self.observe(book, now_ns=now_ns)
-        if not state["data_ok"]:
-            return []
-        # Fill and post-fill mark use separate ledger transactions; the runner
-        # is single-threaded and must not mutate this ledger from another owner.
-        results = self.ledger.on_book(book, max_age_ns=self.limits.max_feed_age_ns,
-                                      participation=self.limits.depth_participation, now_ns=now_ns)
-        self.observe(book, now_ns=now_ns)
-        return results
+        with self.ledger.db:
+            self.ledger.db.execute("BEGIN IMMEDIATE")
+            self.ledger._ensure_book_source_floor()
+            self.ledger._advance(now_ns)
+            accepted, state = self._observe_book(book, now_ns)
+            if not accepted or not state["data_ok"]:
+                return accepted, []
+            results = self.ledger._match_book(book, self.limits.depth_participation, now_ns)
+            if results:
+                self._mark(book, now_ns)
+            return True, results
 
 
 def demo(path: Path) -> dict:

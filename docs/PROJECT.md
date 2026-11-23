@@ -57,7 +57,7 @@ A strategy that finds no qualifying trade must remain idle. Research may conclud
 | --- | --- | --- |
 | G0: scope | Capital/risk stored privately; agreed trading permissions and venue scope | Scope agreed; live risk limits intentionally unset |
 | G1: data | Verified metadata/units; live streams; reconnect/gap tests; coverage audit | Partial: REST, catalogs, three public WebSocket adapters and exact hourly/daily reconciliation; known historical gaps and venue discrepancies remain |
-| G2: simulation | Portfolio accounting; venue-specific rules; causal fills; recovery/invariant tests | Partial: durable spot ledger, fee assets, next-snapshot IOC model and persistent single-venue risk guard |
+| G2: simulation | Portfolio accounting; venue-specific rules; causal fills; recovery/invariant tests | Partial: durable spot ledger, fee assets, source-ordered IOC model and atomic fill/risk updates |
 | G3: research | Reproducible held-out results after all costs and stress scenarios | Preliminary hourly screening engine and registered experiments; no accepted strategy |
 | G4: paper | Prospective net performance and operational reliability; calibrated fill assumptions | Experimental single-venue forward runner implemented; no performance acceptance |
 | G5: limited live | User-approved finite limits; account permissions; reconciliation and shutdown exercises | Disabled / not implemented |
@@ -68,6 +68,14 @@ Before G5, specify per-trade risk, per-venue and aggregate exposure, daily loss 
 Disconnects block new exposure. Managing existing exposure needs an explicit policy and exchange-native protection where supported. Stopping a process alone is not a safe position-management policy. Laptop sleep, loss of power/network and local clock changes require recovery tests before unattended operation.
 
 ## Next implementation milestone
+
+Paper source ordering and settlement are now implemented and locally tested in
+0.25.0. The ledger retains one accepted exchange timestamp per market across
+restarts. The risk guard commits source admission, settlement and pre/post-fill
+risk in a single SQLite transaction. Process-exit recovery is tested against a
+real SQLite file with a pending synthetic order. This strengthens recovery
+evidence for G2. Venue fill calibration, strategy acceptance, prospective
+performance, and live execution remain open.
 
 The registered fresh maker book/trade diagnostic completed its single
 900-second connection: all six subscriptions accepted, 90 fresh G and 59 fresh

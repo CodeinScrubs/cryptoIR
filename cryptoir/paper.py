@@ -186,6 +186,8 @@ class PaperLedger:
             latest = self.db.execute("SELECT value FROM metadata WHERE key='clock_ns'").fetchone()
             if latest and now_ns < int(latest[0]):
                 raise DataError("intent predates simulation clock")
+            if preflight is not None:
+                self._ensure_book_source_floor()
             self._advance(now_ns)
             # Trusted local guard runs under the same write transaction. Its
             # risk latch must commit even when the intent is rejected.
@@ -235,12 +237,55 @@ class PaperLedger:
             self.db.execute("BEGIN IMMEDIATE")
             self._advance(now_ns)
 
-    def on_book(self, book: Book, *, max_age_ns: int, participation: Decimal, now_ns: int | None = None) -> list[dict]:
-        """Fill eligible IOC intents on a later source-timed snapshot only.
+    def _ensure_book_source_floor(self):
+        """Bootstrap the cutoff for legacy snapshot hashes without source indexes."""
+        row = self.db.execute("SELECT value FROM metadata WHERE key='book_source_floor_ns'").fetchone()
+        if row:
+            return int(row[0])
+        floor = 0
+        if self.db.execute("SELECT 1 FROM snapshots LIMIT 1").fetchone():
+            clock = self.db.execute("SELECT value FROM metadata WHERE key='clock_ns'").fetchone()
+            if clock is None:
+                raise DataError("legacy snapshots lack a simulation clock")
+            # Legacy fills already required source time <= processing time.
+            floor = timestamp(int(clock[0]))
+        self.db.execute("INSERT INTO metadata VALUES ('book_source_floor_ns', ?)", (str(floor),))
+        return floor
 
-        Each snapshot's available depth is shared across all orders and can be
-        consumed once across restarts. Partial fills cancel the remainder.
-        """
+    @staticmethod
+    def _book_source_key(book):
+        return "book_source:" + json.dumps([book.venue, book.pair], separators=(",", ":"))
+
+    @staticmethod
+    def _book_content(book):
+        # Decimal equality is exact and ignores trailing zeros without applying
+        # the ambient precision, unlike Decimal.normalize().
+        return [[(str(level.price), str(level.quantity)) for level in side]
+                for side in (book.bids, book.asks)]
+
+    def _book_source_status(self, book):
+        floor = self._ensure_book_source_floor()
+        if book.exchange_ns <= floor:
+            return "book_at_or_before_legacy_cutoff"
+        row = self.db.execute("SELECT value FROM metadata WHERE key=?", (self._book_source_key(book),)).fetchone()
+        if row is None:
+            return "new"
+        source_ns, content = json.loads(row[0])
+        if book.exchange_ns < source_ns:
+            return "book_source_time_regressed"
+        if book.exchange_ns > source_ns:
+            return "new"
+        prices_and_sizes = [[tuple(map(number, level)) for level in side] for side in content]
+        incoming = [[(level.price, level.quantity) for level in side] for side in (book.bids, book.asks)]
+        return "duplicate" if prices_and_sizes == incoming else "book_source_time_conflict"
+
+    def _remember_book_source(self, book):
+        value = json.dumps([book.exchange_ns, self._book_content(book)], separators=(",", ":"))
+        self.db.execute("INSERT INTO metadata VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                        (self._book_source_key(book), value))
+
+    def on_book(self, book: Book, *, max_age_ns: int, participation: Decimal, now_ns: int | None = None) -> list[dict]:
+        """Evaluate IOC intents at most once per increasing venue/pair source time."""
         participation = number(participation)
         if not 0 < participation <= 1:
             raise DataError("participation must be in (0,1]")
@@ -248,53 +293,58 @@ class PaperLedger:
         book.validate_age(now_ns, max_age_ns)
         if book.exchange_ns is None:
             raise DataError("paper fill requires known source time")
-        content = (book.venue, book.pair, book.exchange_ns,
-                   [(str(x.price), str(x.quantity)) for x in book.bids],
-                   [(str(x.price), str(x.quantity)) for x in book.asks])
-        snapshot_id = hashlib.sha256(repr(content).encode()).hexdigest()
-        changed = []
         with self.db:
             self.db.execute("BEGIN IMMEDIATE")
+            source_status = self._book_source_status(book)
             self._advance(now_ns)
-            if self.db.execute("SELECT 1 FROM snapshots WHERE id=?", (snapshot_id,)).fetchone():
+            if source_status != "new":
                 return []
-            self.db.execute("INSERT INTO snapshots VALUES (?, ?)", (snapshot_id, book.received_ns))
-            sides = {"buy": [[x.price, x.quantity * participation] for x in book.asks],
-                     "sell": [[x.price, x.quantity * participation] for x in book.bids]}
-            rows = self.db.execute("""SELECT * FROM orders WHERE status='PENDING' AND venue=? AND pair=?
-                       AND eligible_ns<=? AND eligible_ns<=? ORDER BY seq""",
-                       (book.venue, book.pair, book.received_ns, book.exchange_ns)).fetchall()
-            for order in rows:
-                quantity, price, step = map(number, (order["quantity"], order["price"], order["step"]))
-                filled, notional = ZERO, ZERO
-                levels = sides[order["side"]]
-                for level in levels:
-                    marketable = level[0] <= price if order["side"] == "buy" else level[0] >= price
-                    if not marketable:
-                        break
-                    take = (min(quantity - filled, level[1]) / step).to_integral_value(rounding=ROUND_DOWN) * step
-                    filled += take
-                    notional += take * level[0]
-                    level[1] -= take
-                    if filled == quantity:
-                        break
-                base, quote = pair_assets(order["pair"])
-                hold, quote_equivalent = number(order["held"]), notional * number(order["fee_rate"])
-                fee = filled * number(order["fee_rate"]) if order["fee_asset"] == base else quote_equivalent
-                if order["side"] == "buy":
-                    self._adjust(book.venue, quote, free=hold-notional-(fee if order["fee_asset"] == quote else ZERO), reserved=-hold)
-                    self._adjust(book.venue, base, free=filled-(fee if order["fee_asset"] == base else ZERO))
-                else:
-                    self._adjust(book.venue, base, free=hold - filled, reserved=-hold)
-                    self._adjust(book.venue, quote, free=notional - fee)
-                status = "FILLED" if filled == quantity else "PARTIAL_CANCELED" if filled else "CANCELED"
-                self.db.execute("UPDATE orders SET status=?, held='0', filled=?, notional=?, fee=?, fee_quote_equivalent=? WHERE id=?",
-                                (status, str(filled), str(notional), str(fee), str(quote_equivalent), order["id"]))
-                self._event("ioc_result", order_id=order["id"], status=status, filled=filled,
-                            notional=notional, fee=fee, fee_asset=order["fee_asset"],
-                            fee_quote_equivalent=quote_equivalent, quote=quote, snapshot=snapshot_id,
-                            participation=participation, received_ns=book.received_ns, processed_ns=now_ns)
-                changed.append(self.order(order["id"]))
+            self._remember_book_source(book)
+            return self._match_book(book, participation, now_ns)
+
+    def _match_book(self, book, participation, now_ns):
+        """Match an admitted book inside the caller's write transaction."""
+        content = (book.venue, book.pair, book.exchange_ns, *self._book_content(book))
+        snapshot_id = hashlib.sha256(repr(content).encode()).hexdigest()
+        self.db.execute("INSERT INTO snapshots VALUES (?, ?)", (snapshot_id, book.received_ns))
+        changed = []
+        sides = {"buy": [[x.price, x.quantity * participation] for x in book.asks],
+                 "sell": [[x.price, x.quantity * participation] for x in book.bids]}
+        rows = self.db.execute("""SELECT * FROM orders WHERE status='PENDING' AND venue=? AND pair=?
+                   AND eligible_ns<=? AND eligible_ns<=? ORDER BY seq""",
+                   (book.venue, book.pair, book.received_ns, book.exchange_ns)).fetchall()
+        for order in rows:
+            quantity, price, step = map(number, (order["quantity"], order["price"], order["step"]))
+            filled, notional = ZERO, ZERO
+            levels = sides[order["side"]]
+            for level in levels:
+                marketable = level[0] <= price if order["side"] == "buy" else level[0] >= price
+                if not marketable:
+                    break
+                take = (min(quantity - filled, level[1]) / step).to_integral_value(rounding=ROUND_DOWN) * step
+                filled += take
+                notional += take * level[0]
+                level[1] -= take
+                if filled == quantity:
+                    break
+            base, quote = pair_assets(order["pair"])
+            hold, quote_equivalent = number(order["held"]), notional * number(order["fee_rate"])
+            fee = filled * number(order["fee_rate"]) if order["fee_asset"] == base else quote_equivalent
+            if order["side"] == "buy":
+                self._adjust(book.venue, quote, free=hold-notional-(fee if order["fee_asset"] == quote else ZERO), reserved=-hold)
+                self._adjust(book.venue, base, free=filled-(fee if order["fee_asset"] == base else ZERO))
+            else:
+                self._adjust(book.venue, base, free=hold - filled, reserved=-hold)
+                self._adjust(book.venue, quote, free=notional - fee)
+            status = "FILLED" if filled == quantity else "PARTIAL_CANCELED" if filled else "CANCELED"
+            self.db.execute("UPDATE orders SET status=?, held='0', filled=?, notional=?, fee=?, fee_quote_equivalent=? WHERE id=?",
+                            (status, str(filled), str(notional), str(fee), str(quote_equivalent), order["id"]))
+            self._event("ioc_result", order_id=order["id"], status=status, filled=filled,
+                        notional=notional, fee=fee, fee_asset=order["fee_asset"],
+                        fee_quote_equivalent=quote_equivalent, quote=quote, snapshot=snapshot_id,
+                        participation=participation, source_ns=book.exchange_ns,
+                        received_ns=book.received_ns, processed_ns=now_ns)
+            changed.append(self.order(order["id"]))
         return changed
 
     def report(self) -> dict:

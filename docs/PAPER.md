@@ -15,9 +15,27 @@ The demonstration uses invented prices and capital, explicitly labeled in the re
 - Initial balances are allocated once by venue and asset. The ledger does not refill capital, borrow, transfer or withdraw funds. Rejected intents do not mutate balances.
 - Order IDs are idempotent for identical intents; conflicting reuse fails. Finite order notional bounds, quantity steps, price ticks and an explicit fee assumption are required.
 - A spot limit IOC approximation is evaluated on the first eligible later snapshot and cancels any remainder. This does not imply that a venue supports IOC through its API.
-- Source and receive timestamps must both follow simulated latency. Missing source time blocks a fill. A configurable fraction of displayed depth is shared across eligible orders in submission order; a snapshot cannot be consumed twice after restart.
+- Source and receive timestamps must both follow simulated latency. Missing source time blocks a fill. A configurable fraction of displayed depth is shared across eligible orders in submission order. From 0.25.0, each venue/pair has a durable source-time watermark. An equal or older timestamp provides no additional matching depth.
 - Explicit quote or received-base buy fees, price improvement, partial fills and finite TTL release excess reservations. Sell fees are in quote currency. Every order/report names its fee asset and separately records the quote equivalent. An unknown fee schedule must be supplied as an explicit research assumption.
 - The caller must advance the simulation clock during feed loss; no background scheduler exists yet. Local cancellation is immediate; exchange cancellation races remain unmodeled.
+
+## Durable source order and recovery (0.25.0)
+
+The ledger stores the most recent accepted source timestamp and book levels per
+venue and pair. The guarded path compares prices and quantities by exact decimal
+value, so equivalent representations such as `100` and `100.00` count as the
+same book. If levels differ at the same timestamp, the guard treats the source
+as ambiguous until a newer valid book. This can skip legitimate updates sharing
+a venue timestamp. IOC journal entries include the source timestamp.
+
+The schema remains 2. For a preexisting snapshot journal with hash-only entries,
+the first checkpoint use sets a conservative cutoff at the previously committed
+simulation clock. A source timestamp must exceed that cutoff before it can
+establish a per-market watermark. This avoids reusing pre-upgrade depth when
+the historical source timestamps cannot be reconstructed. Historical orders,
+cash, reservations and journal rows are retained. Forward account code sealing
+and the [explicit upgrade workflow](FORWARD.md#restart-interruption-and-limits)
+still apply.
 
 ## Remaining limits
 

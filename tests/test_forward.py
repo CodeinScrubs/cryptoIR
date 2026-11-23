@@ -147,6 +147,17 @@ class ForwardTests(unittest.TestCase):
         self.assertFalse(self.engine.guard.state()["data_ok"])
         self.assertEqual(self.ledger.report()["orders"],[])
 
+    def test_replayed_book_cannot_dispatch_a_due_decision(self):
+        self.warmup()
+        due = self.now+3600*NS
+        first = book(due-100_000_000)
+        self.engine.on_book(first, now_ns=first.received_ns)
+        self.engine.on_book(replace(first, received_ns=due), now_ns=due)
+        self.assertEqual(self.ledger.report()["orders"], [])
+        self.assertEqual(self.engine.latest_book, first)
+        self.engine.on_book(book(due+100_000_000), now_ns=due+100_000_000)
+        self.assertEqual(self.ledger.report()["orders"][0]["status"], "PENDING")
+
     def test_no_repeated_entry_when_target_is_already_owned(self):
         now=self.execute()
         for offset in (NS,2*NS,3*NS):

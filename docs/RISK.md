@@ -49,16 +49,21 @@ unrealized loss and data uncertainty must still be reported and managed.
 - Route reservations through `guard.submit`. Its preflight executes under the
   same SQLite write transaction as the reservation. A rejected intent commits
   the risk latch and rejection journal, but creates no order or reservation.
-- Route books through `guard.on_book`. It observes risk before fills and marks
-  the portfolio again after fills. It rejects unknown/stale source timestamps.
+- Route books through `guard.on_book`. Source admission, pre-fill risk checks,
+  matching, balances, journal and post-fill risk share a single SQLite write
+  transaction. The forward runner uses `process_book` to also obtain admission.
+  Standalone `observe` admits a book for valuation and consumes its timestamp.
+  Use the matching entry point for observations intended to evaluate orders.
 - On a feed gap, call `guard.invalidate`; it cancels pending buys and marks data
-  unavailable. Fresh valid data can clear that temporary data block, but cannot
-  clear a loss/manual latch.
+  unavailable. A newer valid source observation can clear the temporary data
+  block. Regressed timestamps and conflicting levels at the current timestamp
+  cause a data block. Equivalent repeats leave risk state as it was. Loss and
+  manual latches persist.
 - Drive `guard.advance` from a timer even when the feed stops. It expires orders
-  and cancels pending buys when the freshness budget elapses.
-- Use a single owner for a ledger. Observation, fill and post-fill mark are
-  separate transactions. The [forward runner](FORWARD.md) enforces OS-level
-  single-writer ownership and routes session mutations through the guard.
+  and cancels pending buys when the exchange timestamp exceeds the freshness
+  budget. A recent processing time does not extend that budget.
+- Use a single owner for a ledger. The [forward runner](FORWARD.md) enforces
+  OS-level single-writer ownership and routes session mutations through the guard.
 
 No portfolio conversion across IRT/USDT or venues, automatic hedge, exchange
 native protection, cancellation-race model, authenticated reconciliation,

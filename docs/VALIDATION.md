@@ -667,3 +667,24 @@ historical fees.
   rather than being rounded up to the required ten. Recent duplicate/zero
   rows are not invented unique trades or fills. No account, portfolio, order,
   withdrawal or transfer changed. Complete capture is not strategy acceptance.
+
+
+## Version 0.25.0 paper foundation (2026-11-23)
+
+- All 381 local tests passed. Nine regression cases cover source ordering
+  through restart, venue isolation, equal-timestamp conflicts, exact decimal
+  duplicate detection, recovery after
+  a gap, feed expiry from exchange time, legacy snapshot cutoff, stale decision
+  replay and atomic post-fill rollback.
+- The process death test exits the child process after a synthetic fill has
+  changed its SQLite transaction but before the post-fill risk update and
+  commit. Reopening shows the original pending order, reservation, risk state
+  and journal. A subsequent valid replay commits one fill and one journal row.
+- Replayed 187 accepted Nobitex book messages and two connection boundaries
+  from two existing public-stream recordings into disposable ledgers with
+  synthetic cash. The exercise used receive times and generated zero orders.
+  The recording SHA-256 values are
+  `2a92fb72c0f3c4263db1ae4476bcad1f4fbc3a5f7224f825eae07a3852c22053` and
+  `00a40b6ecca714bab756342e7f186c40b71d5074831f86ffbc6a719c567e729a`.
+  This checks admission of recorded payloads. Fill and process-death checks
+  use synthetic inputs and loopback sockets.

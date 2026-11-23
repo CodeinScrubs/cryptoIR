@@ -145,6 +145,42 @@ class PaperTests(unittest.TestCase):
         self.assertEqual(self.fill(replace(snapshot(), received_ns=2_200_000_000)), [])
         self.assertEqual(self.ledger.order("two")["status"], "PENDING")
 
+    def test_source_frontier_survives_restart_and_isolated_by_venue(self):
+        self.fill(snapshot(now=1_300_000_000, source=1_250_000_000))
+        self.ledger.close()
+        self.ledger = PaperLedger(self.path)
+        self.assertEqual(self.fill(snapshot(now=1_350_000_000, source=1_200_000_000)), [])
+        self.assertEqual(self.ledger.db.execute("SELECT count(*) FROM snapshots").fetchone()[0], 1)
+        self.submit("two", now_ns=1_350_000_000)
+        self.fill(snapshot(now=1_700_000_000, source=1_600_000_000, venue="b"))
+        self.fill(snapshot(now=1_800_000_000, source=1_550_000_000))
+        self.assertEqual(self.ledger.order("two")["status"], "FILLED")
+
+    def test_previously_observed_timestamp_cannot_offer_second_depth(self):
+        self.submit(price=D(100))
+        observed = Book("a", "BTC/USDT", (Level(98, 1),), (Level(101, 1),),
+                        1_300_000_000, 0, 1_250_000_000)
+        self.fill(observed)
+        self.assertEqual(self.ledger.order("one")["status"], "CANCELED")
+        self.assertEqual(self.fill(snapshot(now=1_400_000_000, source=1_250_000_000)), [])
+        self.assertEqual(self.fill(snapshot(now=1_500_000_000, source=1_150_000_000)), [])
+        self.assertEqual(self.ledger.db.execute("SELECT count(*) FROM snapshots").fetchone()[0], 1)
+
+    def test_legacy_snapshot_hashes_get_conservative_cutoff_without_rewriting_history(self):
+        self.submit()
+        self.fill()
+        with self.ledger.db:
+            self.ledger.db.execute("DELETE FROM metadata WHERE key='book_source_floor_ns' OR key LIKE 'book_source:%'")
+        before = self.ledger.report()
+        self.ledger.close()
+        self.ledger = PaperLedger(self.path)
+        self.assertEqual(self.fill(snapshot(now=2_150_000_000, source=1_990_000_000)), [])
+        self.assertEqual(self.ledger.report(), before)
+        self.assertEqual(self.ledger.db.execute("SELECT count(*) FROM snapshots").fetchone()[0], 1)
+        self.submit("after-upgrade", now_ns=2_150_000_000)
+        self.fill(snapshot(now=2_300_000_000, source=2_260_000_000))
+        self.assertEqual(self.ledger.order("after-upgrade")["status"], "FILLED")
+
     def test_venue_isolation(self):
         self.submit()
         self.assertEqual(self.fill(snapshot(venue="b")), [])
