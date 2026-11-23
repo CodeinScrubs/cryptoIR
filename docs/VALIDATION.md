@@ -688,3 +688,27 @@ historical fees.
   `00a40b6ecca714bab756342e7f186c40b71d5074831f86ffbc6a719c567e729a`.
   This checks admission of recorded payloads. Fill and process-death checks
   use synthetic inputs and loopback sockets.
+
+
+## Version 0.26.0 deterministic paper replay
+
+- All 384 local tests passed. The existing loopback test ran and resumed
+  the forward engine, then rebuilt both sessions in order. It also verified
+  that a resumed recording alone fails the opening checkpoint.
+- The CLI regression runs the recorder and engine on a controlled clock using
+  original frame format and a raw hourly candle response. No intent appears
+  before its decision delay. A book inside the order latency leaves the
+  order pending. A later book settles one fill. Offline replay reproduces
+  the final balances, orders and durable ledger digest. A simulated storage
+  cap during manual stop commits the stop once and leaves the replay
+  checkpoint unavailable.
+- Replay refuses changed raw-frame hashes, derived books, early processing
+  times, changed candle payloads, incorrect code fingerprints, incorrect
+  closing digests and omitted footers. Older tapes lack the required actions.
+- One 24-second public Nobitex BTC/USDT smoke session used synthetic capital.
+  It accepted one hourly candle response and warmed up 168 bars. The
+  capture contained 32 book messages, 60 engine inputs and zero orders.
+  The CLI verified the closing ledger digest offline.
+  Recording SHA-256: `9f5ffe8ef6895406d73afff51bb7050ab165a7c431351fb08b2a5ff96dede394`.
+  This observed reception and verified replay parity. Fill behavior was
+  checked with synthetic inputs. Calibration against venue executions remains open.

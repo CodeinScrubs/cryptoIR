@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 import json
 import subprocess
 import sys
@@ -11,7 +12,8 @@ from unittest.mock import patch
 from cryptoir.domain import DataError
 from cryptoir.forward import ForwardConfig, ForwardEngine, NS
 from cryptoir.history import HOUR
-from cryptoir.runner import ClockChanged, SessionClock, closed_candles, run_paper
+from cryptoir.paper_replay import candle_url, closed_candles, replay
+from cryptoir.runner import ClockChanged, SessionClock, run_paper
 from cryptoir.runtime import OwnerLock
 from cryptoir.stream_audit import audit_stream
 from cryptoir.streams import ConsumerFailure
@@ -21,8 +23,11 @@ def response(config,last,now):
     close=(now//NS-120)//HOUR*HOUR
     times=list(range(close-200*HOUR,close,HOUR))
     payload={"s":"ok","t":times,"o":[100]*200,"h":[100]*200,"l":[100]*200,"c":[100]*200,"v":[100]*200}
+    raw_body=json.dumps(payload)
     return {"requested_start":times[0],"requested_end":close,"response":{
-        "kind":"snapshot","received_ns":now,"payload":payload,"raw_body":json.dumps(payload)}}
+        "kind":"snapshot","received_ns":now,"payload":payload,"raw_body":raw_body,
+        "url":candle_url(config,times[0],close) if config is not None else None,
+        "body_sha256":hashlib.sha256(raw_body.encode()).hexdigest()}}
 
 
 class RunnerDataTests(unittest.TestCase):
@@ -35,6 +40,8 @@ class RunnerDataTests(unittest.TestCase):
         record["response"]["payload"]["t"].append(2000*HOUR)
         for key in ("o","h","l","c","v"):
             record["response"]["payload"][key].append(100)
+        raw_body = json.dumps(record["response"]["payload"])
+        record["response"].update(raw_body=raw_body, body_sha256=hashlib.sha256(raw_body.encode()).hexdigest())
         self.assertEqual(len(closed_candles(record)),200)
 
     def test_clock_jump_detected_before_processing(self):
@@ -104,6 +111,13 @@ class RunnerIntegrationTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(second["live_execution"])
         for path in self.directory.glob("market-*.gz"):
             self.assertTrue(audit_stream(path)["ended_cleanly"])
+        paths = [self.directory/("market-"+run["session_id"]+".jsonl.gz") for run in (first, second)]
+        audit = replay(self.config, paths, self.directory/"replay.json")
+        self.assertTrue(audit["ledger_parity"])
+        self.assertEqual(audit["paper"]["forward"], second["forward"])
+        self.assertEqual(audit["sessions"][-1]["closing_ledger_sha256"], second["paper_closing_ledger_sha256"])
+        with self.assertRaisesRegex(DataError, "full account session chain"):
+            replay(self.config, paths[1:], self.directory/"incomplete.json")
 
     async def test_consumer_failure_is_terminal_not_a_network_retry(self):
         with patch.object(ForwardEngine,"on_book",side_effect=RuntimeError("accounting failure")):
@@ -124,6 +138,36 @@ class RunnerIntegrationTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(report["risk"]["halt"],"manual_stop")
         with self.assertRaises(DataError):
             await run_paper(self.config,self.directory,5)
+
+    async def test_full_transcript_at_manual_stop_latches_once_without_checkpoint(self):
+        from cryptoir.paper import PaperLedger
+        from cryptoir.runner import PaperWriter
+        from cryptoir.streams import RecordingLimit
+        original = PaperWriter.record_input
+
+        def write(writer, action, at, **kwargs):
+            if action == "stop":
+                raise RecordingLimit("injected log cap")
+            return original(writer, action, at, **kwargs)
+
+        with patch.object(PaperWriter, "record_input", write):
+            task = asyncio.create_task(run_paper(self.config, self.directory, 30))
+            await asyncio.sleep(0.5)
+            (self.directory/"STOP").touch()
+            async with asyncio.timeout(5):
+                report = await task
+        self.assertEqual(report["reason"], "manual_stop")
+        self.assertEqual(report["risk"]["halt"], "manual_stop")
+        self.assertIsNone(report["paper_closing_ledger_sha256"])
+        ledger = PaperLedger(self.directory/"paper.sqlite")
+        try:
+            ended = ledger.db.execute("SELECT count(*) FROM journal WHERE event='forward_session_end'").fetchone()[0]
+            self.assertEqual(ended, 1)
+        finally:
+            ledger.close()
+        recording = next(self.directory.glob("market-*.gz"))
+        with self.assertRaisesRegex(DataError, "closing ledger"):
+            replay(self.config, [recording], self.directory/"failed-replay.json")
 
     async def test_irt_funded_session_reports_matched_benchmarks(self):
         from dataclasses import asdict

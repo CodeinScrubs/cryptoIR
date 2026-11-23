@@ -18,12 +18,20 @@ def book_from_dict(value: dict) -> Book:
                 value["received_ns"], value["request_duration_ns"], value["exchange_ns"])
 
 
-def events(path: Path):
+def events(path: Path, *, max_bytes=None, strict=False):
+    if strict:
+        from .triangular import strict_json
     previous_seq, previous_mono, run_id = 0, 0, None
+    logical_bytes = 0
     opener = gzip.open(path, "rt", encoding="utf-8") if path.suffix == ".gz" else path.open(encoding="utf-8")
     with opener as stream:
-        for line in stream:
-            row = json.loads(line, parse_float=Decimal)
+        line_limit = 16*1024*1024 if max_bytes is not None else -1
+        while line := stream.readline(line_limit+1 if line_limit > 0 else -1):
+            if max_bytes is not None:
+                logical_bytes += len(line.encode())
+                if len(line) > line_limit or logical_bytes > max_bytes:
+                    raise DataError("stream recording exceeds replay bounds")
+            row = strict_json(line) if strict else json.loads(line, parse_float=Decimal)
             if not isinstance(row, dict) or row.get("schema") != 2:
                 raise DataError("invalid stream record schema")
             if type(row["seq"]) is not int or row["seq"] != previous_seq + 1:

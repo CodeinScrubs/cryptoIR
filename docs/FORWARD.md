@@ -65,6 +65,45 @@ does not prevent a legitimate resume. One experiment has one writer.
 - A durable decision ID ties the signal to its order. A crash after reservation
   and before decision acknowledgement cannot create a second reservation.
 
+## Offline replay with the paper engine (0.26.0)
+
+Use the same configuration and source revision that recorded the session.
+Supply every session from the initial allocation in its original order. The
+optional second recording below illustrates a resumed session.
+
+```powershell
+uv run python -m cryptoir paper-replay --config examples/paper-reference.json --recording data/paper-reference/market-FIRST.jsonl.gz --recording data/paper-reference/market-SECOND.jsonl.gz --output data/paper-reference/replay.json
+```
+
+The recorder saves the clock value passed to each engine action. Actions
+include session start and stop, timer advancement, gap invalidation, book
+updates and candle responses. Each market action points to the preceding
+source record. Replay rebuilds book updates from original WebSocket frames,
+checks the candle request URL and response body, and processes only information
+available by each action's recorded time.
+
+Replay starts with an isolated temporary ledger and verifies the configuration
+and executable source digests. It then compares opening and closing digests
+of the balances, orders, journals, snapshots and metadata. A report with
+`ledger_parity: true` is written to a new file after all supplied sessions pass.
+The report contains the paper account's values and belongs in ignored local
+storage. Real-money authorization remains separate.
+
+Recordings created before 0.26.0 lack the action transcript needed for exact
+replay. A resumed recording whose opening ledger depends on such data, a
+partial recording, a clock-discontinuous run or a missing session in the chain
+cannot pass the replay check. The recorder may also run out of space before
+writing the closing checkpoint. The original session artifacts remain
+available for inspection. This command verifies replay of the USDT execution
+ledger. IRT benchmark snapshots and external valuation reports are outside
+that comparison.
+
+The replay shares the existing next-book IOC model, entry/exit costs, risk
+limits and decision delays with prospective paper execution. Public depth and
+timing still require separate fill calibration. Historical hourly screens
+retain their candle-open cost assumptions. Exact replay is available for
+recorded paper sessions only.
+
 ## Restart, interruption and limits
 
 The engine preserves balances, holdings, signal history, risk high-water marks

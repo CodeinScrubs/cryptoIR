@@ -167,6 +167,11 @@ def main() -> int:
     forward.add_argument("--directory", required=True, type=Path)
     forward.add_argument("--seconds", type=int, default=60)
     forward.add_argument("--max-mb", type=int, default=64)
+    paper_replay = commands.add_parser("paper-replay", help="offline replay of a complete forward paper recording chain")
+    paper_replay.add_argument("--config", required=True, type=Path)
+    paper_replay.add_argument("--recording", action="append", required=True, type=Path,
+                              help="one recording per argument, in original session order")
+    paper_replay.add_argument("--output", required=True, type=Path)
     paper_status = commands.add_parser("paper-status", help="read local paper status and inspect its OS owner lock")
     paper_status.add_argument("directory", type=Path)
     dashboard = commands.add_parser("dashboard", help="serve a read-only paper dashboard on local loopback")
@@ -342,15 +347,24 @@ def main() -> int:
         from .runner import run_paper
         config = ForwardConfig.from_dict(json.loads(args.config.read_text(encoding="utf-8-sig")))
         report = asyncio.run(run_paper(config,args.directory,args.seconds,max_mb=args.max_mb))
+        replayable = report.get("paper_closing_ledger_sha256") is not None
         print(encode({"kind":"forward_paper_summary","reason":report["reason"],"counts":report.get("counts",{}),
                       "orders":len(report["orders"]),"warmup_bars":report["warmup_bars"],
                       "risk_halt":report["risk"]["halt"],"capital_basis":report["capital_basis"],
+                      "closing_checkpoint_recorded":replayable,
                       "live_execution":False,"profitability_established":False}))
-        return int(report["reason"]!="duration_completed" or not report.get("counts",{}).get(config.venue+":book")
+        return int(not replayable or report["reason"]!="duration_completed" or not report.get("counts",{}).get(config.venue+":book")
                    or not report.get("counts",{}).get(config.venue+":candle_accepted"))
     if args.command == "dashboard":
         from .dashboard import serve_dashboard
         serve_dashboard(args.directory, port=args.port, seconds=args.seconds)
+        return 0
+    if args.command == "paper-replay":
+        from .forward import ForwardConfig
+        from .paper_replay import replay
+        report = replay(ForwardConfig.from_dict(json.loads(args.config.read_bytes())), args.recording, args.output)
+        print(encode({"kind": report["kind"], "ledger_parity": report["ledger_parity"],
+                      "sessions": len(report["sessions"]), "live_execution": False}))
         return 0
     if args.command == "paper-status":
         from .monitor import read_status

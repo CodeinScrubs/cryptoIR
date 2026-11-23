@@ -69,6 +69,13 @@ Disconnects block new exposure. Managing existing exposure needs an explicit pol
 
 ## Next implementation milestone
 
+The offline forward replay in 0.26.0 exercises the same strategy, risk and
+paper settlement code on a complete chain of recorded consumer inputs. Raw
+feed evidence and before/after ledger digests are checked. This supplies a
+shared path for causal book-and-candle replay and prospective paper execution.
+The preexisting hourly screens retain their candle-based cost approximations.
+Performance and live execution gates still require separate evidence.
+
 Paper source ordering and settlement are now implemented and locally tested in
 0.25.0. The ledger retains one accepted exchange timestamp per market across
 restarts. The risk guard commits source admission, settlement and pre/post-fill

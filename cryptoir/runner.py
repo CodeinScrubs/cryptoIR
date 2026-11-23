@@ -7,16 +7,16 @@ import shutil
 import time
 import uuid
 from pathlib import Path
-from urllib.parse import urlencode
 
 from .domain import DataError
 from .feeds import public_response
-from .forward import ForwardConfig, ForwardEngine, NS
-from .history import HISTORY, HOUR, parse_udf
+from .forward import ForwardConfig, ForwardEngine, NS, source_fingerprint
+from .history import HOUR
 from .paper import PaperLedger
+from .paper_replay import (FEED_ACTIONS, INPUT_VERSION, REPLAYABLE_STOPS, apply_input, candle_url,
+                           config_digest, ledger_digest)
 from .runtime import OwnerLock, atomic_json
-from .stream_audit import book_from_dict
-from .streams import ConsumerFailure, EventWriter, RecordingLimit, capture_venue
+from .streams import ConsumerFailure, EventWriter, RecordingIOError, RecordingLimit, capture_venue
 from .valuation import ALL_BOOKS, matched_valuation, snapshot_pair, verify_receipt
 
 
@@ -47,26 +47,34 @@ def candle_response(config: ForwardConfig, last_epoch: int | None, now_ns: int) 
     start=end-240*HOUR if last_epoch is None else last_epoch-2*HOUR
     if end-start>480*HOUR:
         raise DataError("downtime exceeds bounded candle recovery window")
-    url=HISTORY[config.venue]+"?"+urlencode({"symbol":config.pair.replace("/",""),
-        "resolution":"60","from":start,"to":end-1})
+    url=candle_url(config,start,end)
     return {"requested_start":start,"requested_end":end,"response":public_response(url)}
-
-
-def closed_candles(record: dict):
-    response=record["response"]
-    if response["kind"]!="snapshot":
-        raise DataError("public candle request failed")
-    rows=parse_udf(response["payload"])
-    if any(not record["requested_start"]<=bar.time<record["requested_end"] for bar in rows):
-        raise DataError("candle endpoint returned an unexpected timestamp")
-    cutoff=min(record["requested_end"],response["received_ns"]//NS-120)
-    return [bar for bar in rows if bar.time+HOUR<=cutoff]
 
 
 class PaperWriter(EventWriter):
     def __init__(self,path,max_bytes,engine,clock):
         super().__init__(path,max_bytes)
         self.engine,self.clock=engine,clock
+        self.candle_failure_reason = None
+
+    def input(self, action, *, source=None, reason=None, now_ns=None):
+        at = self.clock.now() if now_ns is None else now_ns
+        result = apply_input(self.engine, action, at, source=source, reason=reason)
+        self.record_input(action, at, source=source, reason=reason)
+        return result
+
+    def record_input(self, action, at, *, source=None, reason=None):
+        # Capture the clock at dispatch rather than before an extra log flush.
+        # A crash between settlement and transcript persistence leaves an
+        # incomplete tape, which cannot pass the offline closing checkpoint.
+        event = {"kind": "paper_input", "action": action, "now_ns": at}
+        if source is not None:
+            event["source_seq"] = source["seq"]
+        if reason is not None:
+            event["reason"] = reason
+        row = super().write("all", event)
+        if abs(row["clock_error_ns"]) > NS or at > row["observed_ns"]:
+            raise ClockChanged("recording clock discontinuity")
 
     def write(self,venue,event):
         record=super().write(venue,event)
@@ -74,11 +82,11 @@ class PaperWriter(EventWriter):
             raise ClockChanged("recording clock discontinuity")
         try:
             kind=record["kind"]
-            if kind=="book":
-                self.engine.on_book(book_from_dict(record["book"]),now_ns=self.clock.now())
-            elif kind in ("gap","session_start","book_unavailable"):
-                self.engine.invalidate(self.clock.now(),record.get("reason",kind))
-        except ConsumerFailure:
+            if kind in FEED_ACTIONS:
+                failure = self.input(kind, source=record)
+                if kind == "candle_response":
+                    self.candle_failure_reason = failure
+        except (ConsumerFailure, RecordingLimit, RecordingIOError):
             raise
         except Exception as exc:
             raise ConsumerFailure("forward consumer failed: "+type(exc).__name__) from exc
@@ -104,6 +112,7 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
         session_id=uuid.uuid4().hex
         capital_receipt=None
         valuation={"available":False,"reason":"not_requested_for_synthetic_reference"}
+        replay_checkpoint = None
         try:
             if config.capital_basis=="paper_irt_conversion":
                 capital_receipt=json.loads((directory/"capital-receipt.json").read_bytes())
@@ -120,12 +129,15 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
                 valuation={"available":False,"reason":"awaiting_fresh_valuation"}
             if not ledger.db.execute("SELECT 1 FROM metadata WHERE key='seeded'").fetchone():
                 ledger.seed({(config.venue,config.pair.split("/")[1]):config.risk.initial_quote})
-            engine=ForwardEngine(ledger,config)
-            engine.start(clock.now())
+            code_sha = source_fingerprint()
+            engine=ForwardEngine(ledger,config,source_id=code_sha)
             writer=PaperWriter(directory/("market-"+session_id+".jsonl.gz"),max_mb*1024*1024,engine,clock)
             writer.write("all",{"kind":"recording_start","pair":config.pair,"venues":[config.venue],
                                 "duration_seconds":seconds,"purpose":"experimental_forward_paper",
-                                "live_execution":False,"max_mb":max_mb})
+                                "live_execution":False,"max_mb":max_mb,"paper_input_version":INPUT_VERSION,
+                                "source_sha256":code_sha,"config_sha256":config_digest(config),
+                                "opening_ledger_sha256":ledger_digest(ledger)})
+            writer.input("start")
 
             def status(state="running"):
                 atomic_json(directory/"status.json",{"schema":1,"session_id":session_id,"pid":os.getpid(),
@@ -158,17 +170,16 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
                     last=engine.signal.bars[-1].time if engine.signal.bars else None
                     try:
                         record=await asyncio.to_thread(candle_response,config,last,clock.now())
+                    except DataError as exc:
+                        writer.input("candle_failure", reason=str(exc))
+                        failures+=1
+                    else:
                         writer.write(config.venue,{"kind":"candle_response","pair":config.pair,**record})
-                        rows=closed_candles(record)
-                        engine.apply_candles(rows,received_ns=record["response"]["received_ns"],now_ns=clock.now())
                         if engine.state()["candles_ok"]:
                             writer.write(config.venue,{"kind":"candle_accepted","last_bar":engine.signal.bars[-1].time})
-                        failures=0
-                    except DataError as exc:
-                        engine.candle_failure(clock.now(),str(exc))
-                        failures+=1
-                        if failures>=5:
-                            raise ConsumerFailure("five consecutive candle failures") from exc
+                        failures=failures+1 if writer.candle_failure_reason else 0
+                    if failures>=5:
+                        raise ConsumerFailure("five consecutive candle failures")
                     await asyncio.sleep(60)
 
             async def supervise():
@@ -176,7 +187,7 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
                 saved=0.0
                 while time.monotonic()-start<seconds:
                     now=clock.now()
-                    engine.advance(now)
+                    writer.input("advance", now_ns=now)
                     if valuation["available"]:
                         current={"usdt":str(sum(ledger.balance(config.venue,"USDT"))),"btc":str(sum(ledger.balance(config.venue,"BTC")))}
                         if now-valuation["last_valuation"]["observed_ns"]>5*NS or current!=valuation["marked_balances"]:
@@ -214,18 +225,42 @@ async def run_paper(config: ForwardConfig, directory: Path, seconds: int, *, max
             await asyncio.gather(*tasks,return_exceptions=True)
             try:
                 if engine is not None:
-                    engine.stop(clock.safe_now(),permanent=reason in ("manual_stop","clock_changed","failed"),reason=reason)
+                    stopped = False
+                    if writer is not None and reason in REPLAYABLE_STOPS:
+                        try:
+                            at = clock.now()
+                            apply_input(engine, "stop", at, reason=reason)
+                            stopped = True
+                            writer.record_input("stop", at, reason=reason)
+                            replay_checkpoint = ledger_digest(ledger)
+                        except ClockChanged as exc:
+                            reason, failure = "clock_changed", exc
+                        except RecordingLimit:
+                            # Preserve manual-stop semantics when the transcript is full.
+                            if reason != "manual_stop":
+                                reason = "storage_limit"
+                        except RecordingIOError as exc:
+                            failure = exc
+                            if reason != "manual_stop":
+                                reason = "failed"
+                    if not stopped:
+                        engine.stop(clock.safe_now(),permanent=reason in ("manual_stop","clock_changed","failed"),reason=reason)
+                    elif reason in ("clock_changed", "failed"):
+                        engine.guard.halt(now_ns=clock.safe_now(), reason=reason)
                 if writer is not None:
                     # The terminal record must not invoke a failed downstream clock.
                     try:
-                        EventWriter.write(writer,"all",{"kind":"recording_end","reason":reason})
-                    except RecordingLimit:
-                        pass
-                    writer.close()
+                        EventWriter.write(writer,"all",{"kind":"recording_end","reason":reason,
+                                          "closing_ledger_sha256":replay_checkpoint})
+                    except (RecordingLimit, RecordingIOError):
+                        replay_checkpoint = None
+                    finally:
+                        writer.close()
                 if engine is not None:
                     report={"schema":1,"session_id":session_id,"pid":os.getpid(),"updated_ns":clock.safe_now(),
                             "session_status":"stopped","reason":reason,**engine.report(),"matched_valuation":valuation,
-                            "irt_performance_available":valuation["available"]}
+                            "irt_performance_available":valuation["available"],
+                            "paper_closing_ledger_sha256":replay_checkpoint}
                     if writer is not None:
                         report.update(counts=dict(writer.counts),uncompressed_log_bytes=writer.size)
                     if failure is not None:
